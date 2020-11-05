@@ -43,7 +43,7 @@ namespace Tweeter.Application.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FollowingCount = table.Column<int>(nullable: false),
-                    FollowersCount = table.Column<int>(nullable: false),
+                    FolloweesCount = table.Column<int>(nullable: false),
                     AvatarUrl = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 300, nullable: false),
                     About = table.Column<string>(nullable: true),

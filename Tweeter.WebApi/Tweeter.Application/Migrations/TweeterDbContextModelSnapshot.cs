@@ -333,7 +333,7 @@ namespace Tweeter.Application.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("FollowersCount")
+                    b.Property<int>("FolloweesCount")
                         .HasColumnType("int");
 
                     b.Property<int>("FollowingCount")
@@ -453,7 +453,7 @@ namespace Tweeter.Application.Migrations
                         .IsRequired();
 
                     b.HasOne("Tweeter.Application.DbModel.User", "Followee")
-                        .WithMany("Following")
+                        .WithMany("Followees")
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

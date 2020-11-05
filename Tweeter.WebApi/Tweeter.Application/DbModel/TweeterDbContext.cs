@@ -16,7 +16,7 @@ namespace Tweeter.Application.DbModel
 		{
 			if (!options.IsConfigured)
 			{
-				options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Thullo;Trusted_Connection=True;");
+				options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Tweeter;Trusted_Connection=True;");
 			}
 		}
 		#endregion
@@ -30,6 +30,7 @@ namespace Tweeter.Application.DbModel
 		{
 			base.OnModelCreating(modelBuilder);
 
+			// Follow ---
 			modelBuilder.Entity<Follow>()
 				.HasKey(f => new { f.FollowerId, f.FolloweeId });
 			modelBuilder.Entity<Follow>()
@@ -39,10 +40,11 @@ namespace Tweeter.Application.DbModel
 				.OnDelete(DeleteBehavior.Cascade);
 			modelBuilder.Entity<Follow>()
 				.HasOne(f => f.Followee)
-				.WithMany(f => f.Following)
+				.WithMany(f => f.Followees)
 				.HasForeignKey(f => f.FollowerId)
 				.OnDelete(DeleteBehavior.Cascade);
 
+			// Tweet ---
 			modelBuilder.Entity<Tweet>()
 				.HasOne(t => t.RetweetedFrom)
 				.WithMany(t => t.Retweets)
@@ -53,23 +55,29 @@ namespace Tweeter.Application.DbModel
 			modelBuilder.Entity<Tweet>()
 				.HasIndex(t => t.Text);
 
+			// HashTag ---
 			modelBuilder.Entity<HashTag>()
 				.HasKey(h => h.Text);
 			modelBuilder.Entity<HashTag>()
 				.Property(h => h.Text).IsRequired().HasMaxLength(300);
 
+			// TweetBookmark ---
 			modelBuilder.Entity<TweetBookmark>()
 				.HasKey(tb => new { tb.UserId, tb.TweetId });
 
+			// TweetLike ---
 			modelBuilder.Entity<TweetLike>()
 				.HasKey(tl => new { tl.UserId, tl.TweetId });
 
+			// TweetCommentLike ---
 			modelBuilder.Entity<TweetCommentLike>()
 				.HasKey(tcl => new { tcl.UserId, tcl.TweetCommentId });
 
+			// User ---
 			modelBuilder.Entity<User>()
 				.Property(u => u.Name).IsRequired().HasMaxLength(300);
 
+			// TweetComment ---
 			modelBuilder.Entity<TweetComment>()
 				.Property(tc => tc.Text).IsRequired().HasMaxLength(1000);
 		}

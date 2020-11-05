@@ -10,7 +10,7 @@ using Tweeter.Application.DbModel;
 namespace Tweeter.Application.Migrations
 {
     [DbContext(typeof(TweeterDbContext))]
-    [Migration("20201105093930_InitialCreate")]
+    [Migration("20201105095227_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -335,7 +335,7 @@ namespace Tweeter.Application.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("FollowersCount")
+                    b.Property<int>("FolloweesCount")
                         .HasColumnType("int");
 
                     b.Property<int>("FollowingCount")
@@ -455,7 +455,7 @@ namespace Tweeter.Application.Migrations
                         .IsRequired();
 
                     b.HasOne("Tweeter.Application.DbModel.User", "Followee")
-                        .WithMany("Following")
+                        .WithMany("Followees")
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
