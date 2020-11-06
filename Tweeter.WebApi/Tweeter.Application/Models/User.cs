@@ -4,5 +4,8 @@ using System.Text;
 
 namespace Tweeter.Application.Models
 {
-	
+	public class UserModel
+	{
+
+	}
 }
