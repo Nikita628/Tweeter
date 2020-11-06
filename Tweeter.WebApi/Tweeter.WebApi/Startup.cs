@@ -73,6 +73,7 @@ namespace Tweeter.WebApi
 			services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
 			services.AddScoped<ICloudService, CloudService>();
+			services.AddScoped<IAuthService, AuthService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -14,7 +14,7 @@ namespace Tweeter.Application.DbModel
 		public bool OnlyFollowedCanReply { get; set; }
 
 		public Tweet RetweetedFrom { get; set; }
-		public User CreatedBy { get; set; }
 		public ICollection<Tweet> Retweets { get; set; }
+		public ICollection<TweetComment> TweetComments { get; set; }
 	}
 }

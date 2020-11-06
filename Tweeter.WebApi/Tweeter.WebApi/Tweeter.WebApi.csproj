@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Dtos\" />
     <Folder Include="MapperConfigs\" />
+    <Folder Include="Files\" />
   </ItemGroup>
 
   <ItemGroup>

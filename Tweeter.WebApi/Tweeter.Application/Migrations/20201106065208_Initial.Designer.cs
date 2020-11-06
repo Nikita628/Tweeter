@@ -10,8 +10,8 @@ using Tweeter.Application.DbModel;
 namespace Tweeter.Application.Migrations
 {
     [DbContext(typeof(TweeterDbContext))]
-    [Migration("20201105095227_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201106065208_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -338,7 +338,7 @@ namespace Tweeter.Application.Migrations
                     b.Property<int>("FolloweesCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("FollowingCount")
+                    b.Property<int>("FollowersCount")
                         .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
@@ -451,13 +451,13 @@ namespace Tweeter.Application.Migrations
                     b.HasOne("Tweeter.Application.DbModel.User", "Follower")
                         .WithMany("Followers")
                         .HasForeignKey("FolloweeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Tweeter.Application.DbModel.User", "Followee")
                         .WithMany("Followees")
                         .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -484,24 +484,24 @@ namespace Tweeter.Application.Migrations
                         .IsRequired();
 
                     b.HasOne("Tweeter.Application.DbModel.User", "User")
-                        .WithMany()
+                        .WithMany("TweetBookmarks")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Tweeter.Application.DbModel.TweetComment", b =>
                 {
                     b.HasOne("Tweeter.Application.DbModel.User", "CreatedBy")
-                        .WithMany()
+                        .WithMany("TweetComments")
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Tweeter.Application.DbModel.Tweet", "Tweet")
-                        .WithMany()
+                        .WithMany("TweetComments")
                         .HasForeignKey("TweetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -514,9 +514,9 @@ namespace Tweeter.Application.Migrations
                         .IsRequired();
 
                     b.HasOne("Tweeter.Application.DbModel.User", "User")
-                        .WithMany()
+                        .WithMany("TweetCommentLikes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -529,9 +529,9 @@ namespace Tweeter.Application.Migrations
                         .IsRequired();
 
                     b.HasOne("Tweeter.Application.DbModel.User", "User")
-                        .WithMany()
+                        .WithMany("TweetLikes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

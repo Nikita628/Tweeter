@@ -8,7 +8,6 @@
 		public int TweetId { get; set; }
 		public int LikeCount { get; set; }
 
-		public User CreatedBy { get; set; }
 		public Tweet Tweet { get; set; }
 	}
 }

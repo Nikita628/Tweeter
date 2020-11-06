@@ -37,12 +37,12 @@ namespace Tweeter.Application.DbModel
 				.HasOne(f => f.Follower)
 				.WithMany(f => f.Followers)
 				.HasForeignKey(f => f.FolloweeId)
-				.OnDelete(DeleteBehavior.Cascade);
+				.OnDelete(DeleteBehavior.Restrict);
 			modelBuilder.Entity<Follow>()
 				.HasOne(f => f.Followee)
 				.WithMany(f => f.Followees)
 				.HasForeignKey(f => f.FollowerId)
-				.OnDelete(DeleteBehavior.Cascade);
+				.OnDelete(DeleteBehavior.Restrict);
 
 			// Tweet ---
 			modelBuilder.Entity<Tweet>()
@@ -64,14 +64,29 @@ namespace Tweeter.Application.DbModel
 			// TweetBookmark ---
 			modelBuilder.Entity<TweetBookmark>()
 				.HasKey(tb => new { tb.UserId, tb.TweetId });
+			modelBuilder.Entity<TweetBookmark>()
+				.HasOne(b => b.User)
+				.WithMany(u => u.TweetBookmarks)
+				.HasForeignKey(b => b.UserId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			// TweetLike ---
 			modelBuilder.Entity<TweetLike>()
 				.HasKey(tl => new { tl.UserId, tl.TweetId });
+			modelBuilder.Entity<TweetLike>()
+				.HasOne(tc => tc.User)
+				.WithMany(u => u.TweetLikes)
+				.HasForeignKey(b => b.UserId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			// TweetCommentLike ---
 			modelBuilder.Entity<TweetCommentLike>()
 				.HasKey(tcl => new { tcl.UserId, tcl.TweetCommentId });
+			modelBuilder.Entity<TweetCommentLike>()
+				.HasOne(tc => tc.User)
+				.WithMany(u => u.TweetCommentLikes)
+				.HasForeignKey(b => b.UserId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			// User ---
 			modelBuilder.Entity<User>()
@@ -80,6 +95,11 @@ namespace Tweeter.Application.DbModel
 			// TweetComment ---
 			modelBuilder.Entity<TweetComment>()
 				.Property(tc => tc.Text).IsRequired().HasMaxLength(1000);
+			modelBuilder.Entity<TweetComment>()
+				.HasOne(tc => tc.Tweet)
+				.WithMany(u => u.TweetComments)
+				.HasForeignKey(b => b.TweetId)
+				.OnDelete(DeleteBehavior.Restrict);
 		}
 
 		public DbSet<User> User { get; set; }
