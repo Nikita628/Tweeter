@@ -1,11 +1,11 @@
-﻿namespace Tweeter.Application.DbModel
+﻿namespace Tweeter.Application.DataBase
 {
-	public class TweetLike
+	public class TweetBookmark
 	{
 		public int TweetId { get; set; }
 		public int UserId { get; set; }
 
-		public Tweet Tweet { get; set; }
 		public User User { get; set; }
+		public Tweet Tweet { get; set; }
 	}
 }

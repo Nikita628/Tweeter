@@ -1,0 +1,13 @@
+﻿using System.Threading.Tasks;
+using Tweeter.Application.DataBase;
+using Tweeter.Application.Models;
+
+namespace Tweeter.Application.Contracts
+{
+	public interface ITweetCommentService
+	{
+		Task<PageResponse<TweetComment>> SearchAsync(TweetCommentSearchParam param);
+		Task<Response<int>> CreateAsync(TweetComment comment);
+		Task<Response<bool>> LikeAsync(int commentId);
+	}
+}

@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tweeter.Application.Common;
 using Tweeter.Application.Contracts;
-using Tweeter.Application.DbModel;
+using Tweeter.Application.DataBase;
 using Tweeter.Application.Models;
 
 namespace Tweeter.Application.Services
@@ -36,7 +36,7 @@ namespace Tweeter.Application.Services
 			_db = db;
 		}
 
-		public async Task<Response<Models.SignInResult>> SignIn(string login, string password)
+		public async Task<Response<Models.SignInResult>> SignInAsync(string login, string password)
 		{
 			var result = new Response<Models.SignInResult>();
 
@@ -80,7 +80,7 @@ namespace Tweeter.Application.Services
 			return result;
 		}
 
-		public async Task<Response<bool>> SignUp(SignUpData signUpData)
+		public async Task<Response<bool>> SignUpAsync(SignUpData signUpData)
 		{
 			var result = new Response<bool>();
 

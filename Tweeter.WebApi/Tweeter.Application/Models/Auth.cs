@@ -1,4 +1,4 @@
-﻿using Tweeter.Application.DbModel;
+﻿using Tweeter.Application.DataBase;
 
 namespace Tweeter.Application.Models
 {

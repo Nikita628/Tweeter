@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tweeter.Application.DbModel
+namespace Tweeter.Application.DataBase
 {
 	public class TweeterDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 	{

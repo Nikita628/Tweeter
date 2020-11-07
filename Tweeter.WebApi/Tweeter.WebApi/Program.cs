@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Tweeter.Application.DbModel;
+using Tweeter.Application.DataBase;
 
 namespace Tweeter.WebApi
 {

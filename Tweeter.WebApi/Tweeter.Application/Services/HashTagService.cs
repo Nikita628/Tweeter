@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tweeter.Application.Models
+namespace Tweeter.Application.Services
 {
-	public class UserModel
+	public class HashTagService
 	{
-
 	}
 }

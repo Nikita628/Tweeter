@@ -1,4 +1,4 @@
-﻿namespace Tweeter.Application.DbModel
+﻿namespace Tweeter.Application.DataBase
 {
 	public class TweetComment : AuditedEntity
 	{

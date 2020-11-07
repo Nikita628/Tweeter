@@ -17,9 +17,10 @@ using System;
 using System.Text;
 using Tweeter.Application.Common;
 using Tweeter.Application.Contracts;
-using Tweeter.Application.DbModel;
+using Tweeter.Application.DataBase;
 using Tweeter.Application.Models;
 using Tweeter.Application.Services;
+using Tweeter.Application.Utils;
 
 namespace Tweeter.WebApi
 {
@@ -74,6 +75,9 @@ namespace Tweeter.WebApi
 
 			services.AddScoped<ICloudService, CloudService>();
 			services.AddScoped<IAuthService, AuthService>();
+			services.AddScoped<ITweetService, TweetService>();
+			services.AddScoped(typeof(CurrentUserIdAccessor));
+			services.AddScoped<IRawSqlService, RawSqlService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

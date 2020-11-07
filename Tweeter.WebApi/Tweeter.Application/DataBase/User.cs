@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
-namespace Tweeter.Application.DbModel
+namespace Tweeter.Application.DataBase
 {
 	public class User : IdentityUser<int>
 	{
