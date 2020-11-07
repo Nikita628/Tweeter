@@ -92,6 +92,9 @@
 				,otu.About
 				,otu.ProfileCoverUrl
 
+				,0 as _split_
+				,COUNT(*) OVER() TotalCount
+
 			FROM dbo.Tweet t
 			JOIN dbo.AspNetUsers u ON u.Id = t.CreatedById
 			LEFT JOIN dbo.Tweet originalTweets ON originalTweets.Id = t.RetweetedFromId

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tweeter.Application.DataBase.Dtos
+﻿namespace Tweeter.Application.DataBase.Dtos
 {
 	public class UserDto
 	{
