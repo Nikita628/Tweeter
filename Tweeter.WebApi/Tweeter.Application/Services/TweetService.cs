@@ -118,6 +118,7 @@ namespace Tweeter.Application.Services
 			param.PageNumber = 1;
 			param.SortProp = "t.id";
 			param.SortDirection = "asc";
+			param.TextContains = "ipsum";
 
 			// TODO research to pass param directly, without having to create an anonymous object
 

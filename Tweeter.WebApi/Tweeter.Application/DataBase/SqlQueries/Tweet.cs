@@ -104,7 +104,7 @@
 			-- filtering setup ----------------------------
 			IF @text IS NOT NULL
 			SET @sql = @sql + ' 
-			AND t.[Text] LIKE ''%'' + @text + ''%''';
+			AND t.[Text] LIKE ''%'' + ''' + @text + ''' + ''%''';
  
 			IF @createdById IS NOT NULL
 			SET @sql = @sql + ' 
