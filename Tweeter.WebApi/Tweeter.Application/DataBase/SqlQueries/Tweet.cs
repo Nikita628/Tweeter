@@ -53,40 +53,52 @@
 					select * from dbo.TweetBookmark tb where tb.TweetId = t.Id and tb.UserId = @currentUserId
 				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
 
-				,u.Id as u_Id
-				,u.FollowersCount as u_FollowersCount
-				,u.FolloweesCount as u_FolloweesCount
-				,u.AvatarUrl as u_AvatarUrl
-				,u.Name as u_Name
-				,u.About as u_About
-				,u.ProfileCoverUrl as u_ProfileCoverUrl
+				,0 as _split_
+				,u.Id
+				,u.FollowersCount
+				,u.FolloweesCount
+				,u.AvatarUrl
+				,u.Name
+				,u.About
+				,u.ProfileCoverUrl
 
-				,originalTweets.Id as ot_Id
-				,originalTweets.[CreatedById] as ot_CreatedById
-			    ,originalTweets.[CreatedAt] as ot_CreatedAt
-			    ,originalTweets.[ImgUrl] as ot_ImgUrl
-			    ,originalTweets.[Text] as ot_Text
-			    ,originalTweets.[RetweetedFromId] as ot_RetweetedFromId
-			    ,originalTweets.[LikeCount] as ot_LikeCount
-			    ,originalTweets.[RetweetCount] as ot_RetweetCount
-			    ,originalTweets.[BookmarkCount] as ot_BookmarkCount
-			    ,originalTweets.[OnlyFollowedCanReply] as ot_OnlyFollowedCanReply
+				,0 as _split_
+				,originalTweets.Id
+				,originalTweets.[CreatedById]
+			    ,originalTweets.[CreatedAt]
+			    ,originalTweets.[ImgUrl]
+			    ,originalTweets.[Text]
+			    ,originalTweets.[RetweetedFromId]
+			    ,originalTweets.[LikeCount]
+			    ,originalTweets.[RetweetCount]
+			    ,originalTweets.[BookmarkCount]
+			    ,originalTweets.[OnlyFollowedCanReply]
 				,CASE WHEN EXISTS(
 					select * from dbo.TweetComment tc where tc.TweetId = originalTweets.Id and tc.CreatedById = @currentUserId
-				) THEN 1 ELSE 0 END AS ot_IsCommentedByCurrentUser
+				) THEN 1 ELSE 0 END AS IsCommentedByCurrentUser
 			    ,CASE WHEN EXISTS(
 					select * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @currentUserId
-				) THEN 1 ELSE 0 END AS ot_IsLikedByCurrentUser
+				) THEN 1 ELSE 0 END AS IsLikedByCurrentUser
 			    ,CASE WHEN EXISTS(
 					select * from dbo.TweetBookmark tb where tb.TweetId = originalTweets.Id and tb.UserId = @currentUserId
-				) THEN 1 ELSE 0 END AS ot_IsBookmarkedByCurrentUser
+				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
+
+				,0 as _split_
+				,otu.Id
+				,otu.FollowersCount
+				,otu.FolloweesCount
+				,otu.AvatarUrl
+				,otu.Name
+				,otu.About
+				,otu.ProfileCoverUrl
 
 			FROM dbo.Tweet t
 			JOIN dbo.AspNetUsers u ON u.Id = t.CreatedById
-			JOIN dbo.Tweet originalTweets ON originalTweets.Id = t.RetweetedFromId
+			LEFT JOIN dbo.Tweet originalTweets ON originalTweets.Id = t.RetweetedFromId
+			LEFT JOIN dbo.AspNetUsers otu ON otu.Id = originalTweets.CreatedById
 			WHERE 1 = 1';
 
-			-- filtering setup
+			-- filtering setup ----------------------------
 			IF @text IS NOT NULL
 			SET @sql = @sql + ' 
 			AND t.[Text] LIKE ''%'' + @text + ''%''';
@@ -111,12 +123,12 @@
 			SET @sql = @sql + ' 
 			AND EXISTS (select * from dbo.Follow f where f.FolloweeId = t.CreatedById and f.FollowerId = @followerId)';
 
-			-- sorting setup
+			-- sorting setup ----------------------------
 			set @orderBy = ' 
 			ORDER BY ' + @sortProp + ' ' + @sortDirection;
 			SET @sql = @sql + @orderBy;
 
-			-- paging setup
+			-- paging setup -----------------------------
 			set @paging = ' 
 			OFFSET (@pageNumber - 1) * @pageSize ROWS FETCH NEXT @pageSize ROWS ONLY';
 			set @sql = @sql + @paging;

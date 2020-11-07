@@ -113,11 +113,13 @@ namespace Tweeter.Application.Services
 
 		public async Task<PageResponse<TweetDto>> SearchAsync(TweetSearchParam param)
 		{
-			param = new TweetSearchParam();
-			param.PageSize = 20;
-			param.PageNumber = 1;
-			param.SortProp = "id";
-			param.SortDirection = "asc";
+			//param = new TweetSearchParam();
+			//param.PageSize = 20;
+			//param.PageNumber = 1;
+			//param.SortProp = "t.id";
+			//param.SortDirection = "asc";
+
+			// TODO research to pass param directly, without having to create an anonymous object
 
 			var result = new PageResponse<TweetDto>();
 
@@ -138,18 +140,19 @@ namespace Tweeter.Application.Services
 				pageSize_ = param.PageSize
 			};
 
-			Func<TweetDto, object, object, TweetDto> map = (tweet, user, originalTweet) =>
+			Func<object[], TweetDto> map = (objects) =>
 			{
-				var ot = originalTweet as IDictionary<string, object>;
-				var u = user as IDictionary<string, object>;
-				//var s = ob as IDictionary<string, object>;
-				//var a = s["OriginalTweetId"];
-				//tweet.CreatedBy = user;
+				TweetDto tweet = (TweetDto)objects[0];
+				tweet.CreatedBy = (UserDto)objects[1];
+				tweet.OriginalTweet = tweet.RetweetedFromId.HasValue ? (TweetDto)objects[2] : null;
+				if (tweet.RetweetedFromId.HasValue)
+					tweet.OriginalTweet.CreatedBy = (UserDto)objects[3];
 
 				return tweet;
 			};
 
-			var tweets = await _rawSql.Search(DbModel.SqlQueries.Tweet.SearchTweets, dbParam, map, "u_Id, ot_Id");
+			var types = new[] { typeof(TweetDto), typeof(UserDto), typeof(TweetDto), typeof(UserDto) };
+			var tweets = await _rawSql.Search<TweetDto>(DbModel.SqlQueries.Tweet.SearchTweets, dbParam, types, map, "_split_");
 
 			return result;
 		}

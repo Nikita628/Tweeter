@@ -20,37 +20,12 @@ namespace Tweeter.Application.DataBase
             _connectionString = co.GetConnectionString("TweeterDb");
         }
 
-		public async Task<List<T>> Search<T>(string sql, object param)
+		public async Task<List<T>> Search<T>(string sql, object param, Type[] types, Func<object[], T> map, string splitOn)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<T>(sql, param);
-                return result.ToList();
-            }
-        }
-
-        public async Task<List<TReturn>> Search<TFirst, TSecond, TReturn>(string sql, object param, Func<TFirst, TSecond, TReturn> map, string splitOn)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                var result = await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, param, splitOn: splitOn);
-                return result.ToList();
-            }
-        }
-
-        public async Task<List<TReturn>> Search<TFirst, TSecond, TThird, TReturn>(
-            string sql, 
-            object param, 
-            Func<TFirst, TSecond, TThird, TReturn> map, 
-            string splitOn
-            )
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                var result = await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, param, splitOn: splitOn);
+                var result = await connection.QueryAsync<T>(sql, types, map, param, splitOn: splitOn);
                 return result.ToList();
             }
         }
