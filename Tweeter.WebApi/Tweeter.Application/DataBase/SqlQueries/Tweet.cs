@@ -1,4 +1,4 @@
-﻿namespace Tweeter.Application.DbModel.SqlQueries
+﻿namespace Tweeter.Application.DataBase.SqlQueries
 {
 	public class Tweet
 	{

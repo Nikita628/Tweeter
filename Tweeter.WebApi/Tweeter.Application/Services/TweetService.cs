@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.DataBase;
@@ -113,14 +114,12 @@ namespace Tweeter.Application.Services
 
 		public async Task<PageResponse<TweetDto>> SearchAsync(TweetSearchParam param)
 		{
-			param = new TweetSearchParam();
-			param.PageSize = 20;
-			param.PageNumber = 1;
-			param.SortProp = "t.id";
-			param.SortDirection = "asc";
-			param.TextContains = "ipsum";
-
-			// TODO research to pass param directly, without having to create an anonymous object
+			//param = new TweetSearchParam();
+			//param.PageSize = 20;
+			//param.PageNumber = 1;
+			//param.SortProp = "t.id";
+			//param.SortDirection = "asc";
+			//param.TextContains = "ipsum";
 
 			var result = new PageResponse<TweetDto>();
 
@@ -141,22 +140,60 @@ namespace Tweeter.Application.Services
 				pageSize_ = param.PageSize
 			};
 
+			var tweetsDict = new Dictionary<int, TweetDto>(param.PageSize);
+
 			Func<object[], TweetDto> map = (objects) =>
 			{
 				TweetDto tweet = (TweetDto)objects[0];
 				tweet.CreatedBy = (UserDto)objects[1];
-				tweet.OriginalTweet = tweet.RetweetedFromId.HasValue ? (TweetDto)objects[2] : null;
+				
 				if (tweet.RetweetedFromId.HasValue)
+				{
+					tweet.OriginalTweet = (TweetDto)objects[2];
 					tweet.OriginalTweet.CreatedBy = (UserDto)objects[3];
+				}
+
 				result.TotalCount = ((Total)objects[4]).TotalCount;
+
+				tweetsDict.Add(tweet.Id, tweet);
 
 				return tweet;
 			};
 
 			var types = new[] { typeof(TweetDto), typeof(UserDto), typeof(TweetDto), typeof(UserDto), typeof(Total) };
-			result.Items = await _rawSql.Search<TweetDto>(DbModel.SqlQueries.Tweet.SearchTweets, dbParam, types, map, "_split_");
+			result.Items = await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.SearchTweets, dbParam, types, map, "_split_");
+
+			PopulateTweetComments(result.Items, tweetsDict);
 
 			return result;
+		}
+
+		private async void PopulateTweetComments(List<TweetDto> items, Dictionary<int, TweetDto> tweetsDict)
+		{
+			Func<object[], TweetCommentDto> commentMap = (objects) =>
+			{
+				TweetCommentDto comment = (TweetCommentDto)objects[0];
+				comment.CreatedBy = (UserDto)objects[1];
+				tweetsDict[comment.TweetId].TweetComments.Add(comment);
+
+				return comment;
+			};
+
+			var commentDbParam = new
+			{
+				currentUserId_ = _userAccessor.CurrentUserId,
+				tweetIds_ = items.Select(i => i.Id).ToList()
+			};
+
+			var commentTypes = new[] { typeof(TweetCommentDto), typeof(UserDto) };
+
+			await _rawSql.Search<TweetCommentDto>(
+				DataBase.SqlQueries.TweetComment.SearchCommentsForTweets,
+				commentDbParam,
+				commentTypes,
+				commentMap,
+				"_split_"
+			);
 		}
 	}
 }

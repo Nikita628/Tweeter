@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Tweeter.Application.DataBase.Dtos
 {
@@ -19,5 +20,6 @@ namespace Tweeter.Application.DataBase.Dtos
 		public DateTime CreatedAt { get; set; }
 		public UserDto CreatedBy { get; set; }
 		public TweetDto OriginalTweet { get; set; }
+		public List<TweetCommentDto> TweetComments { get; set; } = new List<TweetCommentDto>();
 	}
 }
