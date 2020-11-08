@@ -97,11 +97,9 @@ namespace Tweeter.Application.Services
 
 			var newTweet = new Tweet
 			{
-				ImgUrl = originalTweet.ImgUrl,
 				CreatedById = _userAccessor.CurrentUserId,
 				RetweetedFromId = originalTweet.Id,
-				CreatedAt = DateTime.UtcNow,
-				Text = originalTweet.Text
+				CreatedAt = DateTime.UtcNow
 			};
 
 			await _dbContext.Tweet.AddAsync(newTweet);
@@ -114,31 +112,14 @@ namespace Tweeter.Application.Services
 
 		public async Task<PageResponse<TweetDto>> SearchAsync(TweetSearchParam param)
 		{
-			//param = new TweetSearchParam();
-			//param.PageSize = 20;
-			//param.PageNumber = 1;
-			//param.SortProp = "t.id";
-			//param.SortDirection = "asc";
-			//param.TextContains = "ipsum";
+   //         param = new TweetSearchParam();
+   //         param.PageSize = 80;
+   //         param.PageNumber = 1;
+   //         param.SortProp = "id";
+   //         param.SortDirection = "asc";
+			//param.CurrentUserId = 2;
 
-			var result = new PageResponse<TweetDto>();
-
-			var dbParam = new
-			{
-				text_ = param.TextContains,
-				createdBy_ = param.CreatedById,
-				onlyWithComments_ = param.OnlyWithComments,
-				onlyWithMedia_ = param.OnlyWithMedia,
-				onlyLikedByUserId_ = param.OnlyLikedByUserId,
-				followerId_ = param.FollowerId,
-				currentUserId_ = _userAccessor.CurrentUserId,
-
-				sortProp_ = param.SortProp,
-				sortDirection_ = param.SortDirection,
-
-				pageNumber_ = param.PageNumber,
-				pageSize_ = param.PageSize
-			};
+            var result = new PageResponse<TweetDto>();
 
 			var tweetsDict = new Dictionary<int, TweetDto>(param.PageSize);
 
@@ -151,17 +132,21 @@ namespace Tweeter.Application.Services
 				{
 					tweet.OriginalTweet = (TweetDto)objects[2];
 					tweet.OriginalTweet.CreatedBy = (UserDto)objects[3];
+					tweetsDict.TryAdd(tweet.RetweetedFromId.Value, tweet.OriginalTweet);
+				} 
+				else
+                {
+					tweetsDict.Add(tweet.Id, tweet);
 				}
 
 				result.TotalCount = ((Total)objects[4]).TotalCount;
 
-				tweetsDict.Add(tweet.Id, tweet);
-
 				return tweet;
 			};
 
+			param.SortProp = "t." + param.SortProp;
 			var types = new[] { typeof(TweetDto), typeof(UserDto), typeof(TweetDto), typeof(UserDto), typeof(Total) };
-			result.Items = await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.SearchTweets, dbParam, types, map, "_split_");
+			result.Items = await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.SearchTweets, param, types, map, "_split_");
 
 			PopulateTweetComments(result.Items, tweetsDict);
 
@@ -181,8 +166,8 @@ namespace Tweeter.Application.Services
 
 			var commentDbParam = new
 			{
-				currentUserId_ = _userAccessor.CurrentUserId,
-				tweetIds_ = items.Select(i => i.Id).ToList()
+				currentUserId = _userAccessor.CurrentUserId,
+				tweetIds = items.Select(i => i.RetweetedFromId.HasValue ? i.RetweetedFromId.Value : i.Id).ToList()
 			};
 
 			var commentTypes = new[] { typeof(TweetCommentDto), typeof(UserDto) };

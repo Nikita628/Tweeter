@@ -41,11 +41,11 @@ namespace Tweeter.WebApi
 				try
 				{
 					var context = services.GetRequiredService<TweeterDbContext>();
+					var userManager = services.GetRequiredService<UserManager<User>>();
+					context.Database.Migrate();
 
 					if (!context.User.Any())
 					{
-						var userManager = services.GetRequiredService<UserManager<User>>();
-						context.Database.Migrate();
 						SeedDb(context, userManager);
 					}
 				}
@@ -109,8 +109,16 @@ namespace Tweeter.WebApi
 			}
 			context.SaveChanges();
 
+			// retweets
 			for (int i = 0; i < 20; i++)
 			{
+				// retweet is merely a reference to an original tweet, almost all fields are empty
+				seedData.Tweets[i].ImgUrl = null;
+				seedData.Tweets[i].Text = string.Empty;
+				seedData.Tweets[i].LikeCount = 0;
+				seedData.Tweets[i].BookmarkCount = 0;
+				seedData.Tweets[i].RetweetCount = 0;
+				seedData.Tweets[i].OnlyFollowedCanReply = false;
 				seedData.Tweets[i].RetweetedFromId = seedData.Tweets[seedData.Tweets.Count - 1].Id;
 			}
 			context.SaveChanges();
@@ -119,13 +127,16 @@ namespace Tweeter.WebApi
 			var tweetLikes = new List<TweetLike>();
 			while (tweetLikes.Count < 30)
 			{
+				var tweetToLike = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
 				var newTl = new TweetLike
 				{
 					UserId = seedData.Users[rand.Next(seedData.Users.Count)].Id,
-					TweetId = seedData.Tweets[rand.Next(seedData.Tweets.Count)].Id
+					TweetId = tweetToLike.Id
 				};
-				if (!tweetLikes.Any(tl => tl.UserId == newTl.UserId && tl.TweetId == newTl.TweetId))
+				if (!tweetLikes.Any(tl => tl.UserId == newTl.UserId && tl.TweetId == newTl.TweetId)
+					&& !tweetToLike.RetweetedFromId.HasValue)
 				{
+					// can like only original tweet, not a retweet
 					tweetLikes.Add(newTl);
 				}
 			}
@@ -136,13 +147,16 @@ namespace Tweeter.WebApi
 			var tweetBookmarks = new List<TweetBookmark>();
 			while (tweetBookmarks.Count < 30)
 			{
+				var tweetToBookmark = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
 				var newTb = new TweetBookmark
 				{
 					UserId = seedData.Users[rand.Next(seedData.Users.Count)].Id,
-					TweetId = seedData.Tweets[rand.Next(seedData.Tweets.Count)].Id
+					TweetId = tweetToBookmark.Id
 				};
-				if (!tweetBookmarks.Any(tl => tl.UserId == newTb.UserId && tl.TweetId == newTb.TweetId))
+				if (!tweetBookmarks.Any(tl => tl.UserId == newTb.UserId && tl.TweetId == newTb.TweetId)
+					&& !tweetToBookmark.RetweetedFromId.HasValue)
 				{
+					// can bookmark only original tweet, not a retweet
 					tweetBookmarks.Add(newTb);
 				}
 			}
@@ -150,12 +164,20 @@ namespace Tweeter.WebApi
 			context.SaveChanges();
 
 			// seed tweetComments ---
-			foreach (var bl in seedData.TweetComments)
+			foreach (var tc in seedData.TweetComments)
 			{
-				bl.CreatedById = seedData.Users[rand.Next(seedData.Users.Count)].Id;
-				bl.CreatedAt = DateTime.UtcNow;
-				bl.TweetId = seedData.Tweets[rand.Next(seedData.Tweets.Count)].Id;
-				context.TweetComment.Add(bl);
+				tc.CreatedById = seedData.Users[rand.Next(seedData.Users.Count)].Id;
+				tc.CreatedAt = DateTime.UtcNow;
+				var tweetToComment = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
+
+				while (tweetToComment.RetweetedFromId.HasValue)
+                {
+					// can comment only original tweets, not retweets
+					tweetToComment = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
+				}
+
+				tc.TweetId = tweetToComment.Id;
+				context.TweetComment.Add(tc);
 			}
 			context.SaveChanges();
 

@@ -3,27 +3,27 @@
 	public class Tweet
 	{
 		public const string SearchTweets = @"
-			DECLARE 
-			@text as nvarchar(100) = @text_, 
-			@createdById as int = @createdBy_, 
-			@onlyWithComments as bit = @onlyWithComments_,
-			@onlyWithMedia as bit = @onlyWithMedia_, 
-			@onlyLikedByUserId as int = @onlyLikedByUserId_,
-			@followerId as int = @followerId_,
-			@currentUserId as int = @currentUserId_,
+			--DECLARE 
+			--@textContains as nvarchar(500) = null,
+			--@createdById as int = null, 
+			--@onlyWithComments as bit = null,
+			--@onlyWithMedia as bit = null, 
+			--@onlyLikedByUserId as int = null,
+			--@followerId as int = null,
+			--@currentUserId as int = null,
 
-			@sortProp as nvarchar(100) = @sortProp_,
-			@sortDirection as nvarchar(100) = @sortDirection_, 
+			--@sortProp as nvarchar(100) = 't.id',
+			--@sortDirection as nvarchar(100) = 'asc', 
 
-			@pageNumber AS INT = @pageNumber_, 
-			@pageSize AS INT = @pageSize_
+			--@pageNumber AS INT = 1, 
+			--@pageSize AS INT = 100
 
 			DECLARE @sql NVARCHAR(MAX);
 			DECLARE @params NVARCHAR(500);
 			declare @orderBy nvarchar(500);
 			declare @paging nvarchar(500);
 
-			SET @params = '@text nvarchar,
+			SET @params = '@textContains nvarchar,
 							@createdById int,
 							@onlyWithComments bit,
 							@pageNumber int,
@@ -44,13 +44,13 @@
 			  ,t.[BookmarkCount]
 			  ,t.[OnlyFollowedCanReply]
 			  ,CASE WHEN EXISTS(
-					select * from dbo.TweetComment tc where tc.TweetId = t.Id and tc.CreatedById = @currentUserId
+					select top(1) * from dbo.TweetComment tc where tc.TweetId = t.Id and tc.CreatedById = @currentUserId
 				) THEN 1 ELSE 0 END AS IsCommentedByCurrentUser
 			  ,CASE WHEN EXISTS(
-					select * from dbo.TweetLike tl where tl.TweetId = t.Id and tl.UserId = @currentUserId
+					select top(1) * from dbo.TweetLike tl where tl.TweetId = t.Id and tl.UserId = @currentUserId
 				) THEN 1 ELSE 0 END AS IsLikedByCurrentUser
 			  ,CASE WHEN EXISTS(
-					select * from dbo.TweetBookmark tb where tb.TweetId = t.Id and tb.UserId = @currentUserId
+					select top(1) * from dbo.TweetBookmark tb where tb.TweetId = t.Id and tb.UserId = @currentUserId
 				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
 
 				,0 as _split_
@@ -74,13 +74,13 @@
 			    ,originalTweets.[BookmarkCount]
 			    ,originalTweets.[OnlyFollowedCanReply]
 				,CASE WHEN EXISTS(
-					select * from dbo.TweetComment tc where tc.TweetId = originalTweets.Id and tc.CreatedById = @currentUserId
+					select top(1) * from dbo.TweetComment tc where tc.TweetId = originalTweets.Id and tc.CreatedById = @currentUserId
 				) THEN 1 ELSE 0 END AS IsCommentedByCurrentUser
 			    ,CASE WHEN EXISTS(
-					select * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @currentUserId
+					select top(1) * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @currentUserId
 				) THEN 1 ELSE 0 END AS IsLikedByCurrentUser
 			    ,CASE WHEN EXISTS(
-					select * from dbo.TweetBookmark tb where tb.TweetId = originalTweets.Id and tb.UserId = @currentUserId
+					select top(1) * from dbo.TweetBookmark tb where tb.TweetId = originalTweets.Id and tb.UserId = @currentUserId
 				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
 
 				,0 as _split_
@@ -102,9 +102,9 @@
 			WHERE 1 = 1';
 
 			-- filtering setup ----------------------------
-			IF @text IS NOT NULL
-			SET @sql = @sql + ' 
-			AND t.[Text] LIKE ''%'' + ''' + @text + ''' + ''%''';
+			IF @textContains IS NOT NULL
+			SET @sql = @sql + '
+			AND t.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%'' OR originalTweets.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%''';
  
 			IF @createdById IS NOT NULL
 			SET @sql = @sql + ' 
@@ -112,19 +112,27 @@
 
 			IF @onlyWithComments IS NOT NULL AND @onlyWithComments = 1
 			SET @sql = @sql + ' 
-			AND EXISTS (select tc.Id from dbo.TweetComment tc where tc.TweetId = t.Id)';
+			AND EXISTS (
+				select top(1) tc.Id from dbo.TweetComment tc where tc.TweetId = t.Id
+				union
+				select top(1) tc.Id from dbo.TweetComment tc where tc.TweetId = originalTweets.Id
+			)';
 
 			IF @onlyWithMedia IS NOT NULL AND @onlyWithMedia = 1
 			SET @sql = @sql + ' 
-			AND t.ImgUrl IS NOT NULL';
+			AND (t.ImgUrl IS NOT NULL OR originalTweets.ImgUrl IS NOT NULL)';
 
 			IF @onlyLikedByUserId IS NOT NULL
 			SET @sql = @sql + ' 
-			AND EXISTS (select * from dbo.TweetLike tl where tl.TweetId = t.Id and tl.UserId = @onlyLikedByUserId)';
+			AND EXISTS (
+				select top(1) * from dbo.TweetLike tl where tl.TweetId = t.Id and tl.UserId = @onlyLikedByUserId
+				union
+				select top(1) * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @onlyLikedByUserId
+			)';
 
 			IF @followerId IS NOT NULL
 			SET @sql = @sql + ' 
-			AND EXISTS (select * from dbo.Follow f where f.FolloweeId = t.CreatedById and f.FollowerId = @followerId)';
+			AND EXISTS (select top(1) * from dbo.Follow f where f.FolloweeId = t.CreatedById and f.FollowerId = @followerId)';
 
 			-- sorting setup ----------------------------
 			set @orderBy = ' 
@@ -141,7 +149,7 @@
 			EXEC sp_Executesql     
 					@sql,  
 					@params, 
-					@text = @text,
+					@textContains = @textContains,
 					@createdById = @createdById,
 					@onlyWithComments = @onlyWithComments,
 					@pageNumber = @pageNumber,

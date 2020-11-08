@@ -5,26 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20201105092403_InitialCreate.cs" />
-    <Compile Remove="Migrations\20201105092403_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20201105093930_InitialCreate.cs" />
-    <Compile Remove="Migrations\20201105093930_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20201105095227_InitialCreate.cs" />
-    <Compile Remove="Migrations\20201105095227_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20201106053745_RenamedUserColumn.cs" />
-    <Compile Remove="Migrations\20201106053745_RenamedUserColumn.Designer.cs" />
-    <Compile Remove="Migrations\20201106062240_ChangedDeleteBehaviour.cs" />
-    <Compile Remove="Migrations\20201106062240_ChangedDeleteBehaviour.Designer.cs" />
-    <Compile Remove="Migrations\20201106062530_ChangedOnDelete.cs" />
-    <Compile Remove="Migrations\20201106062530_ChangedOnDelete.Designer.cs" />
-    <Compile Remove="Migrations\20201106063403_Initial.cs" />
-    <Compile Remove="Migrations\20201106063403_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20201106064621_Initial.cs" />
-    <Compile Remove="Migrations\20201106064621_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20201106064836_Initial.cs" />
-    <Compile Remove="Migrations\20201106064836_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20201106065007_Initial.cs" />
-    <Compile Remove="Migrations\20201106065007_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

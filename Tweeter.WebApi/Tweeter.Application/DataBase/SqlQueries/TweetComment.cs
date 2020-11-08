@@ -3,9 +3,6 @@
 	public class TweetComment
 	{
 		public const string SearchCommentsForTweets = @"
-			DECLARE 
-			@currentUserId as int = @currentUserId_;
-
 			WITH tweetComments AS (
 				SELECT *, ROW_NUMBER() 
 				over (
@@ -13,7 +10,7 @@
 					order by tc.Id
 				) AS RowNumber
 				FROM dbo.TweetComment tc
-				where tc.TweetId in @tweetIds_
+				where tc.TweetId in @tweetIds
 			)
 			SELECT tweetComments.[Id]
 				  ,[CreatedById]
