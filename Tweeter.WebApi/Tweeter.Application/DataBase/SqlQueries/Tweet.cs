@@ -42,6 +42,7 @@
 			  ,t.[LikeCount]
 			  ,t.[RetweetCount]
 			  ,t.[BookmarkCount]
+			  ,t.[CommentCount]
 			  ,t.[OnlyFollowedCanReply]
 			  ,CASE WHEN EXISTS(
 					select top(1) * from dbo.TweetComment tc where tc.TweetId = t.Id and tc.CreatedById = @currentUserId
@@ -72,6 +73,7 @@
 			    ,originalTweets.[LikeCount]
 			    ,originalTweets.[RetweetCount]
 			    ,originalTweets.[BookmarkCount]
+				,originalTweets.[CommentCount]
 			    ,originalTweets.[OnlyFollowedCanReply]
 				,CASE WHEN EXISTS(
 					select top(1) * from dbo.TweetComment tc where tc.TweetId = originalTweets.Id and tc.CreatedById = @currentUserId

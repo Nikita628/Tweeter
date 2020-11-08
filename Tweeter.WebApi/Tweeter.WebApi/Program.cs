@@ -176,6 +176,7 @@ namespace Tweeter.WebApi
 					tweetToComment = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
 				}
 
+				tweetToComment.CommentCount++;
 				tc.TweetId = tweetToComment.Id;
 				context.TweetComment.Add(tc);
 			}

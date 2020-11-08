@@ -11,7 +11,8 @@ namespace Tweeter.Application.DataBase
 		public int LikeCount { get; set; }
 		public int RetweetCount { get; set; }
 		public int BookmarkCount { get; set; }
-		public bool OnlyFollowedCanReply { get; set; }
+        public int CommentCount { get; set; }
+        public bool OnlyFollowedCanReply { get; set; }
 
 		public Tweet RetweetedFrom { get; set; }
 		public ICollection<Tweet> Retweets { get; set; }

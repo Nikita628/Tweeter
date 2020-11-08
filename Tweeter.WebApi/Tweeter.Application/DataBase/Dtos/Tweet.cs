@@ -12,7 +12,8 @@ namespace Tweeter.Application.DataBase.Dtos
 		public int LikeCount { get; set; }
 		public int RetweetCount { get; set; }
 		public int BookmarkCount { get; set; }
-		public bool OnlyFollowedCanReply { get; set; }
+        public int CommentCount { get; set; }
+        public bool OnlyFollowedCanReply { get; set; }
 		public int CreatedById { get; set; }
 		public bool IsLikedByCurrentUser { get; set; }
 		public bool IsBookmarkedByCurrentUser { get; set; }

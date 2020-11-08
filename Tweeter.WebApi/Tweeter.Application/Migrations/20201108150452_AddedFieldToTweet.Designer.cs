@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tweeter.Application.DataBase;
 
 namespace Tweeter.Application.Migrations
 {
     [DbContext(typeof(TweeterDbContext))]
-    partial class TweeterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201108150452_AddedFieldToTweet")]
+    partial class AddedFieldToTweet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
