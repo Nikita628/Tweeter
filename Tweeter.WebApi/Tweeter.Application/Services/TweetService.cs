@@ -118,13 +118,6 @@ namespace Tweeter.Application.Services
 
 		public async Task<PageResponse<TweetDto>> SearchAsync(TweetSearchParam param)
 		{
-			//         param = new TweetSearchParam();
-			//         param.PageSize = 80;
-			//         param.PageNumber = 1;
-			//         param.SortProp = "id";
-			//         param.SortDirection = "asc";
-			//param.CurrentUserId = 2;
-
 			var result = new PageResponse<TweetDto>();
 
 			var tweetsDict = new Dictionary<int, TweetDto>(param.PageSize);
@@ -174,7 +167,8 @@ namespace Tweeter.Application.Services
 			var commentDbParam = new
 			{
 				currentUserId = _userAccessor.CurrentUserId,
-				tweetIds = items.Select(i => i.RetweetedFromId.HasValue ? i.RetweetedFromId.Value : i.Id).ToList()
+				tweetIds = items.Select(i => i.RetweetedFromId.HasValue ? i.RetweetedFromId.Value : i.Id).ToList(),
+				pageSize = 10
 			};
 
 			var commentTypes = new[] { typeof(TweetCommentDto), typeof(UserDto) };

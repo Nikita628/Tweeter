@@ -35,7 +35,7 @@
 
 			FROM tweetComments 
 			JOIN dbo.AspNetUsers u ON u.Id = tweetComments.CreatedById
-			WHERE RowNumber <= 10 
+			WHERE RowNumber <= @pageSize 
 			order by tweetComments.TweetId
 ";
 	}
