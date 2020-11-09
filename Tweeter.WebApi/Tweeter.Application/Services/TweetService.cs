@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.DataBase;
@@ -58,6 +60,7 @@ namespace Tweeter.Application.Services
 				return result;
 			}
 
+			await ProcessHashTags(tweet.Text);
 			await _dbContext.Tweet.AddAsync(tweet);
 			await _dbContext.SaveChangesAsync();
 
@@ -180,6 +183,34 @@ namespace Tweeter.Application.Services
 				commentMap,
 				"_split_"
 			);
+		}
+
+		private async Task ProcessHashTags(string text)
+		{
+			// select all hashtags from tweet text
+			// select all existing hashtags from db
+			// for all existing hashtags, increment tweet count
+			// for new hashtags, add new hashtag to db
+
+			var searchHashTags = new Regex(@"#[^ ]*");
+			var hashTagsFromNewTweet = searchHashTags.Matches(text).Select(m => m.Value).ToList();
+
+			var param = new SqlParameter("hashTags", hashTagsFromNewTweet);
+			var hashTagsFromDb = await _dbContext.HashTag
+				.FromSqlRaw("select * from dbo.HashTag where Text in @hashTags", param)
+				.ToDictionaryAsync((h) => h.Text);
+
+			var newHashTags = new List<HashTag>();
+
+			foreach (var h in hashTagsFromNewTweet)
+			{
+				if (hashTagsFromDb.TryGetValue(h, out HashTag htFromDb))
+					htFromDb.TweetCount++;
+				else
+					newHashTags.Add(new HashTag { Text = h });
+			}
+
+			await _dbContext.HashTag.AddRangeAsync(newHashTags);
 		}
 	}
 }
