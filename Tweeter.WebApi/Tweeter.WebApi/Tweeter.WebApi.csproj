@@ -6,8 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
-    <Folder Include="MapperConfigs\" />
     <Folder Include="Files\" />
   </ItemGroup>
 
