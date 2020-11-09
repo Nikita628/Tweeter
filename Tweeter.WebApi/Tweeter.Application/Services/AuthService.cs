@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -22,18 +23,21 @@ namespace Tweeter.Application.Services
 		private readonly UserManager<DataBase.User> _userManager;
 		private readonly SignInManager<DataBase.User> _signInManager;
 		private readonly TweeterDbContext _db;
+		private readonly IMapper _mapper;
 
 		public AuthService(
 			IOptions<AppSettings> aps,
 			UserManager<DataBase.User> um,
 			SignInManager<DataBase.User> sm,
-			TweeterDbContext db
+			TweeterDbContext db,
+			IMapper m
 		)
 		{
 			_appSetting = aps.Value;
 			_userManager = um;
 			_signInManager = sm;
 			_db = db;
+			_mapper = m;
 		}
 
 		public async Task<Response<Models.SignInResult>> SignInAsync(string login, string password)
@@ -66,7 +70,7 @@ namespace Tweeter.Application.Services
 			{
 				var signInResult = new Models.SignInResult
 				{
-					User = await _db.Users.FirstAsync(u => u.Id == user.Id),
+					User = await _db.Users.FirstAsync(u => u.Id == user.Id), // TODO map into dto
 					Token = GenerateJwtToken(user)
 				};
 

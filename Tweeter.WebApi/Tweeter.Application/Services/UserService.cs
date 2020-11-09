@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.DataBase;
-using Tweeter.Application.DataBase.Dtos;
 using Tweeter.Application.Models;
 using Tweeter.Application.Utils;
 
@@ -99,7 +98,7 @@ namespace Tweeter.Application.Services
 			return result;
 		}
 
-		public async Task<Response<bool>> UpdateAsync(Models.User user)
+		public async Task<Response<bool>> UpdateAsync(Models.UserForUpdate user)
 		{
 			var result = new Response<bool>();
 

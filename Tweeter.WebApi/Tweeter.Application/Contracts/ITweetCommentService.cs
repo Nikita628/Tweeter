@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Tweeter.Application.DataBase;
-using Tweeter.Application.DataBase.Dtos;
 using Tweeter.Application.Models;
 
 namespace Tweeter.Application.Contracts

@@ -1,4 +1,4 @@
-﻿namespace Tweeter.Application.DataBase.Dtos
+﻿namespace Tweeter.Application.Models
 {
 	public class Total
 	{

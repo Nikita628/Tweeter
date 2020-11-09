@@ -76,6 +76,9 @@ namespace Tweeter.WebApi
 			services.AddScoped<ICloudService, CloudService>();
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<ITweetService, TweetService>();
+			services.AddScoped<IHashTagService, HashTagService>();
+			services.AddScoped<ITweetCommentService, TweetCommentService>();
+			services.AddScoped<IUserService, UserService>();
 			services.AddScoped(typeof(CurrentUserIdAccessor));
 			services.AddScoped<IRawSqlService, RawSqlService>();
 		}

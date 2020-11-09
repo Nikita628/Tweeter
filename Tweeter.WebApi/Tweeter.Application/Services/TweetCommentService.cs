@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.DataBase;
-using Tweeter.Application.DataBase.Dtos;
 using Tweeter.Application.Models;
 using Tweeter.Application.Utils;
 

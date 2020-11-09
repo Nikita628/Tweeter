@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Tweeter.Application.DataBase.Dtos;
 using Tweeter.Application.Models;
 
 namespace Tweeter.Application.Contracts
@@ -10,6 +9,6 @@ namespace Tweeter.Application.Contracts
 		Task<PageResponse<UserDto>> SearchAsync(UserSearchParam param);
 		Task<Response<bool>> FollowAsync(int followeeId);
 		Task<Response<bool>> UnfollowAsync(int followeeId);
-		Task<Response<bool>> UpdateAsync(Models.User user);
+		Task<Response<bool>> UpdateAsync(Models.UserForUpdate user);
 	}
 }
