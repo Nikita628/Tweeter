@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading.Tasks;
+using Tweeter.Application.DataBase.Dtos;
+using Tweeter.Application.Models;
 
 namespace Tweeter.Application.Contracts
 {
 	public interface IUserService
 	{
+		Task<Response<DataBase.User>> GetAsync(int userId);
+		Task<PageResponse<UserDto>> SearchAsync(UserSearchParam param);
+		Task<Response<bool>> FollowAsync(int followeeId);
+		Task<Response<bool>> UnfollowAsync(int followeeId);
+		Task<Response<bool>> UpdateAsync(Models.User user);
 	}
 }

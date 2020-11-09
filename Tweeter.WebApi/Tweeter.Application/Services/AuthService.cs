@@ -19,14 +19,14 @@ namespace Tweeter.Application.Services
 	public class AuthService : IAuthService
 	{
 		private readonly AppSettings _appSetting;
-		private readonly UserManager<User> _userManager;
-		private readonly SignInManager<User> _signInManager;
+		private readonly UserManager<DataBase.User> _userManager;
+		private readonly SignInManager<DataBase.User> _signInManager;
 		private readonly TweeterDbContext _db;
 
 		public AuthService(
 			IOptions<AppSettings> aps,
-			UserManager<User> um,
-			SignInManager<User> sm,
+			UserManager<DataBase.User> um,
+			SignInManager<DataBase.User> sm,
 			TweeterDbContext db
 		)
 		{
@@ -97,7 +97,7 @@ namespace Tweeter.Application.Services
 				return result;
 			}
 
-			var user = new User
+			var user = new DataBase.User
 			{
 				Name = signUpData.Name,
 				UserName = signUpData.Email,
@@ -113,7 +113,7 @@ namespace Tweeter.Application.Services
 			return result;
 		}
 
-		private string GenerateJwtToken(User user)
+		private string GenerateJwtToken(DataBase.User user)
 		{
 			var claims = new List<Claim>
 			{

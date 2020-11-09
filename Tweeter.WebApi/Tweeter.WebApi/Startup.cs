@@ -50,7 +50,7 @@ namespace Tweeter.WebApi
 					};
 				});
 
-			IdentityBuilder ibuilder = services.AddIdentityCore<User>(opt =>
+			IdentityBuilder ibuilder = services.AddIdentityCore<Application.DataBase.User>(opt =>
 			{
 				opt.Password.RequireDigit = false;
 				opt.Password.RequiredLength = 5;
@@ -60,7 +60,7 @@ namespace Tweeter.WebApi
 
 			ibuilder = new IdentityBuilder(ibuilder.UserType, ibuilder.Services);
 			ibuilder.AddEntityFrameworkStores<TweeterDbContext>();
-			ibuilder.AddSignInManager<SignInManager<User>>();
+			ibuilder.AddSignInManager<SignInManager<Application.DataBase.User>>();
 
 			services.AddDbContext<TweeterDbContext>(options => options
 				.UseLoggerFactory(MyLoggerFactory)

@@ -38,6 +38,8 @@ namespace Tweeter.Application.Services
 				UserId = _userAccessor.CurrentUserId
 			};
 
+			var existingTweet = await _dbContext.Tweet.FirstOrDefaultAsync(t => t.Id == tweetId);
+			existingTweet.BookmarkCount++;
 			await _dbContext.TweetBookmark.AddAsync(newBookmark);
 			await _dbContext.SaveChangesAsync();
 
@@ -74,6 +76,8 @@ namespace Tweeter.Application.Services
 				UserId = _userAccessor.CurrentUserId
 			};
 
+			var existingTweet = await _dbContext.Tweet.FirstOrDefaultAsync(t => t.Id == tweetId);
+			existingTweet.LikeCount++;
 			await _dbContext.TweetLike.AddAsync(newLike);
 			await _dbContext.SaveChangesAsync();
 
@@ -99,9 +103,11 @@ namespace Tweeter.Application.Services
 			{
 				CreatedById = _userAccessor.CurrentUserId,
 				RetweetedFromId = originalTweet.Id,
-				CreatedAt = DateTime.UtcNow
+				CreatedAt = DateTime.UtcNow,
+				Text = string.Empty
 			};
 
+			originalTweet.RetweetCount++;
 			await _dbContext.Tweet.AddAsync(newTweet);
 			await _dbContext.SaveChangesAsync();
 
@@ -112,14 +118,14 @@ namespace Tweeter.Application.Services
 
 		public async Task<PageResponse<TweetDto>> SearchAsync(TweetSearchParam param)
 		{
-   //         param = new TweetSearchParam();
-   //         param.PageSize = 80;
-   //         param.PageNumber = 1;
-   //         param.SortProp = "id";
-   //         param.SortDirection = "asc";
+			//         param = new TweetSearchParam();
+			//         param.PageSize = 80;
+			//         param.PageNumber = 1;
+			//         param.SortProp = "id";
+			//         param.SortDirection = "asc";
 			//param.CurrentUserId = 2;
 
-            var result = new PageResponse<TweetDto>();
+			var result = new PageResponse<TweetDto>();
 
 			var tweetsDict = new Dictionary<int, TweetDto>(param.PageSize);
 
@@ -127,15 +133,15 @@ namespace Tweeter.Application.Services
 			{
 				TweetDto tweet = (TweetDto)objects[0];
 				tweet.CreatedBy = (UserDto)objects[1];
-				
+
 				if (tweet.RetweetedFromId.HasValue)
 				{
 					tweet.OriginalTweet = (TweetDto)objects[2];
 					tweet.OriginalTweet.CreatedBy = (UserDto)objects[3];
 					tweetsDict.TryAdd(tweet.RetweetedFromId.Value, tweet.OriginalTweet);
-				} 
+				}
 				else
-                {
+				{
 					tweetsDict.Add(tweet.Id, tweet);
 				}
 
@@ -144,6 +150,7 @@ namespace Tweeter.Application.Services
 				return tweet;
 			};
 
+			param.CurrentUserId = _userAccessor.CurrentUserId;
 			param.SortProp = "t." + param.SortProp;
 			var types = new[] { typeof(TweetDto), typeof(UserDto), typeof(TweetDto), typeof(UserDto), typeof(Total) };
 			result.Items = await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.SearchTweets, param, types, map, "_split_");

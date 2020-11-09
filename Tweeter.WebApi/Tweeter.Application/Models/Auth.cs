@@ -1,10 +1,8 @@
-﻿using Tweeter.Application.DataBase;
-
-namespace Tweeter.Application.Models
+﻿namespace Tweeter.Application.Models
 {
 	public class SignInResult
 	{
-		public User User { get; set; }
+		public DataBase.User User { get; set; }
 		public string Token { get; set; }
 	}
 
