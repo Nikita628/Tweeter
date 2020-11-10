@@ -1,1 +1,35 @@
-<p>signup works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <div class="signup mt-4">
+                <h5>REGISTRATION</h5>
+                <form (keyup.enter)="onSubmit()"> 
+                    <div class="form-group">
+                        <i class="material-icons">person_outline</i>
+                        <input (input)="onNameChange($event.target.value)" type="text" placeholder="Name" name="username">
+                        <p *ngIf="nameError" class="error">{{ nameError }}</p>
+                    </div>
+                    <div class="form-group">
+                        <i class="material-icons">alternate_email</i>
+                        <input (input)="onEmailChange($event.target.value)" type="text" placeholder="Email" name="email">
+                        <p *ngIf="emailError" class="error">{{ emailError }}</p>
+                    </div>
+                    <div class="form-group">
+                        <i class="material-icons">lock</i>
+                        <input (input)="onPasswordChange($event.target.value)" type="password" placeholder="Password" name="password">
+                        <p *ngIf="passwordError" class="error">{{ passwordError }}</p>
+                    </div>
+                    <div class="form-group">
+                        <i class="material-icons">lock</i>
+                        <input (input)="onConfirmationChange($event.target.value)" type="password" placeholder="Confirm Password" name="confirmation">
+                        <p *ngIf="confirmationError" class="error">{{ confirmationError }}</p>
+                    </div>
+                    <div class="text-center">
+                        <button (click)="onSubmit()" [disabled]="isSubmitDisabled" type="button" class="btn btn-primary w-100">SUBMIT</button>
+                        <p class="text-muted mt-3 mb-1">Already have an account? Login <a href="">here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

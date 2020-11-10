@@ -2,19 +2,19 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
             <div class="signin mt-4">
-                <h5>LOGIN</h5>
-                <form>
+                <h5>{{ title }}</h5>
+                <form (keyup.enter)="onSubmit()">
                     <div class="form-group">
-                        <i class="material-icons">person_outline</i>
-                        <input type="text" id="email" placeholder="Email">
+                        <i class="material-icons">alternate_email</i>
+                        <input [(ngModel)]="email" type="text" placeholder="Email" name="email">
                     </div>
                     <div class="form-group">
                         <i class="material-icons">lock</i>
-                        <input type="password" id="password" placeholder="Password">
+                        <input [(ngModel)]="password" type="password" placeholder="Password" name="password">
                     </div>
                     <div class="text-center">
-                        <button type="button" class="btn btn-primary w-100">SUBMIT</button>
-                        <p class="text-muted mt-3 mb-1">Don't have an account? Signup <a href="">here</a></p>
+                        <button (click)="onSubmit()" [disabled]="!email || !password" type="button" class="btn btn-primary w-100">SUBMIT</button>
+                        <p class="text-muted mt-3 mb-1">Don't have an account? Register <a href="">here</a></p>
                     </div>
                 </form>
             </div>

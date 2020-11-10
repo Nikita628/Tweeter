@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { SigninComponent } from "./components/auth/signin/signin.component";
 import { SignupComponent } from './components/auth/signup/signup.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { SignupComponent } from './components/auth/signup/signup.component';
     SignupComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
