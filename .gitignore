@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+tweeter-app/node_modules/
+tweeter-app/.vscode/
+Tweeter.WebApi/Tweeter.WebApi/wwwroot/
+tweeter-app/build
+
 # User-specific files
 *.rsuser
 *.suo
