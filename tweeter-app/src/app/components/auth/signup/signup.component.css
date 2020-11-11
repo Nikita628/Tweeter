@@ -22,14 +22,14 @@ label, input {
     width: 100%;
 }
 
-form input {
+.input {
     padding: 5px 5px 5px 40px;
     border-radius: 5px;
     border: 1px solid #c9c9c9;
     color: gray;
 }
 
-form input:focus {
+.input:focus {
     border: 1px solid #2f80ed;
 }
 
@@ -48,4 +48,8 @@ button {
 .error {
     font-size: smaller;
     color: red;
+}
+
+.redBorder {
+    border: 1px solid red;
 }

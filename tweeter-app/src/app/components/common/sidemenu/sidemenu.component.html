@@ -1,0 +1,5 @@
+<div class="sidemenu">
+    <div *ngFor="let item of items" (click)="item.onClick()" [ngClass]="{active: item.isActive}" class="item">
+        {{ item.text }}
+    </div>
+</div>

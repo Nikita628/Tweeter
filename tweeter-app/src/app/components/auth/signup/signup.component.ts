@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { SignUpData } from 'src/app/models/Common';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -52,9 +54,12 @@ export class SignupComponent {
     this.isAlreadySubmitted = true;
     this.validate();
     if (!this.isSubmitDisabled) {
-      console.log("signup");
-      // this.isSubmitDisabled = true;
+      const signUpData = new SignUpData();
+      signUpData.email = this.email;
+      signUpData.name = this.name;
+      signUpData.password = this.password;
       // TODO dispatch action to signup
+      // disable button and display spinner in button
     }
   }
 

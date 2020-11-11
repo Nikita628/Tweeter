@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
             <div class="signin mt-4">
-                <h5>{{ title }}</h5>
+                <h5>LOGIN</h5>
                 <form (keyup.enter)="onSubmit()">
                     <div class="form-group">
                         <i class="material-icons">alternate_email</i>
@@ -14,7 +14,7 @@
                     </div>
                     <div class="text-center">
                         <button (click)="onSubmit()" [disabled]="!email || !password" type="button" class="btn btn-primary w-100">SUBMIT</button>
-                        <p class="text-muted mt-3 mb-1">Don't have an account? Register <a href="">here</a></p>
+                        <p class="text-muted mt-3 mb-1">Don't have an account? Register <a [routerLink]="['/signup']">here</a></p>
                     </div>
                 </form>
             </div>

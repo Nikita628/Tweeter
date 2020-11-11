@@ -1,0 +1,19 @@
+.sidemenu {
+    padding: 15px 15px 15px 0;
+    background-color: white;
+    box-shadow: 1px 1px 3px #d6d6d6;
+}
+
+.item {
+    padding: 10px 10px 10px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+    border-left: 5px solid transparent;
+}
+
+.item.active {
+    color: #5c9bf1;
+    border-left: 5px solid #2f80ed;
+}
+

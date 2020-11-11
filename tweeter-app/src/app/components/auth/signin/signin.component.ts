@@ -6,11 +6,11 @@ import { Component } from "@angular/core";
     styleUrls: ["./signin.component.css"]
 })
 export class SigninComponent {
-    public title = "LOGIN";
     public email = "";
     public password = "";
 
     public onSubmit(): void {
-        console.log("signin");
+        // disable button and display spinner in button
+        // dispatch action
     }
 }
