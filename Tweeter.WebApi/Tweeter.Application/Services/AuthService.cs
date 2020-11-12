@@ -14,6 +14,7 @@ using Tweeter.Application.Common;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.DataBase;
 using Tweeter.Application.Models;
+using Tweeter.Application.Utils;
 
 namespace Tweeter.Application.Services
 {
@@ -70,7 +71,7 @@ namespace Tweeter.Application.Services
 			{
 				var signInResult = new Models.SignInResult
 				{
-					User = await _db.Users.FirstAsync(u => u.Id == user.Id), // TODO map into dto
+					User = (await _db.Users.FirstAsync(u => u.Id == user.Id)).To<UserDto>(_mapper),
 					Token = GenerateJwtToken(user)
 				};
 

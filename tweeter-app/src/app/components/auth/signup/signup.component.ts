@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { SignUpData } from 'src/app/models/Common';
+import { SignUpData } from 'src/app/models/Auth';
 
 @Component({
   selector: 'app-signup',

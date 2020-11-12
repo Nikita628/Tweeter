@@ -2,7 +2,7 @@
 {
 	public class SignInResult
 	{
-		public DataBase.User User { get; set; }
+		public UserDto User { get; set; }
 		public string Token { get; set; }
 	}
 

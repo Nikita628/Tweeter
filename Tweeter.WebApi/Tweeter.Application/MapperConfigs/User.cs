@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AutoMapper;
 
 namespace Tweeter.Application.MapperConfigs
 {
-	public class UserConfig
+	public class UserConfig : Profile
 	{
+		public UserConfig()
+		{
+			CreateMap<DataBase.User, Models.UserDto>();
+		}
 	}
 }

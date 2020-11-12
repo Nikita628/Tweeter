@@ -1,6 +1,8 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
+import { StoreModule } from "@ngrx/store";
 
 import { AppComponent } from "./app.component";
 import { SidemenuComponent } from './components/common/sidemenu/sidemenu.component';
@@ -16,6 +18,8 @@ import { HomeComponent } from './components/common/home/home.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { SettingsComponent } from './components/user/settings/settings.component';
 import { NotFoundComponent } from './components/common/not-found/not-found.component';
+import { ApiClient } from './services/api-client.service';
+import { reducers } from './state';
 
 @NgModule({
   declarations: [
@@ -35,10 +39,13 @@ import { NotFoundComponent } from './components/common/not-found/not-found.compo
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    StoreModule.forRoot(reducers),
   ],
   providers: [
-    AuthApiClient
+    AuthApiClient,
+    ApiClient
   ],
   bootstrap: [AppComponent]
 })

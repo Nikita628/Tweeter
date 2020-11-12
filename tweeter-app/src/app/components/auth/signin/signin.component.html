@@ -13,7 +13,10 @@
                         <input [(ngModel)]="password" type="password" placeholder="Password" name="password">
                     </div>
                     <div class="text-center">
-                        <button (click)="onSubmit()" [disabled]="!email || !password" type="button" class="btn btn-primary w-100">SUBMIT</button>
+                        <button (click)="onSubmit()" [disabled]="!email || !password || isSubmitDisabled" type="button" class="btn btn-primary w-100">
+                            SUBMIT
+                            <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        </button>
                         <p class="text-muted mt-3 mb-1">Don't have an account? Register <a [routerLink]="['/signup']">here</a></p>
                     </div>
                 </form>

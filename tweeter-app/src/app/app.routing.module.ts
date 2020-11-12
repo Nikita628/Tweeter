@@ -12,6 +12,8 @@ import { ProfileComponent } from './components/user/profile/profile.component';
 import { SettingsComponent } from './components/user/settings/settings.component';
 
 export const routes: Routes = [
+    { path: "signin", component: SigninComponent },
+    { path: "signup", component: SignupComponent },
     {
         path: "", component: LayoutComponent, children: [
             { path: "", redirectTo: "home", pathMatch: "full" },
@@ -40,8 +42,6 @@ export const routes: Routes = [
             { path: "**", redirectTo: "/not-found" }
         ]
     },
-    { path: "signin", component: SigninComponent },
-    { path: "signup", component: SignupComponent },
     { path: "not-found", component: NotFoundComponent }
 ];
 
