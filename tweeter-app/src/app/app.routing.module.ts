@@ -20,22 +20,22 @@ export const routes: Routes = [
             { path: "settings", component: SettingsComponent },
 
             { path: "explore", redirectTo: "explore/top", pathMatch: "full" },
-            { path: "explore/top", component: ExploreComponent },
-            { path: "explore/latest", component: ExploreComponent },
-            { path: "explore/people", component: ExploreComponent },
-            { path: "explore/media", component: ExploreComponent },
+            { path: "explore/top", component: ExploreComponent, data: { filter: "top" } },
+            { path: "explore/latest", component: ExploreComponent, data: { filter: "latest" } },
+            { path: "explore/people", component: ExploreComponent, data: { filter: "people" } },
+            { path: "explore/media", component: ExploreComponent, data: { filter: "media" } },
 
             { path: "bookmarks", redirectTo: "bookmarks/tweets", pathMatch: "full" },
-            { path: "bookmarks/tweets", component: BookmarksComponent },
-            { path: "bookmarks/tweets-and-replies", component: BookmarksComponent },
-            { path: "bookmarks/media", component: BookmarksComponent },
-            { path: "bookmarks/likes", component: BookmarksComponent },
+            { path: "bookmarks/tweets", component: BookmarksComponent, data: { filter: "tweets" } },
+            { path: "bookmarks/tweets-and-replies", component: BookmarksComponent, data: { filter: "tweetsAndReplies" } },
+            { path: "bookmarks/media", component: BookmarksComponent, data: { filter: "media" } },
+            { path: "bookmarks/likes", component: BookmarksComponent, data: { filter: "likes" } },
 
             { path: "profile/:id", redirectTo: "profile/:id/tweets", pathMatch: "full" },
-            { path: "profile/:id/tweets", component: ProfileComponent },
-            { path: "profile/:id/tweets-and-replies", component: ProfileComponent },
-            { path: "profile/:id/media", component: ProfileComponent },
-            { path: "profile/:id/likes", component: ProfileComponent },
+            { path: "profile/:id/tweets", component: ProfileComponent, data: { filter: "tweets" } },
+            { path: "profile/:id/tweets-and-replies", component: ProfileComponent, data: { filter: "tweetsAndReplies" } },
+            { path: "profile/:id/media", component: ProfileComponent, data: { filter: "media" } },
+            { path: "profile/:id/likes", component: ProfileComponent, data: { filter: "likes" } },
 
             { path: "**", redirectTo: "/not-found" }
         ]
