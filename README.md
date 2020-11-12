@@ -21,6 +21,6 @@ User stories
 
     User story(optional): I can search for a group
 
-Tech stack: Backend - .Net Core, C#, EF, Dapper. Frontend - Angular.
+Tech stack: Backend - .Net Core, C#, EF, Dapper. Frontend - Angular, ngrx.
 
 Design - https://www.figma.com/file/xxf4TG14lpF3vFUbBtEZUR/Tweeter?node-id=0%3A1
