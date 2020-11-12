@@ -20,6 +20,8 @@ import { SettingsComponent } from './components/user/settings/settings.component
 import { NotFoundComponent } from './components/common/not-found/not-found.component';
 import { ApiClient } from './services/api-client.service';
 import { reducers } from './state';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './effects/auth';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { reducers } from './state';
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([AuthEffects]),
   ],
   providers: [
     AuthApiClient,

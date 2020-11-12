@@ -7,7 +7,6 @@ import { takeUntil } from "rxjs/operators";
 import { IAppState } from 'src/app/state';
 import { actionCreators, actionTypes, IAuthState } from 'src/app/state/auth';
 
-
 @Component({
     selector: "app-signin",
     templateUrl: "./signin.component.html",

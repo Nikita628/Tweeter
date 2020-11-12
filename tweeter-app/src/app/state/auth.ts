@@ -17,6 +17,8 @@ export const actionTypes = {
     signin: "Auth/Signin",
     signinSuccess: "Auth/SigninSuccess",
     signinError: "Auth/SigninError",
+    signout: "Auth/Signout",
+    autoSignout: "Auth/AutoSignout",
 };
 
 export const actionCreators = {
@@ -30,7 +32,14 @@ export const actionCreators = {
     }),
     signinError: (): Action => ({
         type: actionTypes.signinError
-    })
+    }),
+    signout: (): Action => ({
+        type: actionTypes.signout
+    }),
+    autoSignout: (timeout: number): Action & IPayloadedAction<number> => ({
+        type: actionTypes.autoSignout,
+        payload: timeout
+    }),
 };
 
 const reducerMap = {
