@@ -9,13 +9,13 @@ import { TopmenuComponent } from './components/common/topmenu/topmenu.component'
 import { AuthApiClient } from './services/auth-api-client.service';
 import { SigninComponent } from "./components/auth/signin/signin.component";
 import { SignupComponent } from './components/auth/signup/signup.component';
-import { RouterModule, Routes } from '@angular/router';
-
-const routes: Routes = [
-  { path: "", component: LayoutComponent },
-  { path: "signin", component: SigninComponent },
-  { path: "signup", component: SignupComponent }
-];
+import { AppRoutingModule } from './app.routing.module';
+import { ExploreComponent } from './components/common/explore/explore.component';
+import { BookmarksComponent } from './components/common/bookmarks/bookmarks.component';
+import { HomeComponent } from './components/common/home/home.component';
+import { ProfileComponent } from './components/user/profile/profile.component';
+import { SettingsComponent } from './components/user/settings/settings.component';
+import { NotFoundComponent } from './components/common/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -24,12 +24,18 @@ const routes: Routes = [
     SignupComponent,
     SidemenuComponent,
     LayoutComponent,
-    TopmenuComponent
+    TopmenuComponent,
+    ExploreComponent,
+    BookmarksComponent,
+    HomeComponent,
+    ProfileComponent,
+    SettingsComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    AppRoutingModule
   ],
   providers: [
     AuthApiClient
