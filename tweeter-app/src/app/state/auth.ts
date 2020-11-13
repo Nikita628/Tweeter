@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { SigninResult } from '../models/Auth';
+import { SigninResult, SignUpData } from '../models/Auth';
 import { IPayloadedAction } from '../models/Common';
 import { User } from '../models/User';
 
@@ -19,6 +19,10 @@ export const actionTypes = {
     signinError: "Auth/SigninError",
     signout: "Auth/Signout",
     autoSignout: "Auth/AutoSignout",
+    autoSignin: "Auth/AutoSignin",
+    signup: "Auth/Signup",
+    signupSuccess: "Auth/SignupSuccess",
+    signupError: "Auth/SignupError",
 };
 
 export const actionCreators = {
@@ -40,6 +44,19 @@ export const actionCreators = {
         type: actionTypes.autoSignout,
         payload: timeout
     }),
+    autoSignin: (): Action => ({
+        type: actionTypes.autoSignin
+    }),
+    signup: (data: SignUpData): Action & IPayloadedAction<SignUpData> => ({
+        type: actionTypes.signup,
+        payload: data
+    }),
+    signupSuccess: (): Action => ({
+        type: actionTypes.signupSuccess
+    }),
+    signupError: (): Action => ({
+        type: actionTypes.signupError
+    })
 };
 
 const reducerMap = {

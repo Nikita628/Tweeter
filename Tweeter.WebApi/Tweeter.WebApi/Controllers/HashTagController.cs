@@ -5,7 +5,7 @@ using Tweeter.Application.Contracts;
 
 namespace Tweeter.WebApi.Controllers
 {
-	//[Authorize]
+	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
 	public class HashTagController : ControllerBase

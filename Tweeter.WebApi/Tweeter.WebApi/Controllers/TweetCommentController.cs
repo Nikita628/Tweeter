@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.DataBase;
@@ -6,7 +7,7 @@ using Tweeter.Application.Models;
 
 namespace Tweeter.WebApi.Controllers
 {
-	//[Authorize]
+	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
 	public class TweetCommentController : ControllerBase

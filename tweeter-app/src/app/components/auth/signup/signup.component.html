@@ -32,7 +32,9 @@
                     </div>
                     <div class="text-center">
                         <button (click)="onSubmit()" [disabled]="isSubmitDisabled" type="button"
-                            class="btn btn-primary w-100">SUBMIT</button>
+                            class="btn btn-primary w-100">SUBMIT
+                            <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        </button>
                         <p class="text-muted mt-3 mb-1">Already have an account? Login <a [routerLink]="['/signin']">here</a></p>
                     </div>
                 </form>

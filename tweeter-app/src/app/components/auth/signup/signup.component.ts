@@ -1,17 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ofType } from '@ngrx/effects';
+import { ActionsSubject, Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { SignUpData } from 'src/app/models/Auth';
+import { IAppState } from 'src/app/state';
+import { actionCreators, actionTypes } from 'src/app/state/auth';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit, OnDestroy {
+  private destroyed$ = new Subject();
   private readonly emailRegex = /.*@.*\.[A-Za-z]{2,10}/;
 
   public isSubmitDisabled = false;
   public isAlreadySubmitted = false;
+  public isLoading = false;
   public name = "";
   public email = "";
   public password = "";
@@ -21,6 +29,23 @@ export class SignupComponent {
   public emailError = null;
   public passwordError = null;
   public confirmationError = null;
+
+  constructor(
+    private actions$: ActionsSubject,
+    private store: Store<IAppState>,
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.actions$.pipe(
+      ofType(actionTypes.signupError),
+      takeUntil(this.destroyed$)
+    ).subscribe(() => {
+      this.isLoading = false;
+      this.isSubmitDisabled = false;
+    });
+  }
 
   public onNameChange(name: string): void {
     this.name = name;
@@ -54,12 +79,13 @@ export class SignupComponent {
     this.isAlreadySubmitted = true;
     this.validate();
     if (!this.isSubmitDisabled) {
+      this.isSubmitDisabled = true;
+      this.isLoading = true;
       const signUpData = new SignUpData();
       signUpData.email = this.email;
       signUpData.name = this.name;
       signUpData.password = this.password;
-      // TODO dispatch action to signup
-      // disable button and display spinner in button
+      this.store.dispatch(actionCreators.signup(signUpData));
     }
   }
 
@@ -96,5 +122,10 @@ export class SignupComponent {
       || this.emailError
       || this.passwordError
       || this.confirmationError;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

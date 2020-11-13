@@ -10,12 +10,13 @@ import { LayoutComponent } from './components/common/layout/layout.component';
 import { NotFoundComponent } from './components/common/not-found/not-found.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { SettingsComponent } from './components/user/settings/settings.component';
+import { AuthGuard } from './services/auth-guard';
 
 export const routes: Routes = [
     { path: "signin", component: SigninComponent },
     { path: "signup", component: SignupComponent },
     {
-        path: "", component: LayoutComponent, children: [
+        path: "", component: LayoutComponent, canActivate: [AuthGuard], children: [
             { path: "", redirectTo: "home", pathMatch: "full" },
 
             { path: "home", component: HomeComponent },

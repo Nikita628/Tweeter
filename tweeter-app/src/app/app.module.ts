@@ -1,8 +1,11 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
+import { NotificationAnimationType, SimpleNotificationsModule } from 'angular2-notifications';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppComponent } from "./app.component";
 import { SidemenuComponent } from './components/common/sidemenu/sidemenu.component';
@@ -20,8 +23,8 @@ import { SettingsComponent } from './components/user/settings/settings.component
 import { NotFoundComponent } from './components/common/not-found/not-found.component';
 import { ApiClient } from './services/api-client.service';
 import { reducers } from './state';
-import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './effects/auth';
+import { RequestInterceptor } from './services/request-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -45,10 +48,17 @@ import { AuthEffects } from './effects/auth';
     HttpClientModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([AuthEffects]),
+    SimpleNotificationsModule.forRoot({position: ["top", "right"], timeOut: 4000, animate: NotificationAnimationType.FromTop}),
+    BrowserAnimationsModule,
   ],
   providers: [
     AuthApiClient,
-    ApiClient
+    ApiClient,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
