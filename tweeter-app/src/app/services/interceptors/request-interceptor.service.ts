@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { exhaustMap, take } from 'rxjs/operators';
-import { IAppState } from '../state';
+import { IAppState } from '../../state';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {

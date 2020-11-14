@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { ApiResponse } from '../models/Api';
-import { SigninResult, SignUpData } from '../models/Auth';
+import { ApiResponse } from '../../models/Api';
+import { SigninResult, SignUpData } from '../../models/Auth';
 import { ApiClient } from './api-client.service';
 
 @Injectable()

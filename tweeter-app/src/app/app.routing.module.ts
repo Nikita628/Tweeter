@@ -10,7 +10,7 @@ import { LayoutComponent } from './components/common/layout/layout.component';
 import { NotFoundComponent } from './components/common/not-found/not-found.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { SettingsComponent } from './components/user/settings/settings.component';
-import { AuthGuard } from './services/auth-guard';
+import { AuthGuard } from './services/guards/auth-guard';
 
 export const routes: Routes = [
     { path: "signin", component: SigninComponent },
@@ -43,7 +43,7 @@ export const routes: Routes = [
             { path: "**", redirectTo: "/not-found" }
         ]
     },
-    { path: "not-found", component: NotFoundComponent }
+    { path: "not-found", component: NotFoundComponent },
 ];
 
 @NgModule({

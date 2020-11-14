@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ofType } from '@ngrx/effects';
-import { ActionsSubject, Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { SignUpData } from 'src/app/models/Auth';
 import { IAppState } from 'src/app/state';
-import { actionCreators, actionTypes } from 'src/app/state/auth';
+import { actionCreators, IAuthState } from 'src/app/state/auth';
 
 @Component({
   selector: 'app-signup',
@@ -15,6 +15,7 @@ import { actionCreators, actionTypes } from 'src/app/state/auth';
 })
 export class SignupComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject();
+  private authState$: Observable<IAuthState>;
   private readonly emailRegex = /.*@.*\.[A-Za-z]{2,10}/;
 
   public isSubmitDisabled = false;
@@ -31,19 +32,22 @@ export class SignupComponent implements OnInit, OnDestroy {
   public confirmationError = null;
 
   constructor(
-    private actions$: ActionsSubject,
     private store: Store<IAppState>,
+    private router: Router
   ) {
-
+    this.authState$ = store.select("auth");
   }
 
   ngOnInit(): void {
-    this.actions$.pipe(
-      ofType(actionTypes.signupError),
+    this.authState$.pipe(
       takeUntil(this.destroyed$)
-    ).subscribe(() => {
-      this.isLoading = false;
-      this.isSubmitDisabled = false;
+    ).subscribe((state) => {
+      if (state.signupStatus === "error") {
+        this.isLoading = false;
+        this.isSubmitDisabled = false;
+      } else if (state.signupStatus === "success") {
+        this.router.navigate(["/signin"]);
+      }
     });
   }
 
@@ -127,5 +131,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.store.dispatch(actionCreators.clearSignupStatus());
   }
 }

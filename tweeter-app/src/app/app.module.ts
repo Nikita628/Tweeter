@@ -11,7 +11,7 @@ import { AppComponent } from "./app.component";
 import { SidemenuComponent } from './components/common/sidemenu/sidemenu.component';
 import { LayoutComponent } from './components/common/layout/layout.component';
 import { TopmenuComponent } from './components/common/topmenu/topmenu.component';
-import { AuthApiClient } from './services/auth-api-client.service';
+import { AuthApiClient } from './services/api/auth-api-client.service';
 import { SigninComponent } from "./components/auth/signin/signin.component";
 import { SignupComponent } from './components/auth/signup/signup.component';
 import { AppRoutingModule } from './app.routing.module';
@@ -21,10 +21,11 @@ import { HomeComponent } from './components/common/home/home.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { SettingsComponent } from './components/user/settings/settings.component';
 import { NotFoundComponent } from './components/common/not-found/not-found.component';
-import { ApiClient } from './services/api-client.service';
+import { ApiClient } from './services/api/api-client.service';
 import { reducers } from './state';
 import { AuthEffects } from './effects/auth';
-import { RequestInterceptor } from './services/request-interceptor.service';
+import { RequestInterceptor } from './services/interceptors/request-interceptor.service';
+import { NotificationService } from './services/utils/notification.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { RequestInterceptor } from './services/request-interceptor.service';
     HomeComponent,
     ProfileComponent,
     SettingsComponent,
-    NotFoundComponent
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,7 +59,8 @@ import { RequestInterceptor } from './services/request-interceptor.service';
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,
       multi: true
-    }
+    },
+    NotificationService,
   ],
   bootstrap: [AppComponent]
 })
