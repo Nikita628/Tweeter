@@ -26,6 +26,9 @@ import { reducers } from './state';
 import { AuthEffects } from './effects/auth';
 import { RequestInterceptor } from './services/interceptors/request-interceptor.service';
 import { NotificationService } from './services/utils/notification.service';
+import { TweetDetailsComponent } from './components/tweet/tweet-details/tweet-details.component';
+import { TweetCommentComponent } from './components/tweet/tweet-comment/tweet-comment.component';
+import { TweetCreationComponent } from './components/tweet/tweet-creation/tweet-creation.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,9 @@ import { NotificationService } from './services/utils/notification.service';
     ProfileComponent,
     SettingsComponent,
     NotFoundComponent,
+    TweetDetailsComponent,
+    TweetCommentComponent,
+    TweetCreationComponent,
   ],
   imports: [
     BrowserModule,

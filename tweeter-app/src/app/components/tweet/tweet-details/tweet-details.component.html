@@ -1,0 +1,24 @@
+<div class="tweet">
+    <div class="media">
+        <img *ngIf="tweet.createdBy.avatarUrl" [src]="tweet.createdBy.avatarUrl" class="user-img mr-3" alt="...">
+        <div class="media-body">
+            <h6 class="mt-0 mb-1">{{ tweet.createdBy.name }}</h6>
+            <p class="mb-0 text-muted">{{ tweet.createdAt | date:'medium' }}</p>
+        </div>
+    </div>
+    <p class="my-3">
+        {{ tweet.text }}
+    </p>
+    <img *ngIf="tweet.imgUrl" [src]="tweet.imgUrl" alt="" class="tweet-img">
+    <div class="info">
+        <span class="mx-2">{{ tweet.commentCount }} Comments</span>
+        <span class="mx-2">{{ tweet.retweetCount }} Retweets</span>
+        <span class="mx-2">{{ tweet.bookmarkCount }} Saved</span>
+    </div>
+    <div class="tweet-menu">
+        <button><i class="material-icons">chat_bubble_outline</i> Comment</button>
+        <button><i class="material-icons">autorenew</i> Retweet</button>
+        <button><i class="material-icons">check</i> Like</button>
+        <button><i class="material-icons">bookmark</i> Save</button>
+    </div>
+</div>
