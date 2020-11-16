@@ -1,0 +1,38 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-items {
+    height: 100%;
+}
+
+.nav-item {
+    color: #999;
+    display: inline-block;
+    height: 100%;
+    padding: 0 30px;
+    font-size: 36px;
+}
+
+.nav-item.active {
+    color: #2f80ed;
+    border-bottom: 3px solid #2f80ed;
+}
+
+.nav-item:hover {
+    background-color: #f7f7f7;
+}
+
+.nav-item:hover {
+    text-decoration: none;
+}
+
+@media (min-width: 576px) { 
+    footer {
+        display: none;
+    }
+}

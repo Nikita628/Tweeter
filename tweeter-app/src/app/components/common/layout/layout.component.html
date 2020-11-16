@@ -1,2 +1,9 @@
-<p>layout works!</p>
+<app-topmenu></app-topmenu>
 <router-outlet></router-outlet>
+<footer>
+    <nav class="nav-items">
+        <a class="nav-item" [routerLink]="['/home']" routerLinkActive="active"><i class="material-icons">home</i></a>
+        <a class="nav-item" [routerLink]="['/explore']" routerLinkActive="active"><i class="material-icons">explore</i></a>
+        <a class="nav-item" [routerLink]="['/bookmarks']" routerLinkActive="active"><i class="material-icons">bookmark</i></a>
+    </nav>
+</footer>

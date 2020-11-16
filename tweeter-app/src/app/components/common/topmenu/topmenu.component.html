@@ -1,1 +1,27 @@
-<p>topmenu works!</p>
+<nav class="top-nav">
+    <div class="brand" (click)="navigateHome()">
+        <i class="material-icons">cloud_queue</i>
+        <span class="header">Tweeter</span>
+    </div>
+    <div class="nav-items">
+        <a class="nav-item" [routerLink]="['/home']" routerLinkActive="active">Home</a>
+        <a class="nav-item" [routerLink]="['/explore']" routerLinkActive="active">Explore</a>
+        <a class="nav-item" [routerLink]="['/bookmarks']" routerLinkActive="active">Bookmarks</a>
+    </div>
+    <div class="profile-menu">
+        <button class="btn btn-light dropdown-toggle" type="button" (click)="toggleMenu()">
+            <img *ngIf="user.avatarUrl; else avatarPlaceholder" [src]="user.avatarUrl" alt="avatar" class="avatar">
+            <span class="user-name">{{ user.name }}</span>
+        </button>
+        <div *ngIf="isMenuOpened" class="dropdown-menu show">
+            <a class="dropdown-item" href="#"><i class="material-icons">person</i> My Profile</a>
+            <a class="dropdown-item" [routerLink]="['/settings']"><i class="material-icons">settings</i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item logout-item" (click)="logout($event)"><i class="material-icons">exit_to_app</i> Logout</a>
+        </div>
+    </div>
+</nav>
+
+<ng-template #avatarPlaceholder>
+    <img src="assets/user-placeholder.png" alt="avatar" class="avatar">
+</ng-template>

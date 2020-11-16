@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IAppState } from 'src/app/state';
-import { actionCreators } from 'src/app/state/auth';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +14,4 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logout(): void {
-    this.store.dispatch(actionCreators.signout());
-  }
 }
