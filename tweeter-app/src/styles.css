@@ -2,3 +2,7 @@
 body {
     background-color: #fafafb;
 }
+
+*:active, *:focus {
+    outline: none;
+}

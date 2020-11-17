@@ -1,1 +1,31 @@
-<p>{{ currentUser.name }}</p>
+<div class="comment-section">
+    <div class="comment-creation">
+        <img [src]="currentUser.avatarUrl ? currentUser.avatarUrl : 'assets/user-placeholder.png'" class="user-img"
+            alt="avatar">
+        <textarea [appAutoHeight]="10" class="comment-area" name="comment" rows="1"
+            placeholder="Tweet your reply..."></textarea>
+        <i class="material-icons">image_search</i>
+    </div>
+
+    <hr>
+
+    <div *ngFor="let comment of comments" class="comment">
+        <img [src]="currentUser.avatarUrl ? currentUser.avatarUrl : 'assets/user-placeholder.png'" class="user-img"
+            alt="avatar">
+        <div class="comment-body">
+            <div class="comment-content">
+                <div class="comment-header">
+                    <strong>{{ comment.createdBy.name }}</strong>{{ " " }}<span
+                        class="comment-date">{{ comment.createdAt | date:'medium' }}</span>
+                </div>
+                <p class="comment-text">{{ comment.text }}</p>
+            </div>
+            <div class="comment-likes">
+                <span [ngClass]="{danger: comment.isLikedByCurrentUser}">
+                    <i class="material-icons">check</i> {{ comment.isLikedByCurrentUser ? 'Liked' : 'Like' }}
+                </span>
+                <span>- 23 Likes</span>
+            </div>
+        </div>
+    </div>
+</div>
