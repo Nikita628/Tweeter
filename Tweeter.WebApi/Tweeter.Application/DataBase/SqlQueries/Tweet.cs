@@ -10,7 +10,7 @@
 			--@onlyWithMedia as bit = null, 
 			--@onlyLikedByUserId as int = null,
 			--@followerId as int = null,
-			--@currentUserId as int = null,
+			--@currentUserId as int = 2,
 
 			--@sortProp as nvarchar(100) = 't.id',
 			--@sortDirection as nvarchar(100) = 'asc', 
@@ -53,6 +53,9 @@
 			  ,CASE WHEN EXISTS(
 					select top(1) * from dbo.TweetBookmark tb where tb.TweetId = t.Id and tb.UserId = @currentUserId
 				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
+			  ,CASE WHEN EXISTS(
+					select top(1) * from dbo.Tweet t2 where t2.CreatedById = @currentUserId and t2.RetweetedFromId = t.Id
+				) THEN 1 ELSE 0 END AS IsRetweetedByCurrentUser
 
 				,0 as _split_
 				,u.Id
@@ -84,6 +87,9 @@
 			    ,CASE WHEN EXISTS(
 					select top(1) * from dbo.TweetBookmark tb where tb.TweetId = originalTweets.Id and tb.UserId = @currentUserId
 				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
+				,CASE WHEN EXISTS(
+					select top(1) * from dbo.Tweet t2 where t2.CreatedById = @currentUserId and t2.RetweetedFromId = originalTweets.Id
+				) THEN 1 ELSE 0 END AS IsRetweetedByCurrentUser
 
 				,0 as _split_
 				,otu.Id

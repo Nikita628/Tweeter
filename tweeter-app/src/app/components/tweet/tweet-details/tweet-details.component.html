@@ -1,24 +1,48 @@
-<div class="tweet">
-    <div class="media">
-        <img *ngIf="tweet.createdBy.avatarUrl" [src]="tweet.createdBy.avatarUrl" class="user-img mr-3" alt="...">
-        <div class="media-body">
-            <h6 class="mt-0 mb-1">{{ tweet.createdBy.name }}</h6>
-            <p class="mb-0 text-muted">{{ tweet.createdAt | date:'medium' }}</p>
-        </div>
-    </div>
-    <p class="my-3">
-        {{ tweet.text }}
+<div *ngIf="tweet.originalTweet">
+    <p class="retweeted">
+        <i class="material-icons">autorenew</i> {{ tweet.createdBy.name }} Retweeted
     </p>
-    <img *ngIf="tweet.imgUrl" [src]="tweet.imgUrl" alt="" class="tweet-img">
-    <div class="info">
-        <span class="mx-2">{{ tweet.commentCount }} Comments</span>
-        <span class="mx-2">{{ tweet.retweetCount }} Retweets</span>
-        <span class="mx-2">{{ tweet.bookmarkCount }} Saved</span>
-    </div>
-    <div class="tweet-menu">
-        <button><i class="material-icons">chat_bubble_outline</i> Comment</button>
-        <button><i class="material-icons">autorenew</i> Retweet</button>
-        <button><i class="material-icons">check</i> Like</button>
-        <button><i class="material-icons">bookmark</i> Save</button>
-    </div>
+    <ng-container *ngTemplateOutlet="tweetTemplate; context: {$implicit: tweet.originalTweet}"></ng-container>
 </div>
+
+<div *ngIf="!tweet.originalTweet">
+    <ng-container *ngTemplateOutlet="tweetTemplate; context: {$implicit: tweet}"></ng-container>
+</div>
+
+<ng-template #tweetTemplate let-tweet>
+    <div class="tweet">
+        <app-media 
+            [imgUrl]="tweet.createdBy.avatarUrl ? tweet.createdBy.avatarUrl : 'assets/user-placeholder.png'"
+            [width]="40"
+            [height]="40"
+            [header]="tweet.createdBy.name"
+            [text]="tweet.createdAt | date:'medium'"
+        >
+        </app-media>
+        <p class="my-3">
+            {{ tweet.text }}
+        </p>
+        <img *ngIf="tweet.imgUrl" [src]="tweet.imgUrl" alt="tweet image" class="tweet-img">
+        <div class="info">
+            <span class="mx-2">{{ tweet.commentCount }} Comments</span>
+            <span class="mx-2">{{ tweet.retweetCount }} Retweets</span>
+            <span class="mx-2">{{ tweet.bookmarkCount }} Saved</span>
+        </div>
+        <div class="tweet-menu">
+            <button><i class="material-icons">chat_bubble_outline</i>Comment</button>
+            <button [ngClass]="{success: tweet.isRetweetedByCurrentUser}">
+                <i class="material-icons">autorenew</i>
+                {{ tweet.isRetweetedByCurrentUser ? 'Retweeted' : 'Retweet' }}
+            </button>
+            <button [ngClass]="{danger: tweet.isLikedByCurrentUser}">
+                <i class="material-icons">check</i>
+                {{ tweet.isLikedByCurrentUser ? 'Liked' : 'Like' }}
+            </button>
+            <button [ngClass]="{primary: tweet.isBookmarkedByCurrentUser}">
+                <i class="material-icons">bookmark</i>
+                {{ tweet.isBookmarkedByCurrentUser ? 'Saved' : 'Save' }}
+            </button>
+        </div>
+        <app-tweet-comment-section></app-tweet-comment-section>
+    </div>
+</ng-template>

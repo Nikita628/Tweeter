@@ -1,15 +1,20 @@
+.retweeted {
+    display: flex;
+    align-items: center;
+    color: gray;
+    font-size: small;
+    margin-bottom: 5px;
+}
+
+i {
+    margin-right: 5px;
+}
+
 .tweet {
     background-color: white;
     border-radius: 5px;
     box-shadow: 1px 1px 3px #e4e4e4;
     padding: 20px;
-}
-
-.user-img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 10px;
 }
 
 .tweet-img {
@@ -53,18 +58,18 @@
     outline: none;
 }
 
-.tweet-menu button i {
-    margin-right: 5px;
+.tweet-menu button:active {
+    background-color: #ebebeb;
 }
 
 .success {
-    color: #2cb064;
+    color: #2cb064 !important;
 }
 
 .danger {
-    color: #ed7171;
+    color: #ed7171 !important;
 }
 
 .primary {
-    color: #4dace1;
+    color: #4dace1 !important;
 }

@@ -15,6 +15,7 @@ export class Tweet {
     public isLikedByCurrentUser: boolean;
     public isBookmarkedByCurrentUser: boolean;
     public isCommentedByCurrentUser: boolean;
+    public isRetweetedByCurrentUser: boolean;
     public createdAt: Date;
     public createdBy: User;
     public originalTweet: Tweet;

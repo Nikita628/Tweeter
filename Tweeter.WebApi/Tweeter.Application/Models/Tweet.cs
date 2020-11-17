@@ -18,6 +18,7 @@ namespace Tweeter.Application.Models
 		public bool IsLikedByCurrentUser { get; set; }
 		public bool IsBookmarkedByCurrentUser { get; set; }
 		public bool IsCommentedByCurrentUser { get; set; }
+		public bool IsRetweetedByCurrentUser { get; set; }
 		public DateTime CreatedAt { get; set; }
 		public UserDto CreatedBy { get; set; }
 		public TweetDto OriginalTweet { get; set; }
