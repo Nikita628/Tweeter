@@ -2,11 +2,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <app-tweet-details *ngFor="let tweet of tweets" [tweet]="tweet"></app-tweet-details>
+                <div *ngFor="let tweet of tweets" class="tweet-container">
+                    <app-tweet-details [tweet]="tweet"></app-tweet-details>
+                </div>
             </div>
             <div class="col-md-4">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, quod! Magnam laboriosam ad esse quidem
-                debitis placeat fugiat quibusdam praesentium?
+                <div class="trends-container">
+                    <app-trends></app-trends>
+                </div>
             </div>
         </div>
     </div>

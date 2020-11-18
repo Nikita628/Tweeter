@@ -2,16 +2,19 @@
     <div class="comment-creation">
         <img [src]="currentUser.avatarUrl ? currentUser.avatarUrl : 'assets/user-placeholder.png'" class="user-img"
             alt="avatar">
-        <textarea [appAutoHeight]="10" class="comment-area" name="comment" rows="1"
-            placeholder="Tweet your reply..."></textarea>
-        <i class="material-icons">image_search</i>
+        <div class="comment-input">
+            <textarea [appAutoHeight]="10" class="comment-area" name="comment" rows="1"
+                placeholder="Tweet your reply..."></textarea>
+            <i class="material-icons" (click)="imgInput.click()">image_search</i>
+            <input #imgInput type="file" class="img-input" (change)="onFileSelected($event.target.files)"
+                accept="image/*">
+            <img alt="" [ngClass]="{'img-preview': !!selectedImg}" #imgPreviewEl>
+        </div>
     </div>
-
     <hr>
-
     <div *ngFor="let comment of comments" class="comment">
-        <img [src]="currentUser.avatarUrl ? currentUser.avatarUrl : 'assets/user-placeholder.png'" class="user-img"
-            alt="avatar">
+        <img [src]="comment.createdBy.avatarUrl ? comment.createdBy.avatarUrl : 'assets/user-placeholder.png'"
+            class="user-img" alt="avatar">
         <div class="comment-body">
             <div class="comment-content">
                 <div class="comment-header">
@@ -19,12 +22,13 @@
                         class="comment-date">{{ comment.createdAt | date:'medium' }}</span>
                 </div>
                 <p class="comment-text">{{ comment.text }}</p>
+                <img *ngIf="comment.imgUrl" [src]="comment.imgUrl" alt="" class="img-preview">
             </div>
             <div class="comment-likes">
                 <span [ngClass]="{danger: comment.isLikedByCurrentUser}">
                     <i class="material-icons">check</i> {{ comment.isLikedByCurrentUser ? 'Liked' : 'Like' }}
                 </span>
-                <span>- 23 Likes</span>
+                <span>- {{ comment.likeCount }} Likes</span>
             </div>
         </div>
     </div>

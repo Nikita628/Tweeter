@@ -31,6 +31,8 @@ import { TweetCreationComponent } from './components/tweet/tweet-creation/tweet-
 import { MediaComponent } from './components/common/ui/media/media.component';
 import { TweetCommentSectionComponent } from './components/tweet/tweet-comment-section/tweet-comment-section.component';
 import { AutoHeightDirective } from './directives/auto-height.directive';
+import { TrendsComponent } from './components/tweet/trends/trends.component';
+import { RecommendedUsersComponent } from './components/user/recommended-users/recommended-users.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { AutoHeightDirective } from './directives/auto-height.directive';
     MediaComponent,
     TweetCommentSectionComponent,
     AutoHeightDirective,
+    TrendsComponent,
+    RecommendedUsersComponent,
   ],
   imports: [
     BrowserModule,

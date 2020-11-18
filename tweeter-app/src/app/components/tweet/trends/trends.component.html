@@ -1,0 +1,8 @@
+<div class="trends">
+    <h6 class="header">Trends for you</h6>
+    <hr>
+    <div *ngFor="let ht of hashTags">
+        <p class="text">#{{ ht.text }}</p>
+        <p class="tweet-count">{{ht.tweetCount}} Tweets</p>
+    </div>
+</div>

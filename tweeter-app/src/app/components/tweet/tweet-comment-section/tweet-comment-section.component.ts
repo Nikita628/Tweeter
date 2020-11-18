@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TweetComment } from 'src/app/models/TweetComment';
 import { User } from 'src/app/models/User';
 
@@ -8,6 +8,11 @@ import { User } from 'src/app/models/User';
   styleUrls: ['./tweet-comment-section.component.css']
 })
 export class TweetCommentSectionComponent implements OnInit {
+  @ViewChild("imgPreviewEl") imgPreviewEl: ElementRef<HTMLImageElement>;
+  @Input() tweetId: number;
+
+  public selectedImg: File;
+  public commentText: string;
   public comments: TweetComment[] = [];
   public currentUser: User;
 
@@ -25,7 +30,7 @@ export class TweetCommentSectionComponent implements OnInit {
     a.imgUrl = "https://www.familyfriendpoems.com/images/hero/large/nature-beauty.jpg";
     a.isLikedByCurrentUser = true;
     a.likeCount = 8;
-    a.text = "s;ldkfnsdlkfnsdlkfnsdlfkna;sdkfnsdpuivhjsiubnekj5n4p3iufhnskdnr34kj534kjnf3kj4r";
+    a.text = "s;ldkfnsdlkfnsdl kfnsdlfkna;sdkfnsdp uivhjsiubnekj5 n4p3iufhnskdnr3 4kj534kjnf3kj4r";
     a.tweetId = 10;
 
     const aa = new TweetComment();
@@ -34,7 +39,7 @@ export class TweetCommentSectionComponent implements OnInit {
     aa.id = 2;
     aa.isLikedByCurrentUser = true;
     aa.likeCount = 8;
-    aa.text = "s;ldkfnsdlkfnsdlkfnsdlfkna;sdkfnsdpuivhjsiubnekj5n4p3iufhnskdnr34kj534kjnf3kj4r";
+    aa.text = "s;ldkfns dlkfnsdlkfnsdlfkn a;sdkfnsdpuivhjsiu bnekj5n4p3iufhns kdnr34kj534k jnf3kj4r";
     aa.tweetId = 10;
 
     this.comments.push(a, aa);
@@ -43,4 +48,18 @@ export class TweetCommentSectionComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public onFileSelected(files: File[]): void {
+    this.selectedImg = files[0];
+    this.imgPreviewEl.nativeElement.src = URL.createObjectURL(this.selectedImg);
+  }
+
+  public onCommentTextInput(text: string): void {
+    this.commentText = text;
+  }
+
+  public sendComment(): void {
+    if (this.commentText) {
+      // dispatch
+    }
+  }
 }

@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
     t.retweetCount = 3;
     t.text = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, quod! Magnam laboriosam ad";
     this.tweets = [];
-    this.tweets.push(t);
+    this.tweets.push(t, t);
   }
 
   ngOnInit(): void {
