@@ -150,12 +150,12 @@ namespace Tweeter.Application.Services
 			var types = new[] { typeof(TweetDto), typeof(UserDto), typeof(TweetDto), typeof(UserDto), typeof(Total) };
 			result.Items = await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.SearchTweets, param, types, map, "_split_");
 
-			PopulateTweetComments(result.Items, tweetsDict);
+			await PopulateTweetComments(result.Items, tweetsDict);
 
 			return result;
 		}
 
-		private async void PopulateTweetComments(List<TweetDto> items, Dictionary<int, TweetDto> tweetsDict)
+		private async Task PopulateTweetComments(List<TweetDto> items, Dictionary<int, TweetDto> tweetsDict)
 		{
 			Func<object[], TweetCommentDto> commentMap = (objects) =>
 			{

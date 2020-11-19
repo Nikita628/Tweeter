@@ -34,6 +34,8 @@ import { AutoHeightDirective } from './directives/auto-height.directive';
 import { TrendsComponent } from './components/tweet/trends/trends.component';
 import { RecommendedUsersComponent } from './components/user/recommended-users/recommended-users.component';
 import { DropdownComponent } from './components/common/ui/dropdown/dropdown.component';
+import { TweetEffects } from './effects/tweet';
+import { TweetApiClient } from './services/api/tweet-api-client.service';
 
 @NgModule({
   declarations: [
@@ -64,13 +66,14 @@ import { DropdownComponent } from './components/common/ui/dropdown/dropdown.comp
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, TweetEffects]),
     SimpleNotificationsModule.forRoot({position: ["top", "right"], timeOut: 4000, animate: NotificationAnimationType.FromTop}),
     BrowserAnimationsModule,
   ],
   providers: [
     AuthApiClient,
     ApiClient,
+    TweetApiClient,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,

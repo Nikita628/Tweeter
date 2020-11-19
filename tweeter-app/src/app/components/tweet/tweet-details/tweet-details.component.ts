@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Notifier } from 'src/app/models/Common';
 import { Tweet } from 'src/app/models/Tweet';
-import { TweetCommentSectionComponent } from '../tweet-comment-section/tweet-comment-section.component';
 
 @Component({
   selector: 'app-tweet-details',
@@ -8,8 +8,8 @@ import { TweetCommentSectionComponent } from '../tweet-comment-section/tweet-com
   styleUrls: ['./tweet-details.component.css']
 })
 export class TweetDetailsComponent implements OnInit {
-  @ViewChild("commentSection") commentSection: ElementRef<TweetCommentSectionComponent>;
   @Input() tweet: Tweet;
+  private notifier = new Notifier();
 
   constructor() { }
 
@@ -17,7 +17,7 @@ export class TweetDetailsComponent implements OnInit {
   }
 
   public onSendComment(): void {
-    this.commentSection.nativeElement.sendComment();
+    this.notifier.notifyListener();
   }
 
   public onRetweet(tweetId: number): void {

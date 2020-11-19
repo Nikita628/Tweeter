@@ -29,4 +29,5 @@ export class TweetSearchParam extends ApiPageRequest {
     public onlyWithMedia: boolean;
     public onlyLikedByUserId: number;
     public followerId: number; // tweets of people whom this user follows
+    public appendToExistingStorePage: boolean;
 }

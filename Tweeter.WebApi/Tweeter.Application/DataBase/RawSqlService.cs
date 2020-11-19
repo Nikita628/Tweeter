@@ -22,12 +22,15 @@ namespace Tweeter.Application.DataBase
 
 		public async Task<List<T>> Search<T>(string sql, object param, Type[] types, Func<object[], T> map, string splitOn)
         {
+            var res = new List<T>();
+
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
                 var result = await connection.QueryAsync<T>(sql, types, map, param, splitOn: splitOn);
-                return result.ToList();
+                res = result.ToList();
             }
+
+            return res;
         }
     }
 }

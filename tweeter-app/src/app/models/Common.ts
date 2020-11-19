@@ -16,3 +16,8 @@ export function cloneAndReplace(
         [actionType]: status,
     };
 }
+
+export class Notifier {
+    notifyListener: (data?: any) => void = () =>  this.onEmit();
+    onEmit: (data?: any) => void = () => { };
+}

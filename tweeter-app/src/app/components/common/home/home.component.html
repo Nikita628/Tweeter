@@ -8,6 +8,7 @@
                 <div *ngFor="let tweet of tweets" class="tweet-container">
                     <app-tweet-details [tweet]="tweet"></app-tweet-details>
                 </div>
+                <button class="load-more" (click)="onLoadMore()" *ngIf="tweets?.length && totalCount > tweets.length" type="button">Load More</button>
             </div>
             <div class="col-md-4">
                 <div class="trends-container">

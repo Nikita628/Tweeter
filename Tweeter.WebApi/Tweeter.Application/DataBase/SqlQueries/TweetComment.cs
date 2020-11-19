@@ -3,7 +3,7 @@
 	public class TweetComment
 	{
 		public const string SearchCommentsForTweets = @"
-			WITH tweetComments AS (
+			;WITH tweetComments AS (
 				SELECT *, ROW_NUMBER() 
 				over (
 					PARTITION BY tc.TweetId
@@ -36,7 +36,7 @@
 			FROM tweetComments 
 			JOIN dbo.AspNetUsers u ON u.Id = tweetComments.CreatedById
 			WHERE RowNumber <= @pageSize 
-			order by tweetComments.TweetId
+			order by tweetComments.TweetId;
 ";
 
 		public const string SearchComments = @"

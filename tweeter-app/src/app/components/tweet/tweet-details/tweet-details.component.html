@@ -22,6 +22,9 @@
         <p class="my-3">
             {{ tweet.text }}
         </p>
+        <p class="my-3">
+            {{ tweet.id }}
+        </p>
         <img *ngIf="tweet.imgUrl" [src]="tweet.imgUrl" alt="tweet image" class="tweet-img">
         <div class="info">
             <span class="mx-2">{{ tweet.commentCount }} Comments</span>
@@ -29,21 +32,24 @@
             <span class="mx-2">{{ tweet.bookmarkCount }} Saved</span>
         </div>
         <div class="tweet-menu">
-            <button (click)="onSendComment()"><i class="material-icons">chat_bubble_outline</i>Comment</button>
+            <button (click)="onSendComment()">
+                <i class="material-icons">chat_bubble_outline</i>
+                <span class="menu-button-text">Comment</span>
+            </button>
             <button (click)="onRetweet(tweet.id)" [ngClass]="{success: tweet.isRetweetedByCurrentUser}">
                 <i class="material-icons">autorenew</i>
-                {{ tweet.isRetweetedByCurrentUser ? 'Retweeted' : 'Retweet' }}
+                <span class="menu-button-text">{{ tweet.isRetweetedByCurrentUser ? 'Retweeted' : 'Retweet' }}</span>
             </button>
             <button (click)="onLike(tweet.id)" [ngClass]="{danger: tweet.isLikedByCurrentUser}">
                 <i class="material-icons">check</i>
-                {{ tweet.isLikedByCurrentUser ? 'Liked' : 'Like' }}
+                <span class="menu-button-text">{{ tweet.isLikedByCurrentUser ? 'Liked' : 'Like' }}</span>
             </button>
             <button (click)="onBookmark(tweet.id)" [ngClass]="{primary: tweet.isBookmarkedByCurrentUser}">
                 <i class="material-icons">bookmark</i>
-                {{ tweet.isBookmarkedByCurrentUser ? 'Saved' : 'Save' }}
+                <span class="menu-button-text">{{ tweet.isBookmarkedByCurrentUser ? 'Saved' : 'Save' }}</span>
             </button>
         </div>
         <br>
-        <app-tweet-comment-section #commentSection [tweetId]="tweet.id"></app-tweet-comment-section>
+        <app-tweet-comment-section [notifier]="notifier" [tweetId]="tweet.id" [tweetListStoreKey]="tweetListStoreKey"></app-tweet-comment-section>
     </div>
 </ng-template>

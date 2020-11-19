@@ -1,61 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Tweet } from 'src/app/models/Tweet';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Tweet, TweetSearchParam } from 'src/app/models/Tweet';
 import { User } from 'src/app/models/User';
 import { IAppState } from 'src/app/state';
+import { actionCreators, ITweetState, selectors } from 'src/app/state/tweet';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
-  public tweets: Tweet[];
+export class HomeComponent implements OnInit, OnDestroy {
+  private readonly tweetListStoreKey = "homeTweets";
+  private destroyed$ = new Subject();
+  private homeTweets$: Observable<{tweets: Tweet[], totalCount: number}>;
+  private currentUser: User;
+  private param = new TweetSearchParam();
+  private pageNumber = 1;
+  private scrollY = 0;
+
+  public totalCount = 0;
+  public tweets: Tweet[] = [];
 
   constructor(private store: Store<IAppState>) {
-    const tt = new Tweet();
-    const uu = new User();
-    uu.avatarUrl = "https://www.familyfriendpoems.com/images/hero/large/nature-beauty.jpg";
-    uu.name = "User Name";
-
-    tt.isBookmarkedByCurrentUser = true;
-    tt.bookmarkCount = 3;
-    tt.commentCount = 4;
-    tt.createdAt = new Date();
-    tt.createdBy = uu;
-    tt.imgUrl = "https://www.familyfriendpoems.com/images/hero/large/nature-beauty.jpg";
-    tt.isBookmarkedByCurrentUser = true;
-    tt.isCommentedByCurrentUser = true;
-    tt.isLikedByCurrentUser = true;
-    tt.isRetweetedByCurrentUser = true;
-    tt.likeCount = 2;
-    tt.retweetCount = 3;
-    tt.text = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, quod! Magnam laboriosam ad";
-
-
-    const t = new Tweet();
-    const u = new User();
-    u.avatarUrl = "https://www.familyfriendpoems.com/images/hero/large/nature-beauty.jpg";
-    u.name = "User Name";
-
-    t.retweetedFromId = 2;
-    t.originalTweet = tt;
-    t.bookmarkCount = 3;
-    t.commentCount = 4;
-    t.createdAt = new Date();
-    t.createdBy = u;
-    t.imgUrl = "https://www.familyfriendpoems.com/images/hero/large/nature-beauty.jpg";
-    t.isBookmarkedByCurrentUser = true;
-    t.isCommentedByCurrentUser = true;
-    t.isLikedByCurrentUser = true;
-    t.likeCount = 2;
-    t.retweetCount = 3;
-    t.text = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, quod! Magnam laboriosam ad";
-    this.tweets = [];
-    this.tweets.push(t, t);
+    this.homeTweets$ = store.select(selectors.selectTweetList, this.tweetListStoreKey);
+    this.param.pageNumber = this.pageNumber;
+    this.param.pageSize = 10;
+    this.param.sortDirection = "desc";
+    this.param.sortProp = "createdAt";
   }
 
   ngOnInit(): void {
+    this.homeTweets$.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((state) => {
+      this.tweets = state?.tweets;
+      this.totalCount = state?.totalCount;
+      if (this.scrollY) {
+        window.scrollTo(0, this.scrollY);
+      }
+    });
+
+    this.store.select("auth")
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => this.currentUser = state.user);
+
+    this.param.appendToExistingStorePage = false;
+    this.param.followerId = this.currentUser.id;
+
+    this.store.dispatch(actionCreators.search(this.param, this.tweetListStoreKey));
   }
 
+  public onLoadMore(): void {
+    this.scrollY = window.scrollY;
+    this.pageNumber++;
+
+    const param: TweetSearchParam = {
+      ...this.param,
+      pageNumber: this.pageNumber,
+      appendToExistingStorePage: true,
+    };
+
+    this.store.dispatch(actionCreators.search(param, this.tweetListStoreKey));
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 }
