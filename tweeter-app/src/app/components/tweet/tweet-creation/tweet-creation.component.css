@@ -44,13 +44,19 @@
     max-height: 30px;
 }
 
-.tweet-settings button:active {
+.tweet-settings button:active:not(.disabled) {
     background-color: #2465b9;
 }
 
-.tweet-settings div {
+.tweet-settings .visibility-menu,
+.tweet-settings span {
     display: flex;
     align-items: center;
+}
+
+.tweet-settings span {
+    font-weight: bold;
+    font-size: small;
 }
 
 .img-input {
@@ -68,4 +74,29 @@
 
 .tweet-settings i {
     cursor: pointer;
+    margin-right: 5px;
+}
+
+.tweet-visibility {
+    background-color: white;
+    box-shadow: 1px 1px 3px #c7c7c7;
+    border-radius: 5px;
+    min-width: 250px;
+    padding: 10px 10px 5px 10px;
+}
+
+.tweet-visibility div {
+    display: flex;
+    align-items: center;
+    padding: 10px 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.tweet-visibility div:hover {
+    background-color: #c7c7c7;
+}
+
+.disabled {
+    opacity: 0.7;
 }

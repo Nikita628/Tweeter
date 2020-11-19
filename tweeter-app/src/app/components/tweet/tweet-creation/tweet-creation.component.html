@@ -4,24 +4,40 @@
     <div class="creation-info">
         <img [src]="'assets/user-placeholder.png'" alt="" class="user-img">
         <div class="creation-menu">
-            <textarea [appAutoHeight]="20" class="tweet-text" placeholder="What's happening?"></textarea>
+            <textarea [appAutoHeight]="20" class="tweet-text" placeholder="What's happening?" [(ngModel)]="tweetText"></textarea>
             <div class="tweet-settings">
-                <div>
+                <div class="visibility-menu">
                     <i class="material-icons" (click)="imgInput.click()">image_search</i>
-                    <app-dropdown>
+                    <app-dropdown #dropdown>
                         <ng-container button>
-                            <i class="material-icons">supervisor_account</i>
+                            <span *ngIf="onlyFollowedCanReply"><i class="material-icons">supervisor_account</i> People you follow</span>
+                            <span *ngIf="!onlyFollowedCanReply"><i class="material-icons">cloud_queue</i> Everyone</span>
                         </ng-container>
                         <ng-container content>
-                            <p>sdlfknsdkfl</p>
-                            <i class="material-icons">cloud_queue</i>
+                            <ng-container *ngTemplateOutlet="tweetVisibility"></ng-container>
                         </ng-container>
                     </app-dropdown>
                 </div>
-                <button>Tweet</button>
+                <button [disabled]="!tweetText" [ngClass]="{disabled: !tweetText}" type="button">Tweet</button>
             </div>
             <input #imgInput type="file" class="img-input" (change)="onFileSelected($event.target.files)" accept="image/*">
             <img alt="" class="img-preview" [ngClass]="{'mt-3': !!selectedImg}" #imgPreviewEl>
         </div>
     </div>
 </div>
+
+<ng-template #tweetVisibility>
+    <div class="tweet-visibility">
+        <strong>Who can reply?</strong>
+        <p class="mb-0">Choose who can reply to this tweet</p>
+        <div class="visibility-button" (click)="onVisibilityChanged(false); dropdown.toggle()">
+            <i class="material-icons">cloud_queue</i>
+            <span>Everyone</span>
+        </div>
+        <div class="visibility-button" (click)="onVisibilityChanged(true); dropdown.toggle()">
+            <i class="material-icons">supervisor_account</i>
+            <span>People you follow</span>
+        </div>
+    </div>
+</ng-template>
+
