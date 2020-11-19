@@ -1,0 +1,45 @@
+.recommended {
+    background: white;
+    box-shadow: 1px 1px 3px #d7d6d6;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.recommended-header {
+    font-weight: bold;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.header button {
+    border: none;
+    background-color: #2f80ed;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 5px;
+    max-height: 30px;
+    font-size: small;
+}
+
+.header button:active {
+    background-color: #2362b4;
+}
+
+.about {
+    color: gray;
+}
+
+.cover {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    max-height: 100px;
+    object-fit: cover;
+}

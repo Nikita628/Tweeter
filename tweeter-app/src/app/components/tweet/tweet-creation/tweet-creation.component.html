@@ -1,1 +1,27 @@
-<p>tweet-creation works!</p>
+<div class="tweet-creation">
+    <strong>Tweet something</strong>
+    <hr>
+    <div class="creation-info">
+        <img [src]="'assets/user-placeholder.png'" alt="" class="user-img">
+        <div class="creation-menu">
+            <textarea [appAutoHeight]="20" class="tweet-text" placeholder="What's happening?"></textarea>
+            <div class="tweet-settings">
+                <div>
+                    <i class="material-icons" (click)="imgInput.click()">image_search</i>
+                    <app-dropdown>
+                        <ng-container button>
+                            <i class="material-icons">supervisor_account</i>
+                        </ng-container>
+                        <ng-container content>
+                            <p>sdlfknsdkfl</p>
+                            <i class="material-icons">cloud_queue</i>
+                        </ng-container>
+                    </app-dropdown>
+                </div>
+                <button>Tweet</button>
+            </div>
+            <input #imgInput type="file" class="img-input" (change)="onFileSelected($event.target.files)" accept="image/*">
+            <img alt="" class="img-preview" [ngClass]="{'mt-3': !!selectedImg}" #imgPreviewEl>
+        </div>
+    </div>
+</div>

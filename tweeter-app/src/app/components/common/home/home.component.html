@@ -2,6 +2,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
+                <div class="tweet-creation-container">
+                    <app-tweet-creation></app-tweet-creation>
+                </div>
                 <div *ngFor="let tweet of tweets" class="tweet-container">
                     <app-tweet-details [tweet]="tweet"></app-tweet-details>
                 </div>
@@ -9,6 +12,9 @@
             <div class="col-md-4">
                 <div class="trends-container">
                     <app-trends></app-trends>
+                </div>
+                <div class="recommended-container">
+                    <app-recommended-users></app-recommended-users>
                 </div>
             </div>
         </div>

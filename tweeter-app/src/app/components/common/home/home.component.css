@@ -5,3 +5,12 @@
 .tweet-container {
     margin-bottom: 30px;
 }
+
+.trends-container,
+.recommended-container {
+    margin-bottom: 30px;
+}
+
+.tweet-creation-container {
+    margin-bottom: 20px;
+}

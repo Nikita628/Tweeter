@@ -33,6 +33,7 @@ import { TweetCommentSectionComponent } from './components/tweet/tweet-comment-s
 import { AutoHeightDirective } from './directives/auto-height.directive';
 import { TrendsComponent } from './components/tweet/trends/trends.component';
 import { RecommendedUsersComponent } from './components/user/recommended-users/recommended-users.component';
+import { DropdownComponent } from './components/common/ui/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { RecommendedUsersComponent } from './components/user/recommended-users/r
     AutoHeightDirective,
     TrendsComponent,
     RecommendedUsersComponent,
+    DropdownComponent,
   ],
   imports: [
     BrowserModule,

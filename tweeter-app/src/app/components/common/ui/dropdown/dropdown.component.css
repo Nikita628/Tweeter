@@ -1,0 +1,14 @@
+.dropdown {
+    position: relative;
+}
+
+.content {
+    position: absolute;
+    margin-top: 5px;
+}
+
+.button {
+    cursor: pointer;
+    display: flex;
+    user-select: none;
+}

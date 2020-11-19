@@ -1,1 +1,24 @@
-<p>recommended-users works!</p>
+<div class="recommended">
+    <h6 class="recommended-header">Who to follow</h6>
+    <hr>
+    <div *ngFor="let u of users" class="user">
+        <div class="header">
+            <app-media 
+                [imgUrl]="u.avatarUrl ? u.avatarUrl : 'assets/user-placeholder.png'"
+                [width]="40"
+                [height]="40"
+                [header]="u.name"
+                [text]="u.followersCount + ' followers'"
+            >
+            </app-media>
+            <button>
+                <i class="material-icons">person_add</i> Follow
+            </button>
+        </div>
+        <p class="about">
+            {{u.about}}
+        </p>
+        <img *ngIf="u.profileCoverUrl" [src]="u.profileCoverUrl" alt="cover" class="cover">
+        <hr>
+    </div>
+</div>
