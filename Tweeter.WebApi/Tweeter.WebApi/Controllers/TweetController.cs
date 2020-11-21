@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.Models;
+using Tweeter.WebApi.Extensions;
 
 namespace Tweeter.WebApi.Controllers
 {
@@ -27,9 +30,20 @@ namespace Tweeter.WebApi.Controllers
 		}
 
 		[HttpPost("create")]
-		public async Task<IActionResult> Create(Application.DataBase.Tweet param)
+		public async Task<IActionResult> Create([FromForm]IFormFile img, [FromForm]string param)
 		{
-			var result = await _tweet.CreateAsync(param);
+			var tweet = JsonConvert.DeserializeObject<TweetForCreation>(param);
+
+			if (img != null)
+			{
+				tweet.Img = new Application.Models.File
+				{
+					FileName = img.FileName,
+					Bytes = await img.ToByteArrayAsync()
+				};
+			}
+
+			var result = await _tweet.CreateAsync(tweet);
 
 			return Ok(result);
 		}

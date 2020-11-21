@@ -7,16 +7,18 @@ import { catchError, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ApiPageResponse, ApiResponse } from '../models/Api';
 import { IPayloadedAction } from '../models/Common';
 import { Tweet, TweetSearchParam } from '../models/Tweet';
+import { TweetComment, TweetCommentSearchParam } from '../models/TweetComment';
 import { TweetApiClient } from '../services/api/tweet-api-client.service';
+import { TweetCommentApiClient } from '../services/api/tweet-comment-api-client.service';
 import { NotificationService } from '../services/utils/notification.service';
 import { IAppState } from '../state';
-import { actionCreators, actionTypes } from '../state/tweet';
+import { actionCreators, actionTypes } from '../state/tweet-comment';
 
 @Injectable()
-export class TweetEffects {
+export class TweetCommentEffects {
     constructor(
         private actions$: Actions,
-        private tweetApi: TweetApiClient,
+        private commentApi: TweetCommentApiClient,
         private router: Router,
         private store: Store<IAppState>,
         private notification: NotificationService
@@ -25,15 +27,15 @@ export class TweetEffects {
     @Effect()
     search = this.actions$.pipe(
         ofType(actionTypes.search),
-        switchMap((action: Action & IPayloadedAction<{ param: TweetSearchParam, feedKey: string }>) => {
-            return this.tweetApi.search(action.payload.param)
+        switchMap((action: Action & IPayloadedAction<{ param: TweetCommentSearchParam, feedKey: string }>) => {
+            return this.commentApi.search(action.payload.param)
                 .pipe(
-                    mergeMap((res: ApiPageResponse<Tweet>) => {
+                    mergeMap((res: ApiPageResponse<TweetComment>) => {
                         if (!res.errors.length) {
                             return [actionCreators.searchSuccess(
                                 res,
                                 action.payload.feedKey,
-                                action.payload.param.appendToExistingStorePage
+                                action.payload.param.tweetId
                             )];
                         }
                         this.notification.error(res.errors);
@@ -50,12 +52,12 @@ export class TweetEffects {
     @Effect()
     create = this.actions$.pipe(
         ofType(actionTypes.create),
-        switchMap((action: Action & IPayloadedAction<Tweet>) => {
-            return this.tweetApi.create(action.payload)
+        switchMap((action: Action & IPayloadedAction<{ comment: TweetComment, feedKey: string }>) => {
+            return this.commentApi.create(action.payload.comment)
                 .pipe(
-                    mergeMap((res: ApiResponse<Tweet>) => {
+                    mergeMap((res: ApiResponse<TweetComment>) => {
                         if (!res.errors.length) {
-                            return [actionCreators.createSuccess(res.item)];
+                            return [actionCreators.createSuccess(res.item, action.payload.feedKey)];
                         }
                         this.notification.error(res.errors);
                         return [actionCreators.createError()];

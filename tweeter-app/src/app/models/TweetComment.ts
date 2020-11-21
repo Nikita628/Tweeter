@@ -10,8 +10,10 @@ export class TweetComment {
     public isLikedByCurrentUser: boolean;
     public createdAt: Date;
     public createdBy: User;
+    public img: File;
 }
 
 export class TweetCommentSearchParam extends ApiPageRequest {
     public tweetId: number;
+    public idLessThan: number;
 }

@@ -98,3 +98,14 @@
 .comment-input {
     flex-grow: 1;
 }
+
+.more-container {
+    text-align: center;
+}
+
+.more-button {
+    border: none;
+    text-decoration: underline;
+    background: transparent;
+    color: gray;
+}

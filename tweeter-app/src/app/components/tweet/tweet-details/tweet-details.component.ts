@@ -9,6 +9,7 @@ import { Tweet } from 'src/app/models/Tweet';
 })
 export class TweetDetailsComponent implements OnInit {
   @Input() tweet: Tweet;
+  @Input() feedKey: string;
   private notifier = new Notifier();
 
   constructor() { }

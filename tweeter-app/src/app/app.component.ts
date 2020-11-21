@@ -31,7 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
         filter(state => state.signinStatus === "errorLocal" || state.signinStatus === "successLocal")
       )
       .subscribe((authState) => {
-        // console.log("app auth state, urlaftersign", authState, urlAfterSignin);
         if (authState.signinStatus === "successLocal") {
           this.router.navigate([urlAfterSignin]);
         } else if (authState.signinStatus === "errorLocal") {

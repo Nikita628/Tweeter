@@ -1,4 +1,5 @@
-import { Action } from "@ngrx/store";
+import { Action, createSelector } from "@ngrx/store";
+import { IAppState } from '.';
 import { SigninResult, SignUpData } from '../models/Auth';
 import { IPayloadedAction } from '../models/Common';
 import { User } from '../models/User';
@@ -138,3 +139,8 @@ export function authReducer(state: IAuthState = initialState, action: any): IAut
     }
     return state;
 }
+
+export const selectFeature = (state: IAppState) => state.auth;
+export const selectors = {
+    currentUser: createSelector(selectFeature, (state: IAuthState) => state.user),
+};

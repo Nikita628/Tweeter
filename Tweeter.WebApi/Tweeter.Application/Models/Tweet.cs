@@ -25,6 +25,13 @@ namespace Tweeter.Application.Models
 		public List<TweetCommentDto> TweetComments { get; set; } = new List<TweetCommentDto>();
 	}
 
+	public class TweetForCreation
+	{
+		public string Text { get; set; }
+		public bool OnlyFollowedCanReply { get; set; }
+		public File Img { get; set; }
+	}
+
 	public class TweetSearchParam : PageRequest
 	{
 		public string TextContains { get; set; }
@@ -34,5 +41,7 @@ namespace Tweeter.Application.Models
 		public int? OnlyLikedByUserId { get; set; }
 		public int? FollowerId { get; set; } // tweets of people whom this user follows
         public int? CurrentUserId { get; set; }
-    }
+		public int? IdLessThan { get; set; }
+		public bool? CreatedByIdOrFollowerId { get; set; }
+	}
 }

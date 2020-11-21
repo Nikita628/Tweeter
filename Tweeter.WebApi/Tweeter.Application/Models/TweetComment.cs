@@ -14,9 +14,17 @@ namespace Tweeter.Application.Models
 		public UserDto CreatedBy { get; set; }
 	}
 
+	public class TweetCommentForCreation
+	{
+		public string Text { get; set; }
+		public int TweetId { get; set; }
+		public File Img { get; set; }
+	}
+
 	public class TweetCommentSearchParam : PageRequest
 	{
 		public int? CurrentUserId { get; set; }
 		public int? TweetId { get; set; }
+		public int? IdLessThan { get; set; }
 	}
 }

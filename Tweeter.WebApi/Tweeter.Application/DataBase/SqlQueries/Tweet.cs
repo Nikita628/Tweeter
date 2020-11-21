@@ -4,19 +4,21 @@
 	{
 		public const string SearchTweets = @"
 			--DECLARE 
-			--@textContains as nvarchar(500) = null,
-			--@createdById as int = null, 
-			--@onlyWithComments as bit = null,
-			--@onlyWithMedia as bit = null, 
-			--@onlyLikedByUserId as int = null,
-			--@followerId as int = null,
-			--@currentUserId as int = 2,
+--			@textContains as nvarchar(500) = null,
+--			@createdById as int = 2, 
+--			@onlyWithComments as bit = null,
+--			@onlyWithMedia as bit = null, 
+--			@onlyLikedByUserId as int = null,
+--			@followerId as int = 1,
+--			@currentUserId as int = 1,
+--			@idLessThan as int = null,
+--			@createdByIdOrFollowerId as bit = 1,
 
-			--@sortProp as nvarchar(100) = 't.id',
-			--@sortDirection as nvarchar(100) = 'asc', 
+--			@sortProp as nvarchar(100) = 't.id',
+--			@sortDirection as nvarchar(100) = 'asc', 
 
-			--@pageNumber AS INT = 1, 
-			--@pageSize AS INT = 100
+--			@pageNumber AS INT = 1, 
+--			@pageSize AS INT = 100
 
 			DECLARE @sql NVARCHAR(MAX);
 			DECLARE @params NVARCHAR(500);
@@ -31,7 +33,8 @@
 							@onlyWithMedia bit,
 							@onlyLikedByUserId int,
 							@followerId int,
-							@currentUserId int';
+							@currentUserId int,
+							@idLessThan int';
 
 			SET @sql = 'SELECT t.[Id]
 			  ,t.[CreatedById]
@@ -114,9 +117,13 @@
 			SET @sql = @sql + '
 			AND t.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%'' OR originalTweets.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%''';
  
-			IF @createdById IS NOT NULL
+			IF @createdById IS NOT NULL and (@createdByIdOrFollowerId is null or @createdByIdOrFollowerId = 0) 
 			SET @sql = @sql + ' 
 			AND t.[CreatedById] = @createdById';
+
+			IF @idLessThan IS NOT NULL
+			SET @sql = @sql + ' 
+			AND t.Id < @idLessThan';
 
 			IF @onlyWithComments IS NOT NULL AND @onlyWithComments = 1
 			SET @sql = @sql + ' 
@@ -138,9 +145,13 @@
 				select top(1) * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @onlyLikedByUserId
 			)';
 
-			IF @followerId IS NOT NULL
+			IF @followerId IS NOT NULL and (@createdByIdOrFollowerId is null or @createdByIdOrFollowerId = 0) 
 			SET @sql = @sql + ' 
 			AND EXISTS (select top(1) * from dbo.Follow f where f.FolloweeId = t.CreatedById and f.FollowerId = @followerId)';
+
+			IF @createdByIdOrFollowerId IS NOT NULL and @createdByIdOrFollowerId = 1
+			SET @sql = @sql + ' 
+			AND (t.CreatedById = @createdById or EXISTS (select top(1) * from dbo.Follow f where f.FolloweeId = t.CreatedById and f.FollowerId = @followerId))';
 
 			-- sorting setup ----------------------------
 			set @orderBy = ' 
@@ -165,7 +176,37 @@
 					@onlyLikedByUserId = @onlyLikedByUserId,
 					@onlyWithMedia = @onlyWithMedia,
 					@followerId = @followerId,
-					@currentUserId = @currentUserId
+					@currentUserId = @currentUserId,
+					@idLessThan = @idLessThan
+";
+
+		public const string GetById = @"
+			--DECLARE @idEquals as int = 1;
+
+			SELECT t.[Id]
+			  ,t.[CreatedById]
+			  ,t.[CreatedAt]
+			  ,t.[ImgUrl]
+			  ,t.[Text]
+			  ,t.[RetweetedFromId]
+			  ,t.[LikeCount]
+			  ,t.[RetweetCount]
+			  ,t.[BookmarkCount]
+			  ,t.[CommentCount]
+			  ,t.[OnlyFollowedCanReply]
+
+				,0 as _split_
+				,u.Id
+				,u.FollowersCount
+				,u.FolloweesCount
+				,u.AvatarUrl
+				,u.Name
+				,u.About
+				,u.ProfileCoverUrl
+
+			FROM dbo.Tweet t
+			JOIN dbo.AspNetUsers u ON u.Id = t.CreatedById
+			WHERE t.Id = @id;
 ";
 	}
 }

@@ -17,16 +17,19 @@ namespace Tweeter.Application.Services
 		private readonly CurrentUserIdAccessor _userAccessor;
 		private readonly IRawSqlService _rawSql;
 		private readonly TweeterDbContext _dbContext;
+		private readonly ICloudService _cloud;
 
 		public TweetService(
 			CurrentUserIdAccessor cu,
 			TweeterDbContext tw,
-			IRawSqlService ra
+			IRawSqlService ra,
+			ICloudService cl
 			)
 		{
 			_userAccessor = cu;
 			_rawSql = ra;
 			_dbContext = tw;
+			_cloud = cl;
 		}
 
 		public async Task<Response<bool>> BookmarkAsync(int tweetId)
@@ -49,9 +52,9 @@ namespace Tweeter.Application.Services
 			return result;
 		}
 
-		public async Task<Response<int>> CreateAsync(Tweet tweet)
+		public async Task<Response<TweetDto>> CreateAsync(TweetForCreation tweet)
 		{
-			var result = new Response<int>();
+			var result = new Response<TweetDto>();
 
 			if (string.IsNullOrWhiteSpace(tweet.Text))
 			{
@@ -59,11 +62,24 @@ namespace Tweeter.Application.Services
 				return result;
 			}
 
-			await ProcessHashTags(tweet.Text);
-			await _dbContext.Tweet.AddAsync(tweet);
-			await _dbContext.SaveChangesAsync();
+			var newTweet = new Tweet
+			{
+				Text = tweet.Text,
+				OnlyFollowedCanReply = tweet.OnlyFollowedCanReply,
+				CreatedAt = DateTime.UtcNow,
+				CreatedById = _userAccessor.CurrentUserId
+			};
 
-			result.Item = tweet.Id;
+			if (tweet.Img != null)
+			{
+				var res = await _cloud.UploadAsync(tweet.Img);
+				newTweet.ImgUrl = res.Url;
+			}
+
+			//await ProcessHashTags(tweet.Text);
+			await _dbContext.Tweet.AddAsync(newTweet);
+			await _dbContext.SaveChangesAsync();
+			result.Item = await Get(newTweet.Id);
 
 			return result;
 		}
@@ -153,6 +169,19 @@ namespace Tweeter.Application.Services
 			await PopulateTweetComments(result.Items, tweetsDict);
 
 			return result;
+		}
+
+		public async Task<TweetDto> Get(int id)
+		{
+			Func<object[], TweetDto> map = (objects) =>
+			{
+				TweetDto tweet = (TweetDto)objects[0];
+				tweet.CreatedBy = (UserDto)objects[1];
+				return tweet;
+			};
+
+			var types = new[] { typeof(TweetDto), typeof(UserDto) };
+			return (await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.GetById, new { id }, types, map, "_split_")).FirstOrDefault();
 		}
 
 		private async Task PopulateTweetComments(List<TweetDto> items, Dictionary<int, TweetDto> tweetsDict)

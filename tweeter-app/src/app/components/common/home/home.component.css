@@ -2,25 +2,11 @@
     padding-top: 20px;
 }
 
-.tweet-container {
-    margin-bottom: 30px;
-}
-
 .trends-container,
 .recommended-container {
     margin-bottom: 30px;
 }
 
 .tweet-creation-container {
-    margin-bottom: 20px;
-}
-
-.load-more {
-    border: 1px solid gray;
-    color: gray;
-    background-color: transparent;
-    width: 100%;
-    border-radius: 20px;
-    font-weight: bold;
     margin-bottom: 20px;
 }

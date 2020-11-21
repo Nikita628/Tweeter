@@ -24,6 +24,7 @@ import { NotFoundComponent } from './components/common/not-found/not-found.compo
 import { ApiClient } from './services/api/api-client.service';
 import { reducers } from './state';
 import { AuthEffects } from './effects/auth';
+import { TweetCommentEffects } from "./effects/tweet-comment";
 import { RequestInterceptor } from './services/interceptors/request-interceptor.service';
 import { NotificationService } from './services/utils/notification.service';
 import { TweetDetailsComponent } from './components/tweet/tweet-details/tweet-details.component';
@@ -36,6 +37,8 @@ import { RecommendedUsersComponent } from './components/user/recommended-users/r
 import { DropdownComponent } from './components/common/ui/dropdown/dropdown.component';
 import { TweetEffects } from './effects/tweet';
 import { TweetApiClient } from './services/api/tweet-api-client.service';
+import { TweetsFeedComponent } from './components/tweet/tweets-feed/tweets-feed.component';
+import { TweetCommentApiClient } from './services/api/tweet-comment-api-client.service';
 
 @NgModule({
   declarations: [
@@ -59,14 +62,19 @@ import { TweetApiClient } from './services/api/tweet-api-client.service';
     TrendsComponent,
     RecommendedUsersComponent,
     DropdownComponent,
+    TweetsFeedComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects, TweetEffects]),
+    StoreModule.forRoot(reducers, {
+      runtimeChecks: {
+        strictActionImmutability: false,
+      },
+    }),
+    EffectsModule.forRoot([AuthEffects, TweetEffects, TweetCommentEffects]),
     SimpleNotificationsModule.forRoot({position: ["top", "right"], timeOut: 4000, animate: NotificationAnimationType.FromTop}),
     BrowserAnimationsModule,
   ],
@@ -74,6 +82,7 @@ import { TweetApiClient } from './services/api/tweet-api-client.service';
     AuthApiClient,
     ApiClient,
     TweetApiClient,
+    TweetCommentApiClient,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,

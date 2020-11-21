@@ -1,29 +1,23 @@
-<div *ngIf="tweet.originalTweet">
+<!-- <div *ngIf="tweet.originalTweet">
     <p class="retweeted">
         <i class="material-icons">autorenew</i> {{ tweet.createdBy.name }} Retweeted
     </p>
     <ng-container *ngTemplateOutlet="tweetTemplate; context: {$implicit: tweet.originalTweet}"></ng-container>
-</div>
+</div> -->
 
-<div *ngIf="!tweet.originalTweet">
-    <ng-container *ngTemplateOutlet="tweetTemplate; context: {$implicit: tweet}"></ng-container>
-</div>
-
-<ng-template #tweetTemplate let-tweet>
-    <div class="tweet">
-        <app-media 
-            [imgUrl]="tweet.createdBy.avatarUrl ? tweet.createdBy.avatarUrl : 'assets/user-placeholder.png'"
-            [width]="40"
-            [height]="40"
-            [header]="tweet.createdBy.name"
-            [text]="tweet.createdAt | date:'medium'"
-        >
+<div>
+    <p *ngIf="tweet.originalTweet" class="retweeted">
+        <i class="material-icons">autorenew</i> {{ tweet.createdBy.name }} Retweeted
+    </p>
+    <div class="tweet" *ngIf="tweet.originalTweet || tweet as tweet">
+        <app-media [imgUrl]="tweet.createdBy.avatarUrl ? tweet.createdBy.avatarUrl : 'assets/user-placeholder.png'"
+            [width]="40" [height]="40" [header]="tweet.createdBy.name" [text]="tweet.createdAt | date:'medium'">
         </app-media>
         <p class="my-3">
-            {{ tweet.text }}
+            {{ tweet.id }}
         </p>
         <p class="my-3">
-            {{ tweet.id }}
+            {{ tweet.text }}
         </p>
         <img *ngIf="tweet.imgUrl" [src]="tweet.imgUrl" alt="tweet image" class="tweet-img">
         <div class="info">
@@ -50,6 +44,9 @@
             </button>
         </div>
         <br>
-        <app-tweet-comment-section [notifier]="notifier" [tweetId]="tweet.id" [tweetListStoreKey]="tweetListStoreKey"></app-tweet-comment-section>
+        <app-tweet-comment-section [notifier]="notifier" [tweet]="tweet" [feedKey]="'home'"></app-tweet-comment-section>
     </div>
-</ng-template>
+</div>
+
+<!-- <ng-template #tweetTemplate let-t>
+</ng-template> -->

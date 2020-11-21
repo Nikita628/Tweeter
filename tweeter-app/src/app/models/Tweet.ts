@@ -20,6 +20,7 @@ export class Tweet {
     public createdBy: User;
     public originalTweet: Tweet;
     public tweetComments: any[];
+    public img: File;
 }
 
 export class TweetSearchParam extends ApiPageRequest {
@@ -30,4 +31,6 @@ export class TweetSearchParam extends ApiPageRequest {
     public onlyLikedByUserId: number;
     public followerId: number; // tweets of people whom this user follows
     public appendToExistingStorePage: boolean;
+    public idLessThan: number;
+    public createdByIdOrFollowerId: boolean;
 }

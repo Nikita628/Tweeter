@@ -4,11 +4,11 @@
             alt="avatar">
         <div class="comment-input">
             <textarea [appAutoHeight]="10" class="comment-area" name="comment" rows="1"
-                placeholder="Tweet your reply..."></textarea>
+                placeholder="Tweet your reply..." [(ngModel)]="commentText"></textarea>
             <i class="material-icons" (click)="imgInput.click()">image_search</i>
             <input #imgInput type="file" class="img-input" (change)="onFileSelected($event.target.files)"
                 accept="image/*">
-            <img alt="" [ngClass]="{'img-preview': !!selectedImg}" #imgPreviewEl>
+            <img alt="" [ngClass]="{'img-preview': !!selectedImg}" #imgPreviewElement>
         </div>
     </div>
     <hr>
@@ -21,6 +21,7 @@
                     <strong>{{ comment.createdBy.name }}</strong>{{ " " }}<span
                         class="comment-date">{{ comment.createdAt | date:'medium' }}</span>
                 </div>
+                <p>{{ comment.id }}</p>
                 <p class="comment-text">{{ comment.text }}</p>
                 <img *ngIf="comment.imgUrl" [src]="comment.imgUrl" alt="" class="img-preview">
             </div>
@@ -31,5 +32,8 @@
                 <span>- {{ comment.likeCount }} Likes</span>
             </div>
         </div>
+    </div>
+    <div *ngIf="comments.length && totalCount > comments.length" class="more-container">
+        <button class="more-button" type="button" (click)="onLoadMore()">Load More</button>
     </div>
 </div>

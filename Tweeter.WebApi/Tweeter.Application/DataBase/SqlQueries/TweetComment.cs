@@ -7,7 +7,7 @@
 				SELECT *, ROW_NUMBER() 
 				over (
 					PARTITION BY tc.TweetId
-					order by tc.Id
+					order by tc.Id desc
 				) AS RowNumber
 				FROM dbo.TweetComment tc
 				where tc.TweetId in @tweetIds
@@ -58,7 +58,8 @@
 			SET @params = '@pageNumber int,
 							@pageSize int,
 							@tweetId int,
-							@currentUserId int';
+							@currentUserId int,
+							@idLessThan int';
 
 			SET @sql = 'SELECT tc.[Id]
 				  ,tc.[CreatedById]
@@ -92,6 +93,10 @@
 				SET @sql = @sql + ' 
 				AND tc.[TweetId] = @tweetId';
 
+			IF @idLessThan IS NOT NULL
+				SET @sql = @sql + ' 
+				AND tc.[Id] < @idLessThan';
+
 			-- sorting setup ----------------------------
 			set @orderBy = ' 
 			ORDER BY ' + @sortProp + ' ' + @sortDirection;
@@ -110,7 +115,31 @@
 					@pageNumber = @pageNumber,
 					@pageSize = @pageSize,
 					@tweetId = @tweetId,
-					@currentUserId = @currentUserId
+					@currentUserId = @currentUserId,
+					@idLessThan = @idLessThan
+";
+
+		public const string GetById = @"
+				SELECT tc.[Id]
+				  ,tc.[CreatedById]
+				  ,tc.[CreatedAt]
+				  ,tc.[Text]
+				  ,tc.[ImgUrl]
+				  ,tc.[TweetId]
+				  ,tc.[LikeCount]
+			  
+				,0 as _split_
+				,u.Id
+				,u.FollowersCount
+				,u.FolloweesCount
+				,u.AvatarUrl
+				,u.Name
+				,u.About
+				,u.ProfileCoverUrl
+
+			FROM dbo.TweetComment tc
+			JOIN dbo.AspNetUsers u ON u.Id = tc.CreatedById
+			WHERE tc.Id = @id;
 ";
 	}
 }
