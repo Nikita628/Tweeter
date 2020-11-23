@@ -1,34 +1,30 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { IActionStatuses } from 'src/app/models/Common';
 import { Tweet } from 'src/app/models/Tweet';
-import { User } from 'src/app/models/User';
 import { IAppState } from 'src/app/state';
 
-import { actionCreators, actionTypes, selectors as tweetSelectors } from "../../../state/tweet";
+import { actionCreators as tweetAC, actionTypes as tweetAT } from "../../../state/tweet";
+import { BaseComponent } from '../../common/base-component/base-component.component';
 
 @Component({
   selector: 'app-tweet-creation',
   templateUrl: './tweet-creation.component.html',
   styleUrls: ['./tweet-creation.component.css']
 })
-export class TweetCreationComponent implements OnInit, OnDestroy {
+export class TweetCreationComponent extends BaseComponent implements OnInit, OnDestroy {
   @ViewChild("imgPreviewElement") imgPreviewElement: ElementRef<HTMLImageElement>;
-  private destroyed$ = new Subject();
-  private actionStatuses$: Observable<IActionStatuses>;
   public selectedImg: File;
   public tweetText: string;
   public onlyFollowedCanReply = false;
-  public currentUser: User;
   public sending = false;
 
-  constructor(private store: Store<IAppState>) { }
+  constructor(protected store: Store<IAppState>) {
+    super(store);
+  }
 
   ngOnInit(): void {
-    this.actionStatuses$ = this.store.select(tweetSelectors.actionStatuses);
-    this.store.select("auth").subscribe(state => this.currentUser = state.user);
+    super.ngOnInit();
 
     this.actionStatuses$
       .pipe(
@@ -36,13 +32,13 @@ export class TweetCreationComponent implements OnInit, OnDestroy {
         filter(statuses => !!statuses)
       )
       .subscribe(statuses => {
-        if (statuses[actionTypes.create] === "success") {
+        if (statuses[tweetAT.create] === "success") {
           this.tweetText = null;
           this.selectedImg = null;
           this.imgPreviewElement.nativeElement.src = "";
           this.onlyFollowedCanReply = false;
           this.sending = false;
-        } else if (statuses[actionTypes.create] === "progress") {
+        } else if (statuses[tweetAT.create] === "progress") {
           this.sending = true;
         }
       });
@@ -59,15 +55,10 @@ export class TweetCreationComponent implements OnInit, OnDestroy {
     newTweet.text = this.tweetText;
     newTweet.onlyFollowedCanReply = this.onlyFollowedCanReply;
 
-    this.store.dispatch(actionCreators.create(newTweet));
+    this.store.dispatch(tweetAC.create(newTweet));
   }
 
   public onVisibilityChanged(onlyFollowedCanReply: boolean): void {
     this.onlyFollowedCanReply = onlyFollowedCanReply;
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }

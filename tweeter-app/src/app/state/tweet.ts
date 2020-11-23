@@ -1,12 +1,10 @@
 import { Action } from "@ngrx/store";
 import { createSelector } from '@ngrx/store';
 
-import { actionTypes as tweetCommentActionTypes } from "./tweet-comment";
 import { IAppState } from '.';
 import { ApiPageResponse } from '../models/Api';
-import { IActionStatuses, IPayloadedAction } from '../models/Common';
+import { IPayloadedAction } from '../models/Common';
 import { Tweet, TweetSearchParam } from '../models/Tweet';
-import { TweetComment } from '../models/TweetComment';
 
 export interface ITweetFeed {
     home: { tweets: Tweet[], totalCount: number };
@@ -16,7 +14,6 @@ export interface ITweetFeed {
 
 export interface ITweetState {
     tweetFeed: ITweetFeed;
-    actionStatuses: IActionStatuses;
 }
 
 const initialState: ITweetState = {
@@ -25,7 +22,6 @@ const initialState: ITweetState = {
         explore: null,
         bookmarks: null
     },
-    actionStatuses: {},
 };
 
 export const actionTypes = {
@@ -86,12 +82,6 @@ const reducerMap = {
         };
     },
 
-    [actionTypes.create]: (state: ITweetState, action: Action): ITweetState => {
-        return {
-            ...state,
-            actionStatuses: { ...state.actionStatuses, [actionTypes.create]: "progress" },
-        };
-    },
     [actionTypes.createSuccess]: (state: ITweetState, action: Action & IPayloadedAction<Tweet>): ITweetState => {
         const createdTweet = action.payload;
         return {
@@ -100,30 +90,8 @@ const reducerMap = {
                 ...state.tweetFeed,
                 home: { tweets: [createdTweet, ...state.tweetFeed.home.tweets], totalCount: state.tweetFeed.home.totalCount },
             },
-            actionStatuses: { ...state.actionStatuses, [actionTypes.create]: "success" },
         };
     },
-    [actionTypes.createError]: (state: ITweetState): ITweetState => {
-        return {
-            ...state,
-            actionStatuses: { ...state.actionStatuses, [actionTypes.create]: "error" },
-        };
-    },
-
-    // [tweetCommentActionTypes.createSuccess]
-    //     : (state: ITweetState, action: Action & IPayloadedAction<{ comment: TweetComment, feedKey: string }>): ITweetState => {
-    //         const feed: { tweets: Tweet[], totalCount: number } = { ...state[action.payload.feedKey] };
-    //         feed.tweets = feed.tweets.map(t => {
-    //             if (t.id === action.payload.comment.tweetId) {
-    //                 return { ...t, tweetComments: [action.payload.comment, ...t.tweetComments] };
-    //             }
-    //             return t;
-    //         });
-    //         return {
-    //             ...state,
-    //             [action.payload.feedKey]: feed,
-    //         };
-    //     }
 };
 
 export function tweetReducer(state: ITweetState = initialState, action: any): ITweetState {
@@ -136,5 +104,4 @@ export function tweetReducer(state: ITweetState = initialState, action: any): IT
 export const selectFeature = (state: IAppState) => state.tweet;
 export const selectors = {
     feed: createSelector(selectFeature, (state: ITweetState, feedKey: string) => state.tweetFeed[feedKey]),
-    actionStatuses: createSelector(selectFeature, (state: ITweetState) => state.actionStatuses),
 };

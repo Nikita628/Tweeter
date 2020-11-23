@@ -3,8 +3,8 @@ import { createSelector } from '@ngrx/store';
 
 import { IAppState } from '.';
 import { ApiPageResponse } from '../models/Api';
-import { IActionStatuses, IPayloadedAction } from '../models/Common';
-import { Tweet, TweetSearchParam } from '../models/Tweet';
+import { IPayloadedAction } from '../models/Common';
+import { Tweet } from '../models/Tweet';
 import { TweetComment, TweetCommentSearchParam } from '../models/TweetComment';
 import { actionTypes as tweetActionTypes } from "./tweet";
 
@@ -13,14 +13,12 @@ export interface ITweetComments {
 }
 
 export interface ITweetCommentState {
-    actionStatuses: IActionStatuses;
     home: ITweetComments;
     explore: ITweetComments;
     bookmarks: ITweetComments;
 }
 
 const initialState: ITweetCommentState = {
-    actionStatuses: {},
     home: null,
     explore: null,
     bookmarks: null,
@@ -79,7 +77,6 @@ const reducerMap = {
         };
         const existingComments: TweetComment[] = newState[feedKey][tweetId].comments;
         newState[feedKey][tweetId] = { comments: [...existingComments, ...comments] };
-        newState.actionStatuses = { ...state.actionStatuses, [actionTypes.create]: "success" };
         return newState;
     },
     [actionTypes.searchError]: (state: ITweetCommentState, action: Action & IPayloadedAction<string>): ITweetCommentState => {
@@ -89,12 +86,6 @@ const reducerMap = {
         };
     },
 
-    [actionTypes.create]: (state: ITweetCommentState, action: Action): ITweetCommentState => {
-        return {
-            ...state,
-            actionStatuses: { ...state.actionStatuses, [actionTypes.create]: "progress" },
-        };
-    },
     [actionTypes.createSuccess]
         : (
             state: ITweetCommentState,
@@ -108,15 +99,8 @@ const reducerMap = {
             };
             const existingComments: TweetComment[] = newState[feedKey][comment.tweetId].comments;
             newState[feedKey][comment.tweetId] = { comments: [comment, ...existingComments] };
-            newState.actionStatuses = { ...state.actionStatuses, [actionTypes.create]: "success" };
             return newState;
         },
-    [actionTypes.createError]: (state: ITweetCommentState): ITweetCommentState => {
-        return {
-            ...state,
-            actionStatuses: { ...state.actionStatuses, [actionTypes.create]: "error" },
-        };
-    },
 
     [tweetActionTypes.searchSuccess]
         : (
@@ -174,5 +158,4 @@ export const selectors = {
             return state[param.feedKey] ? state[param.feedKey][param.tweetId] : null;
         }
     ),
-    actionStatuses: createSelector(selectFeature, (state: ITweetCommentState) => state.actionStatuses),
 };

@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActionsSubject, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { ofType } from "@ngrx/effects";
 import { takeUntil } from "rxjs/operators";
 
 import { IAppState } from 'src/app/state';
-import { actionCreators, actionTypes, IAuthState } from 'src/app/state/auth';
+import { actionCreators, IAuthState } from 'src/app/state/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,7 +22,6 @@ export class SigninComponent implements OnInit, OnDestroy {
     public isLoading = false;
 
     constructor(
-        private actions$: ActionsSubject,
         private store: Store<IAppState>,
         private router: Router
     ) {
@@ -41,14 +39,6 @@ export class SigninComponent implements OnInit, OnDestroy {
                 this.router.navigate(["/"]);
             }
         });
-
-        // this.actions$.pipe(
-        //     ofType(actionTypes.signinError),
-        //     takeUntil(this.destroyed$)
-        // ).subscribe(() => {
-        //     this.isLoading = false;
-        //     this.isSubmitDisabled = false;
-        // });
     }
 
     public onSubmit(): void {

@@ -1,22 +1,21 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { Tweet, TweetSearchParam } from 'src/app/models/Tweet';
-import { User } from 'src/app/models/User';
 import { IAppState } from 'src/app/state';
-import { actionCreators, selectors } from 'src/app/state/tweet';
+import { actionCreators as tweetAC, selectors as tweetSE } from 'src/app/state/tweet';
+import { BaseComponent } from '../../common/base-component/base-component.component';
 
 @Component({
   selector: 'app-tweets-feed',
   templateUrl: './tweets-feed.component.html',
   styleUrls: ['./tweets-feed.component.css']
 })
-export class TweetsFeedComponent implements OnInit, OnDestroy {
+export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDestroy {
   @Input() feedKey: string;
-  private destroyed$ = new Subject();
   private feed$: Observable<{tweets: Tweet[], totalCount: number}>;
-  private currentUser: User;
   private param = new TweetSearchParam();
   private scrollY = 0;
   private lastId: number;
@@ -24,13 +23,16 @@ export class TweetsFeedComponent implements OnInit, OnDestroy {
   public totalCount = 0;
   public tweets: Tweet[] = [];
 
-  constructor(private store: Store<IAppState>) {
+  constructor(protected store: Store<IAppState>) {
+    super(store);
     this.param.pageSize = 10;
     this.param.sortDirection = "desc";
   }
 
   ngOnInit(): void {
-    this.feed$ = this.store.select(selectors.feed, this.feedKey);
+    super.ngOnInit();
+
+    this.feed$ = this.store.select(tweetSE.feed, this.feedKey);
 
     this.feed$.pipe(
       takeUntil(this.destroyed$)
@@ -49,16 +51,12 @@ export class TweetsFeedComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.select("auth")
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((state) => this.currentUser = state.user);
-
     this.param.appendToExistingStorePage = false;
     this.param.followerId = this.currentUser.id;
     this.param.createdById = this.currentUser.id;
     this.param.createdByIdOrFollowerId = true;
 
-    this.store.dispatch(actionCreators.search(this.param, this.feedKey));
+    this.store.dispatch(tweetAC.search(this.param, this.feedKey));
   }
 
   public onLoadMore(): void {
@@ -70,12 +68,7 @@ export class TweetsFeedComponent implements OnInit, OnDestroy {
       appendToExistingStorePage: true,
     };
 
-    this.store.dispatch(actionCreators.search(param, this.feedKey));
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+    this.store.dispatch(tweetAC.search(param, this.feedKey));
   }
 }
 

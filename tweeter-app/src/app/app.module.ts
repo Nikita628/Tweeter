@@ -39,6 +39,7 @@ import { TweetEffects } from './effects/tweet';
 import { TweetApiClient } from './services/api/tweet-api-client.service';
 import { TweetsFeedComponent } from './components/tweet/tweets-feed/tweets-feed.component';
 import { TweetCommentApiClient } from './services/api/tweet-comment-api-client.service';
+import { BaseComponent } from './components/common/base-component/base-component.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { TweetCommentApiClient } from './services/api/tweet-comment-api-client.s
     RecommendedUsersComponent,
     DropdownComponent,
     TweetsFeedComponent,
+    BaseComponent,
   ],
   imports: [
     BrowserModule,
