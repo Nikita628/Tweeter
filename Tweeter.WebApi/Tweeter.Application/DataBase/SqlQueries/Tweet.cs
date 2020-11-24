@@ -181,8 +181,6 @@
 ";
 
 		public const string GetById = @"
-			--DECLARE @idEquals as int = 1;
-
 			SELECT t.[Id]
 			  ,t.[CreatedById]
 			  ,t.[CreatedAt]
@@ -194,6 +192,18 @@
 			  ,t.[BookmarkCount]
 			  ,t.[CommentCount]
 			  ,t.[OnlyFollowedCanReply]
+			  ,CASE WHEN EXISTS(
+					select top(1) * from dbo.TweetComment tc where tc.TweetId = t.Id and tc.CreatedById = @currentUserId
+				) THEN 1 ELSE 0 END AS IsCommentedByCurrentUser
+			  ,CASE WHEN EXISTS(
+					select top(1) * from dbo.TweetLike tl where tl.TweetId = t.Id and tl.UserId = @currentUserId
+				) THEN 1 ELSE 0 END AS IsLikedByCurrentUser
+			  ,CASE WHEN EXISTS(
+					select top(1) * from dbo.TweetBookmark tb where tb.TweetId = t.Id and tb.UserId = @currentUserId
+				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
+			  ,CASE WHEN EXISTS(
+					select top(1) * from dbo.Tweet t2 where t2.CreatedById = @currentUserId and t2.RetweetedFromId = t.Id
+				) THEN 1 ELSE 0 END AS IsRetweetedByCurrentUser
 
 				,0 as _split_
 				,u.Id
@@ -204,8 +214,44 @@
 				,u.About
 				,u.ProfileCoverUrl
 
+				,0 as _split_
+				,originalTweets.Id
+				,originalTweets.[CreatedById]
+			    ,originalTweets.[CreatedAt]
+			    ,originalTweets.[ImgUrl]
+			    ,originalTweets.[Text]
+			    ,originalTweets.[RetweetedFromId]
+			    ,originalTweets.[LikeCount]
+			    ,originalTweets.[RetweetCount]
+			    ,originalTweets.[BookmarkCount]
+				,originalTweets.[CommentCount]
+			    ,originalTweets.[OnlyFollowedCanReply]
+				,CASE WHEN EXISTS(
+					select top(1) * from dbo.TweetComment tc where tc.TweetId = originalTweets.Id and tc.CreatedById = @currentUserId
+				) THEN 1 ELSE 0 END AS IsCommentedByCurrentUser
+			    ,CASE WHEN EXISTS(
+					select top(1) * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @currentUserId
+				) THEN 1 ELSE 0 END AS IsLikedByCurrentUser
+			    ,CASE WHEN EXISTS(
+					select top(1) * from dbo.TweetBookmark tb where tb.TweetId = originalTweets.Id and tb.UserId = @currentUserId
+				) THEN 1 ELSE 0 END AS IsBookmarkedByCurrentUser
+				,CASE WHEN EXISTS(
+					select top(1) * from dbo.Tweet t2 where t2.CreatedById = @currentUserId and t2.RetweetedFromId = originalTweets.Id
+				) THEN 1 ELSE 0 END AS IsRetweetedByCurrentUser
+
+				,0 as _split_
+				,otu.Id
+				,otu.FollowersCount
+				,otu.FolloweesCount
+				,otu.AvatarUrl
+				,otu.Name
+				,otu.About
+				,otu.ProfileCoverUrl
+
 			FROM dbo.Tweet t
 			JOIN dbo.AspNetUsers u ON u.Id = t.CreatedById
+			LEFT JOIN dbo.Tweet originalTweets ON originalTweets.Id = t.RetweetedFromId
+			LEFT JOIN dbo.AspNetUsers otu ON otu.Id = originalTweets.CreatedById
 			WHERE t.Id = @id;
 ";
 	}

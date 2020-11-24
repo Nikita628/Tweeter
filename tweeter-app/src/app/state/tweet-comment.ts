@@ -19,9 +19,9 @@ export interface ITweetCommentState {
 }
 
 const initialState: ITweetCommentState = {
-    home: null,
-    explore: null,
-    bookmarks: null,
+    home: {},
+    explore: {},
+    bookmarks: {},
 };
 
 export const actionTypes = {
@@ -79,12 +79,6 @@ const reducerMap = {
         newState[feedKey][tweetId] = { comments: [...existingComments, ...comments] };
         return newState;
     },
-    [actionTypes.searchError]: (state: ITweetCommentState, action: Action & IPayloadedAction<string>): ITweetCommentState => {
-        return {
-            ...state,
-            [action.payload]: { tweets: [], totalCount: 0 }
-        };
-    },
 
     [actionTypes.createSuccess]
         : (
@@ -117,7 +111,8 @@ const reducerMap = {
 
             for (const t of tweets) {
                 if (t.retweetedFromId) {
-                    newState[feedKey][t.id] = { comments: t.originalTweet.tweetComments, totalCount: t.originalTweet.commentCount };
+                    newState[feedKey][t.retweetedFromId] =
+                        { comments: t.originalTweet.tweetComments, totalCount: t.originalTweet.commentCount };
                 } else {
                     newState[feedKey][t.id] = { comments: t.tweetComments, totalCount: t.commentCount };
                 }

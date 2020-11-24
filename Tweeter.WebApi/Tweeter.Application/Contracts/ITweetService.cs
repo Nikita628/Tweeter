@@ -7,7 +7,7 @@ namespace Tweeter.Application.Contracts
 	{
 		Task<Response<TweetDto>> CreateAsync(TweetForCreation tweet);
 		Task<PageResponse<TweetDto>> SearchAsync(TweetSearchParam param);
-		Task<Response<bool>> RetweetAsync(int tweetId);
+		Task<Response<TweetDto>> RetweetAsync(int tweetId);
 		Task<Response<bool>> LikeAsync(int tweetId);
 		Task<Response<bool>> BookmarkAsync(int tweetId);
 	}

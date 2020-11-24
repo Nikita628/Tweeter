@@ -9,40 +9,44 @@
     <p *ngIf="tweet.originalTweet" class="retweeted">
         <i class="material-icons">autorenew</i> {{ tweet.createdBy.name }} Retweeted
     </p>
-    <div class="tweet" *ngIf="tweet.originalTweet || tweet as tweet">
-        <app-media [imgUrl]="tweet.createdBy.avatarUrl ? tweet.createdBy.avatarUrl : 'assets/user-placeholder.png'"
-            [width]="40" [height]="40" [header]="tweet.createdBy.name" [text]="tweet.createdAt | date:'medium'">
-        </app-media>
-        <p class="my-3">
-            {{ tweet.id }}
-        </p>
-        <p class="my-3">
-            {{ tweet.text }}
-        </p>
-        <img *ngIf="tweet.imgUrl" [src]="tweet.imgUrl" alt="tweet image" class="tweet-img">
-        <div class="info">
-            <span class="mx-2">{{ tweet.commentCount }} Comments</span>
-            <span class="mx-2">{{ tweet.retweetCount }} Retweets</span>
-            <span class="mx-2">{{ tweet.bookmarkCount }} Saved</span>
-        </div>
-        <div class="tweet-menu">
-            <button (click)="onSendComment()">
-                <i class="material-icons">chat_bubble_outline</i>
-                <span class="menu-button-text">Comment</span>
-            </button>
-            <button (click)="onRetweet(tweet.id)" [ngClass]="{success: tweet.isRetweetedByCurrentUser}">
-                <i class="material-icons">autorenew</i>
-                <span class="menu-button-text">{{ tweet.isRetweetedByCurrentUser ? 'Retweeted' : 'Retweet' }}</span>
-            </button>
-            <button (click)="onLike(tweet.id)" [ngClass]="{danger: tweet.isLikedByCurrentUser}">
-                <i class="material-icons">check</i>
-                <span class="menu-button-text">{{ tweet.isLikedByCurrentUser ? 'Liked' : 'Like' }}</span>
-            </button>
-            <button (click)="onBookmark(tweet.id)" [ngClass]="{primary: tweet.isBookmarkedByCurrentUser}">
-                <i class="material-icons">bookmark</i>
-                <span class="menu-button-text">{{ tweet.isBookmarkedByCurrentUser ? 'Saved' : 'Save' }}</span>
-            </button>
-        </div>
+    <div class="tweet">
+        <ng-container *ngIf="tweet.originalTweet || tweet as t">
+            <app-media [imgUrl]="t.createdBy.avatarUrl ? t.createdBy.avatarUrl : 'assets/user-placeholder.png'"
+                [width]="40" [height]="40" [header]="t.createdBy.name" [text]="t.createdAt | date:'medium'">
+            </app-media>
+            <p class="my-3">
+                {{ t.id }}
+            </p>
+            <p class="my-3">
+                {{ t.text }}
+            </p>
+            <img *ngIf="t.imgUrl" [src]="t.imgUrl" alt="tweet image" class="tweet-img">
+            <div class="info">
+                <span class="mx-2">{{ t.commentCount }} Comments</span>
+                <span class="mx-2">{{ t.retweetCount }} Retweets</span>
+                <span class="mx-2">{{ t.bookmarkCount }} Saved</span>
+            </div>
+            <div class="tweet-menu">
+                <button (click)="onSendComment()">
+                    <i class="material-icons">chat_bubble_outline</i>
+                    <span class="menu-button-text">Comment</span>
+                </button>
+                <button (click)="onRetweet(t.id)"
+                    [ngClass]="{success: t.isRetweetedByCurrentUser, disabled: isRetweeting}">
+                    <i class="material-icons">autorenew</i>
+                    <span class="menu-button-text">{{ t.isRetweetedByCurrentUser ? 'Retweeted' : 'Retweet' }}</span>
+                </button>
+                <button (click)="onLike(t.id)" [ngClass]="{danger: t.isLikedByCurrentUser, disabled: isLiking}">
+                    <i class="material-icons">check</i>
+                    <span class="menu-button-text">{{ t.isLikedByCurrentUser ? 'Liked' : 'Like' }}</span>
+                </button>
+                <button (click)="onBookmark(t.id)"
+                    [ngClass]="{primary: t.isBookmarkedByCurrentUser, disabled: isSaving}">
+                    <i class="material-icons">bookmark</i>
+                    <span class="menu-button-text">{{ t.isBookmarkedByCurrentUser ? 'Saved' : 'Save' }}</span>
+                </button>
+            </div>
+        </ng-container>
         <br>
         <app-tweet-comment-section [notifier]="notifier" [tweet]="tweet" [feedKey]="'home'"></app-tweet-comment-section>
     </div>

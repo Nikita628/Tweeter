@@ -104,9 +104,9 @@ namespace Tweeter.Application.Services
 			return result;
 		}
 
-		public async Task<Response<bool>> RetweetAsync(int tweetId)
+		public async Task<Response<TweetDto>> RetweetAsync(int tweetId)
 		{
-			var result = new Response<bool>();
+			var result = new Response<TweetDto>();
 
 			var originalTweet = await _dbContext.Tweet
 				.FirstOrDefaultAsync(t => t.Id == tweetId);
@@ -129,7 +129,7 @@ namespace Tweeter.Application.Services
 			await _dbContext.Tweet.AddAsync(newTweet);
 			await _dbContext.SaveChangesAsync();
 
-			result.Item = true;
+			result.Item = await Get(newTweet.Id);
 
 			return result;
 		}
@@ -137,8 +137,6 @@ namespace Tweeter.Application.Services
 		public async Task<PageResponse<TweetDto>> SearchAsync(TweetSearchParam param)
 		{
 			var result = new PageResponse<TweetDto>();
-
-			var tweetsDict = new Dictionary<int, TweetDto>(param.PageSize);
 
 			Func<object[], TweetDto> map = (objects) =>
 			{
@@ -149,11 +147,6 @@ namespace Tweeter.Application.Services
 				{
 					tweet.OriginalTweet = (TweetDto)objects[2];
 					tweet.OriginalTweet.CreatedBy = (UserDto)objects[3];
-					tweetsDict.TryAdd(tweet.RetweetedFromId.Value, tweet.OriginalTweet);
-				}
-				else
-				{
-					tweetsDict.Add(tweet.Id, tweet);
 				}
 
 				result.TotalCount = ((Total)objects[4]).TotalCount;
@@ -166,7 +159,7 @@ namespace Tweeter.Application.Services
 			var types = new[] { typeof(TweetDto), typeof(UserDto), typeof(TweetDto), typeof(UserDto), typeof(Total) };
 			result.Items = await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.SearchTweets, param, types, map, "_split_");
 
-			await PopulateTweetComments(result.Items, tweetsDict);
+			await PopulateTweetComments(result.Items);
 
 			return result;
 		}
@@ -177,20 +170,40 @@ namespace Tweeter.Application.Services
 			{
 				TweetDto tweet = (TweetDto)objects[0];
 				tweet.CreatedBy = (UserDto)objects[1];
+
+				if (tweet.RetweetedFromId.HasValue)
+				{
+					tweet.OriginalTweet = (TweetDto)objects[2];
+					tweet.OriginalTweet.CreatedBy = (UserDto)objects[3];
+				}
+
 				return tweet;
 			};
 
-			var types = new[] { typeof(TweetDto), typeof(UserDto) };
-			return (await _rawSql.Search<TweetDto>(DataBase.SqlQueries.Tweet.GetById, new { id }, types, map, "_split_")).FirstOrDefault();
+			var types = new[] { typeof(TweetDto), typeof(UserDto), typeof(TweetDto), typeof(UserDto) };
+			return (await _rawSql.Search<TweetDto>(
+					DataBase.SqlQueries.Tweet.GetById,
+					new { id, currentUserId = _userAccessor.CurrentUserId },
+					types,
+					map,
+					"_split_"
+				))
+				.FirstOrDefault();
 		}
 
-		private async Task PopulateTweetComments(List<TweetDto> items, Dictionary<int, TweetDto> tweetsDict)
+		private async Task PopulateTweetComments(List<TweetDto> items)
 		{
+			var commentsDict = new Dictionary<int, List<TweetCommentDto>>();
+
 			Func<object[], TweetCommentDto> commentMap = (objects) =>
 			{
 				TweetCommentDto comment = (TweetCommentDto)objects[0];
 				comment.CreatedBy = (UserDto)objects[1];
-				tweetsDict[comment.TweetId].TweetComments.Add(comment);
+
+				if (commentsDict.ContainsKey(comment.TweetId))
+					commentsDict[comment.TweetId].Add(comment);
+				else
+					commentsDict.Add(comment.TweetId, new List<TweetCommentDto>() { comment });
 
 				return comment;
 			};
@@ -204,13 +217,22 @@ namespace Tweeter.Application.Services
 
 			var commentTypes = new[] { typeof(TweetCommentDto), typeof(UserDto) };
 
-			await _rawSql.Search<TweetCommentDto>(
+			var comments = await _rawSql.Search<TweetCommentDto>(
 				DataBase.SqlQueries.TweetComment.SearchCommentsForTweets,
 				commentDbParam,
 				commentTypes,
 				commentMap,
 				"_split_"
 			);
+
+			foreach (var tweet in items)
+			{
+				if (tweet.RetweetedFromId.HasValue && commentsDict.ContainsKey(tweet.RetweetedFromId.Value))
+					tweet.OriginalTweet.TweetComments = commentsDict[tweet.RetweetedFromId.Value];
+
+				if (commentsDict.ContainsKey(tweet.Id))
+					tweet.TweetComments = commentsDict[tweet.Id];
+			}
 		}
 
 		private async Task ProcessHashTags(string text)

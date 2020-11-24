@@ -67,4 +67,67 @@ export class TweetEffects {
                 );
         })
     );
+
+    @Effect()
+    retweet = this.actions$.pipe(
+        ofType(actionTypes.retweet),
+        switchMap((action: Action & IPayloadedAction<{ tweetId: number, feedKey: string }>) => {
+            return this.tweetApi.retweet(action.payload.tweetId)
+                .pipe(
+                    mergeMap((res: ApiResponse<Tweet>) => {
+                        if (!res.errors.length) {
+                            return [actionCreators.retweetSuccess(res.item, action.payload.feedKey)];
+                        }
+                        this.notification.error(res.errors);
+                        return [actionCreators.retweetError()];
+                    }),
+                    catchError((error) => {
+                        this.notification.error();
+                        return [actionCreators.retweetError()];
+                    })
+                );
+        })
+    );
+
+    @Effect()
+    like = this.actions$.pipe(
+        ofType(actionTypes.like),
+        switchMap((action: Action & IPayloadedAction<{ tweetId: number, feedKey: string }>) => {
+            return this.tweetApi.like(action.payload.tweetId)
+                .pipe(
+                    mergeMap((res: ApiResponse<boolean>) => {
+                        if (!res.errors.length) {
+                            return [actionCreators.likeSuccess(action.payload.tweetId, action.payload.feedKey)];
+                        }
+                        this.notification.error(res.errors);
+                        return [actionCreators.likeError()];
+                    }),
+                    catchError((error) => {
+                        this.notification.error();
+                        return [actionCreators.likeError()];
+                    })
+                );
+        })
+    );
+
+    @Effect()
+    bookmark = this.actions$.pipe(
+        ofType(actionTypes.bookmark),
+        switchMap((action: Action & IPayloadedAction<{ tweetId: number, feedKey: string }>) => {
+            return this.tweetApi.bookmark(action.payload.tweetId)
+                .pipe(
+                    mergeMap((res: ApiResponse<boolean>) => {
+                        if (!res.errors.length) {
+                            return [actionCreators.bookmarkSuccess(action.payload.tweetId, action.payload.feedKey)];
+                        }
+                        this.notification.error(res.errors);
+                        return [actionCreators.bookmarkError()];
+                    }),
+                    catchError((error) => {
+                        this.notification.error();
+                        return [actionCreators.bookmarkError()];
+                    })
+                );
+        })
+    );
 }

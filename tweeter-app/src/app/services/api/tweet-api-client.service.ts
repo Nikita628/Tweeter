@@ -22,4 +22,16 @@ export class TweetApiClient extends ApiClient {
 
         return this.http.post<ApiResponse<Tweet>>(`${environment.apiUrl}${this.endpoint}create`, form);
     }
+
+    public retweet(tweetId: number): Observable<ApiResponse<Tweet>> {
+        return this.http.put<ApiResponse<Tweet>>(`${environment.apiUrl}${this.endpoint}retweet/${tweetId}`, {});
+    }
+
+    public like(tweetId: number): Observable<ApiResponse<boolean>> {
+        return this.http.put<ApiResponse<boolean>>(`${environment.apiUrl}${this.endpoint}like/${tweetId}`, {});
+    }
+
+    public bookmark(tweetId: number): Observable<ApiResponse<boolean>> {
+        return this.http.put<ApiResponse<boolean>>(`${environment.apiUrl}${this.endpoint}bookmark/${tweetId}`, {});
+    }
 }

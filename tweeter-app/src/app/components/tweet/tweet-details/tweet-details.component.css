@@ -84,3 +84,7 @@ i {
         display: inline;
     }
 }
+
+.disabled {
+    opacity: 0.7;
+}

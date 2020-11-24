@@ -39,7 +39,10 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.comments$ = this.store.select(tweetCommentSE.tweetComments, { feedKey: "home", tweetId: this.tweet.id });
+    this.comments$ = this.store.select(
+      tweetCommentSE.tweetComments,
+      { feedKey: "home", tweetId: this.tweet.retweetedFromId ? this.tweet.retweetedFromId : this.tweet.id }
+    );
 
     this.comments$.pipe(
       takeUntil(this.destroyed$),
@@ -55,7 +58,9 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
         if (state[tweetCommentAT.create] === "success") {
           this.selectedImg = null;
           this.commentText = null;
-          this.imgPreviewElement.nativeElement.src = "";
+          if (this.imgPreviewElement?.nativeElement) {
+            this.imgPreviewElement.nativeElement.src = "";
+          }
         }
       });
 
