@@ -85,7 +85,7 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
 
   public onLoadMore(): void {
     this.param.idLessThan = this.lastId;
-    this.param.tweetId = this.tweet.id;
+    this.param.tweetId = this.tweet.retweetedFromId ? this.tweet.retweetedFromId : this.tweet.id;
     this.store.dispatch(tweetCommentAC.search(this.param, this.feedKey));
   }
 
