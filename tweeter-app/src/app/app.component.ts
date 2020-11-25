@@ -4,7 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { IAppState } from './state';
-import { actionCreators, IAuthState } from './state/auth';
+import { actionCreators } from './state/auth/actions';
+import { IAuthState } from './state/auth/reducer';
 
 @Component({
   selector: "app-root",

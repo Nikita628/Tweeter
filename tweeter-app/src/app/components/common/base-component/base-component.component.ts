@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { IActionStatuses } from 'src/app/models/Common';
 import { User } from 'src/app/models/User';
 import { IAppState } from 'src/app/state';
-import { selectors as commonSE } from "../../../state/common";
+import { selectors as commonSE } from "../../../state/common/reducer";
 
 @Component({
   selector: 'app-base-component',

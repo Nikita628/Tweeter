@@ -49,7 +49,7 @@ namespace Tweeter.WebApi.Controllers
 			return Ok(result);
 		}
 
-		[HttpPost("like/{commentId}")]
+		[HttpPut("like/{commentId}")]
 		public async Task<IActionResult> Like([FromRoute]int commentId)
 		{
 			var result = await _comment.LikeAsync(commentId);

@@ -10,11 +10,11 @@
     </div>
     <div class="profile-menu">
         <button class="btn btn-light dropdown-toggle" type="button" (click)="toggleMenu()">
-            <img *ngIf="user.avatarUrl; else avatarPlaceholder" [src]="user.avatarUrl" alt="avatar" class="avatar">
-            <span class="user-name">{{ user.name }}</span>
+            <img *ngIf="currentUser.avatarUrl; else avatarPlaceholder" [src]="currentUser.avatarUrl" alt="avatar" class="avatar">
+            <span class="user-name">{{ currentUser.name }}</span>
         </button>
         <div *ngIf="isMenuOpened" class="dropdown-menu show">
-            <a class="dropdown-item" [routerLink]="['/profile', 'user.id']"><i class="material-icons">person</i> My Profile</a>
+            <a class="dropdown-item" [routerLink]="['/profile', 'currentUser.id']"><i class="material-icons">person</i> My Profile</a>
             <a class="dropdown-item" [routerLink]="['/settings']"><i class="material-icons">settings</i> Settings</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item logout-item" (click)="logout($event)"><i class="material-icons">exit_to_app</i> Logout</a>

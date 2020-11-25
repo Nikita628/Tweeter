@@ -4,15 +4,15 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, Store } from '@ngrx/store';
 import { catchError, mergeMap, switchMap, tap } from 'rxjs/operators';
 
-import { ApiPageResponse, ApiResponse } from '../models/Api';
-import { IPayloadedAction } from '../models/Common';
-import { Tweet, TweetSearchParam } from '../models/Tweet';
-import { TweetComment, TweetCommentSearchParam } from '../models/TweetComment';
-import { TweetApiClient } from '../services/api/tweet-api-client.service';
-import { TweetCommentApiClient } from '../services/api/tweet-comment-api-client.service';
-import { NotificationService } from '../services/utils/notification.service';
-import { IAppState } from '../state';
-import { actionCreators, actionTypes } from '../state/tweet-comment';
+import { ApiPageResponse, ApiResponse } from '../../models/Api';
+import { IPayloadedAction } from '../../models/Common';
+import { Tweet, TweetSearchParam } from '../../models/Tweet';
+import { TweetComment, TweetCommentSearchParam } from '../../models/TweetComment';
+import { TweetApiClient } from '../../services/api/tweet-api-client.service';
+import { TweetCommentApiClient } from '../../services/api/tweet-comment-api-client.service';
+import { NotificationService } from '../../services/utils/notification.service';
+import { IAppState } from '..';
+import { actionCreators, actionTypes } from './actions';
 
 @Injectable()
 export class TweetCommentEffects {
@@ -65,6 +65,31 @@ export class TweetCommentEffects {
                     catchError((error) => {
                         this.notification.error();
                         return [actionCreators.createError()];
+                    })
+                );
+        })
+    );
+
+    @Effect()
+    like = this.actions$.pipe(
+        ofType(actionTypes.like),
+        switchMap((action: Action & IPayloadedAction<{ commentId: number, feedKey: string, tweetId: number }>) => {
+            return this.commentApi.like(action.payload.commentId)
+                .pipe(
+                    mergeMap((res: ApiResponse<boolean>) => {
+                        if (!res.errors.length) {
+                            return [actionCreators.likeSuccess(
+                                action.payload.commentId,
+                                action.payload.tweetId,
+                                action.payload.feedKey
+                            )];
+                        }
+                        this.notification.error(res.errors);
+                        return [actionCreators.likeError()];
+                    }),
+                    catchError((error) => {
+                        this.notification.error();
+                        return [actionCreators.likeError()];
                     })
                 );
         })

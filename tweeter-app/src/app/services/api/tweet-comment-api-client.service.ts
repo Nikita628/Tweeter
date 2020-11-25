@@ -22,4 +22,8 @@ export class TweetCommentApiClient extends ApiClient {
 
         return this.http.post<ApiResponse<TweetComment>>(`${environment.apiUrl}${this.endpoint}create`, form);
     }
+
+    public like(commentId: number): Observable<ApiResponse<boolean>> {
+        return this.http.put<ApiResponse<boolean>>(`${environment.apiUrl}${this.endpoint}like/${commentId}`, {});
+    }
 }

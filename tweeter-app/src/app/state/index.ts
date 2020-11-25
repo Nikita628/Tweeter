@@ -1,8 +1,8 @@
 import { ActionReducerMap } from '@ngrx/store';
-import { authReducer, IAuthState } from './auth';
-import { ICommonState, commonReducer } from './common';
-import { ITweetState, tweetReducer } from './tweet';
-import { ITweetCommentState, tweetCommentReducer } from './tweet-comment';
+import { authReducer, IAuthState } from './auth/reducer';
+import { ICommonState, commonReducer } from './common/reducer';
+import { ITweetState, tweetReducer } from './tweet/reducer';
+import { ITweetCommentState, tweetCommentReducer } from './tweet-comment/reducer';
 
 export interface IAppState {
     auth: IAuthState;

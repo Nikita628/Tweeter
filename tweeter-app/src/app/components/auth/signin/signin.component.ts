@@ -1,19 +1,20 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { takeUntil } from "rxjs/operators";
 
 import { IAppState } from 'src/app/state';
-import { actionCreators, IAuthState } from 'src/app/state/auth';
+import { actionCreators } from 'src/app/state/auth/actions';
+import { IAuthState } from 'src/app/state/auth/reducer';
 import { Router } from '@angular/router';
+import { BaseComponent } from '../../common/base-component/base-component.component';
 
 @Component({
     selector: "app-signin",
     templateUrl: "./signin.component.html",
     styleUrls: ["./signin.component.css"]
 })
-export class SigninComponent implements OnInit, OnDestroy {
-    private destroyed$ = new Subject();
+export class SigninComponent extends BaseComponent implements OnInit, OnDestroy {
     private authState$: Observable<IAuthState>;
 
     public email = "";
@@ -22,9 +23,10 @@ export class SigninComponent implements OnInit, OnDestroy {
     public isLoading = false;
 
     constructor(
-        private store: Store<IAppState>,
+        protected store: Store<IAppState>,
         private router: Router
     ) {
+        super(store);
         this.authState$ = store.select("auth");
     }
 
@@ -48,8 +50,7 @@ export class SigninComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.destroyed$.next();
-        this.destroyed$.complete();
+        super.ngOnDestroy();
         this.store.dispatch(actionCreators.clearSigninStatus());
     }
 }

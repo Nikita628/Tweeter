@@ -21,12 +21,12 @@
                     <strong>{{ comment.createdBy.name }}</strong>{{ " " }}<span
                         class="comment-date">{{ comment.createdAt | date:'medium' }}</span>
                 </div>
-                <p>{{ comment.id }}</p>
+                <p>ID = {{ comment.id }}</p>
                 <p class="comment-text">{{ comment.text }}</p>
                 <img *ngIf="comment.imgUrl" [src]="comment.imgUrl" alt="" class="img-preview">
             </div>
             <div class="comment-likes">
-                <span [ngClass]="{danger: comment.isLikedByCurrentUser}">
+                <span [ngClass]="{danger: comment.isLikedByCurrentUser}" (click)="onLike(comment.id)">
                     <i class="material-icons">check</i> {{ comment.isLikedByCurrentUser ? 'Liked' : 'Like' }}
                 </span>
                 <span>- {{ comment.likeCount }} Likes</span>

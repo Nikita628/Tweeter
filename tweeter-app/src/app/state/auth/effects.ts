@@ -4,13 +4,13 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, Store } from '@ngrx/store';
 import { catchError, mergeMap, switchMap, tap } from 'rxjs/operators';
 
-import { ApiResponse } from '../models/Api';
-import { SigninResult, SignUpData } from '../models/Auth';
-import { IPayloadedAction } from '../models/Common';
-import { AuthApiClient } from '../services/api/auth-api-client.service';
-import { NotificationService } from '../services/utils/notification.service';
-import { IAppState } from '../state';
-import { actionCreators, actionTypes } from '../state/auth';
+import { ApiResponse } from '../../models/Api';
+import { SigninResult, SignUpData } from '../../models/Auth';
+import { IPayloadedAction } from '../../models/Common';
+import { AuthApiClient } from '../../services/api/auth-api-client.service';
+import { NotificationService } from '../../services/utils/notification.service';
+import { IAppState } from '../../state';
+import { actionCreators, actionTypes } from './actions';
 
 @Injectable()
 export class AuthEffects {

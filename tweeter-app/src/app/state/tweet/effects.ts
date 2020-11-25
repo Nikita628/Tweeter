@@ -4,13 +4,13 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, Store } from '@ngrx/store';
 import { catchError, mergeMap, switchMap, tap } from 'rxjs/operators';
 
-import { ApiPageResponse, ApiResponse } from '../models/Api';
-import { IPayloadedAction } from '../models/Common';
-import { Tweet, TweetSearchParam } from '../models/Tweet';
-import { TweetApiClient } from '../services/api/tweet-api-client.service';
-import { NotificationService } from '../services/utils/notification.service';
-import { IAppState } from '../state';
-import { actionCreators, actionTypes } from '../state/tweet';
+import { ApiPageResponse, ApiResponse } from '../../models/Api';
+import { IPayloadedAction } from '../../models/Common';
+import { Tweet, TweetSearchParam } from '../../models/Tweet';
+import { TweetApiClient } from '../../services/api/tweet-api-client.service';
+import { NotificationService } from '../../services/utils/notification.service';
+import { IAppState } from '../../state';
+import { actionCreators, actionTypes } from './actions';
 
 @Injectable()
 export class TweetEffects {

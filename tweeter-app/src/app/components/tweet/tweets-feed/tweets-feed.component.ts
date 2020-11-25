@@ -5,7 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { Tweet, TweetSearchParam } from 'src/app/models/Tweet';
 import { IAppState } from 'src/app/state';
-import { actionCreators as tweetAC, selectors as tweetSE } from 'src/app/state/tweet';
+import { actionCreators as tweetAC } from 'src/app/state/tweet/actions';
+import { selectors as tweetSE } from "../../../state/tweet/reducer";
 import { BaseComponent } from '../../common/base-component/base-component.component';
 
 @Component({

@@ -1,12 +1,13 @@
 import { Action } from "@ngrx/store";
 import { createSelector } from '@ngrx/store';
 
-import { IAppState } from '.';
-import { ApiPageResponse } from '../models/Api';
-import { IPayloadedAction } from '../models/Common';
-import { Tweet } from '../models/Tweet';
-import { TweetComment, TweetCommentSearchParam } from '../models/TweetComment';
-import { actionTypes as tweetActionTypes } from "./tweet";
+import { IAppState } from '..';
+import { ApiPageResponse } from '../../models/Api';
+import { IPayloadedAction } from '../../models/Common';
+import { Tweet } from '../../models/Tweet';
+import { TweetComment } from '../../models/TweetComment';
+import { actionTypes as tweetActionTypes } from "../tweet/actions";
+import { actionTypes } from "./actions";
 
 export interface ITweetComments {
     [tweetId: number]: { comments: TweetComment[], totalCount: number };
@@ -22,45 +23,6 @@ const initialState: ITweetCommentState = {
     home: {},
     explore: {},
     bookmarks: {},
-};
-
-export const actionTypes = {
-    search: "TweetComment/Search",
-    searchSuccess: "TweetComment/SearchSuccess",
-    searchError: "TweetComment/SearchError",
-
-    create: "TweetComment/Create",
-    createSuccess: "TweetComment/CreateSuccess",
-    createError: "TweetComment/CreateError",
-};
-
-export const actionCreators = {
-    search: (param: TweetCommentSearchParam, feedKey: string)
-        : Action & IPayloadedAction<{ param: TweetCommentSearchParam, feedKey: string }> => ({
-            type: actionTypes.search,
-            payload: { param, feedKey },
-        }),
-    searchSuccess: (res: ApiPageResponse<TweetComment>, feedKey: string, tweetId: number)
-        : Action & IPayloadedAction<{ res: ApiPageResponse<TweetComment>, feedKey: string, tweetId: number }> => ({
-            type: actionTypes.searchSuccess,
-            payload: { res, feedKey, tweetId }
-        }),
-    searchError: (feedKey: string): Action & IPayloadedAction<string> => ({
-        type: actionTypes.searchError,
-        payload: feedKey,
-    }),
-
-    create: (comment: TweetComment, feedKey: string): Action & IPayloadedAction<{ comment: TweetComment, feedKey: string }> => ({
-        type: actionTypes.create,
-        payload: { comment, feedKey },
-    }),
-    createSuccess: (comment: TweetComment, feedKey: string): Action & IPayloadedAction<{ comment: TweetComment, feedKey: string }> => ({
-        type: actionTypes.createSuccess,
-        payload: { comment, feedKey },
-    }),
-    createError: (): Action => ({
-        type: actionTypes.createError,
-    }),
 };
 
 const reducerMap = {
@@ -94,6 +56,26 @@ const reducerMap = {
             const existingComments: TweetComment[] = newState[feedKey][comment.tweetId].comments;
             newState[feedKey][comment.tweetId] = { comments: [comment, ...existingComments] };
             return newState;
+        },
+
+    [actionTypes.likeSuccess]
+        : (
+            state: ITweetCommentState,
+            action: Action & IPayloadedAction<{ commentId: number, feedKey: string, tweetId: number }>
+        ): ITweetCommentState => {
+            const commentId = action.payload.commentId;
+            const tweetId = action.payload.tweetId;
+            const feedKey = action.payload.feedKey;
+            const comments = state[feedKey][tweetId].comments.map((c: TweetComment): TweetComment => {
+                return c.id === commentId ? { ...c, isLikedByCurrentUser: true, likeCount: c.likeCount + 1 } : c;
+            });
+            return {
+                ...state,
+                [feedKey]: {
+                    ...state[feedKey],
+                    [tweetId]: { ...state[feedKey][tweetId], comments },
+                },
+            };
         },
 
     [tweetActionTypes.searchSuccess]

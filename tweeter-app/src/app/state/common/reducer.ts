@@ -1,8 +1,8 @@
 import { Action } from "@ngrx/store";
 import { createSelector } from '@ngrx/store';
 
-import { IAppState } from '.';
-import { IActionStatuses } from '../models/Common';
+import { IAppState } from '..';
+import { IActionStatuses } from '../../models/Common';
 
 export interface ICommonState {
     actionStatuses: IActionStatuses;
@@ -10,15 +10,6 @@ export interface ICommonState {
 
 const initialState: ICommonState = {
     actionStatuses: {},
-};
-
-export const actionTypes = {
-};
-
-export const actionCreators = {
-};
-
-const reducerMap = {
 };
 
 export function commonReducer(state: ICommonState = initialState, action: Action): ICommonState {

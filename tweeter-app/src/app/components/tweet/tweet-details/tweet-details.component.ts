@@ -5,7 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 import { IActionStatuses, Notifier } from 'src/app/models/Common';
 import { Tweet } from 'src/app/models/Tweet';
 import { IAppState } from 'src/app/state';
-import { actionCreators as tweetAC, actionTypes as tweetAT } from "../../../state/tweet";
+import { actionCreators as tweetAC, actionTypes as tweetAT } from "../../../state/tweet/actions";
+import { actionTypes as tweetCommentAT } from "../../../state/tweet-comment/actions";
 import { BaseComponent } from '../../common/base-component/base-component.component';
 
 @Component({
@@ -17,10 +18,10 @@ export class TweetDetailsComponent extends BaseComponent implements OnInit {
   @Input() tweet: Tweet;
   @Input() feedKey: string;
   public notifier = new Notifier();
-  private isRetweeting = false;
-  private isCommenting = false;
-  private isLiking = false;
-  private isSaving = false;
+  public isRetweeting = false;
+  public isCommenting = false;
+  public isLiking = false;
+  public isSaving = false;
 
   constructor(protected store: Store<IAppState>) {
     super(store);
@@ -44,10 +45,16 @@ export class TweetDetailsComponent extends BaseComponent implements OnInit {
           || statuses[tweetAT.bookmark] === "error") {
           this.isSaving = false;
         }
+
+        if (statuses[tweetCommentAT.create] === "success"
+          || statuses[tweetCommentAT.create] === "error") {
+          this.isCommenting = false;
+        }
       });
   }
 
   public onSendComment(): void {
+    this.isCommenting = true;
     this.notifier.notifyListener();
   }
 
@@ -59,14 +66,24 @@ export class TweetDetailsComponent extends BaseComponent implements OnInit {
   }
 
   public onLike(tweetId: number): void {
-    if (!this.tweet.isLikedByCurrentUser && !this.isLiking) {
+    if (this.tweet.retweetedFromId) {
+      if (!this.tweet.originalTweet.isLikedByCurrentUser && !this.isLiking) {
+        this.isLiking = true;
+        this.store.dispatch(tweetAC.like(tweetId, this.feedKey));
+      }
+    } else if (!this.tweet.isLikedByCurrentUser && !this.isLiking){
       this.isLiking = true;
       this.store.dispatch(tweetAC.like(tweetId, this.feedKey));
     }
   }
 
   public onBookmark(tweetId: number): void {
-    if (!this.isSaving) {
+    if (this.tweet.retweetedFromId) {
+      if (!this.tweet.originalTweet.isBookmarkedByCurrentUser && !this.isSaving) {
+        this.isSaving = true;
+        this.store.dispatch(tweetAC.bookmark(tweetId, this.feedKey));
+      }
+    } else if (!this.tweet.isBookmarkedByCurrentUser && !this.isSaving) {
       this.isSaving = true;
       this.store.dispatch(tweetAC.bookmark(tweetId, this.feedKey));
     }

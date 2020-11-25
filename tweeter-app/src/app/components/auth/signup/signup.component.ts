@@ -1,20 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { SignUpData } from 'src/app/models/Auth';
 import { IAppState } from 'src/app/state';
-import { actionCreators, IAuthState } from 'src/app/state/auth';
+import { actionCreators } from 'src/app/state/auth/actions';
+import { IAuthState } from 'src/app/state/auth/reducer';
+import { BaseComponent } from '../../common/base-component/base-component.component';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent implements OnInit, OnDestroy {
-  private destroyed$ = new Subject();
+export class SignupComponent extends BaseComponent implements OnInit, OnDestroy {
   private authState$: Observable<IAuthState>;
   private readonly emailRegex = /.*@.*\.[A-Za-z]{2,10}/;
 
@@ -32,9 +33,10 @@ export class SignupComponent implements OnInit, OnDestroy {
   public confirmationError = null;
 
   constructor(
-    private store: Store<IAppState>,
+    protected store: Store<IAppState>,
     private router: Router
   ) {
+    super(store);
     this.authState$ = store.select("auth");
   }
 
@@ -129,8 +131,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+    super.ngOnDestroy();
     this.store.dispatch(actionCreators.clearSignupStatus());
   }
 }

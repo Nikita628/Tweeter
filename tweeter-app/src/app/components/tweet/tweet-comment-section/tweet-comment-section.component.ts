@@ -7,8 +7,8 @@ import { Notifier } from 'src/app/models/Common';
 import { Tweet } from 'src/app/models/Tweet';
 import { TweetComment, TweetCommentSearchParam } from 'src/app/models/TweetComment';
 import { IAppState } from 'src/app/state';
-import { selectors as tweetCommentSE } from 'src/app/state/tweet-comment';
-import { actionCreators as tweetCommentAC, actionTypes as tweetCommentAT } from "../../../state/tweet-comment";
+import { selectors as tweetCommentSE } from 'src/app/state/tweet-comment/reducer';
+import { actionCreators as tweetCommentAC, actionTypes as tweetCommentAT } from "../../../state/tweet-comment/actions";
 import { BaseComponent } from '../../common/base-component/base-component.component';
 
 @Component({
@@ -41,7 +41,7 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
 
     this.comments$ = this.store.select(
       tweetCommentSE.tweetComments,
-      { feedKey: "home", tweetId: this.tweet.retweetedFromId ? this.tweet.retweetedFromId : this.tweet.id }
+      { feedKey: this.feedKey, tweetId: this.tweet.retweetedFromId ? this.tweet.retweetedFromId : this.tweet.id }
     );
 
     this.comments$.pipe(
@@ -87,5 +87,15 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
     this.param.idLessThan = this.lastId;
     this.param.tweetId = this.tweet.id;
     this.store.dispatch(tweetCommentAC.search(this.param, this.feedKey));
+  }
+
+  public onLike(commentId: number): void {
+    if (!this.comments.some(c => c.id === commentId && c.isLikedByCurrentUser)) {
+      this.store.dispatch(tweetCommentAC.like(
+        commentId,
+        this.tweet.retweetedFromId ? this.tweet.retweetedFromId : this.tweet.id,
+        this.feedKey
+      ));
+    }
   }
 }
