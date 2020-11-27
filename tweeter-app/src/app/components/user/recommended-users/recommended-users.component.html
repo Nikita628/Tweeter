@@ -11,8 +11,11 @@
                 [text]="u.followersCount + ' followers'"
             >
             </app-media>
-            <button>
+            <button *ngIf="!u.isFolloweeOfCurrentUser" type="button" (click)="onFollow(u.id)">
                 <i class="material-icons">person_add</i> Follow
+            </button>
+            <button *ngIf="u.isFolloweeOfCurrentUser" type="button" (click)="onUnfollow(u.id)">
+                <i class="material-icons">person_add_disabled</i> Unfollow
             </button>
         </div>
         <p class="about">

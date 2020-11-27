@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { ApiPageResponse } from 'src/app/models/Api';
 import { IPayloadedAction } from 'src/app/models/Common';
+import { HashTag } from 'src/app/models/HashTag';
 import { Tweet, TweetSearchParam } from 'src/app/models/Tweet';
 
 export const actionTypes = {
@@ -23,6 +24,10 @@ export const actionTypes = {
     bookmark: "Tweet/Bookmark",
     bookmarkSuccess: "Tweet/BookmarkSuccess",
     bookmarkError: "Tweet/BookmarkError",
+
+    searchHashtags: "Tweet/SearchHashtags",
+    searchHashtagsSuccess: "Tweet/SearchHashtagsSuccess",
+    searchHashtagsError: "Tweet/SearchHashtagsError",
 };
 
 export const actionCreators = {
@@ -87,5 +92,17 @@ export const actionCreators = {
     }),
     bookmarkError: (): Action => ({
         type: actionTypes.bookmarkError,
+    }),
+
+    searchHashtags: (): Action => ({
+        type: actionTypes.searchHashtags,
+    }),
+    searchHashtagsSuccess: (res: ApiPageResponse<HashTag>)
+        : Action & IPayloadedAction<ApiPageResponse<HashTag>> => ({
+            type: actionTypes.searchHashtagsSuccess,
+            payload: res
+        }),
+    searchHashtagsError: (): Action => ({
+        type: actionTypes.searchHashtagsError,
     }),
 };

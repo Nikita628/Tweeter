@@ -40,6 +40,8 @@ export class TweetCreationComponent extends BaseComponent implements OnInit, OnD
           this.sending = false;
         } else if (statuses[tweetAT.create] === "progress") {
           this.sending = true;
+        } else if (statuses[tweetAT.create] === "error") {
+          this.sending = false;
         }
       });
   }

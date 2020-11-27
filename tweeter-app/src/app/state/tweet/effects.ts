@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Action, Store } from '@ngrx/store';
 import { catchError, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { HashTag } from 'src/app/models/HashTag';
 
 import { ApiPageResponse, ApiResponse } from '../../models/Api';
 import { IPayloadedAction } from '../../models/Common';
@@ -126,6 +127,27 @@ export class TweetEffects {
                     catchError((error) => {
                         this.notification.error();
                         return [actionCreators.bookmarkError()];
+                    })
+                );
+        })
+    );
+
+    @Effect()
+    searchHashtags = this.actions$.pipe(
+        ofType(actionTypes.searchHashtags),
+        switchMap((action: Action) => {
+            return this.tweetApi.searchHashTags()
+                .pipe(
+                    mergeMap((res: ApiPageResponse<HashTag>) => {
+                        if (!res.errors.length) {
+                            return [actionCreators.searchHashtagsSuccess(res)];
+                        }
+                        this.notification.error(res.errors);
+                        return [actionCreators.searchHashtagsError()];
+                    }),
+                    catchError(() => {
+                        this.notification.error();
+                        return [actionCreators.searchHashtagsError()];
                     })
                 );
         })

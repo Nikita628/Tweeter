@@ -81,7 +81,7 @@ namespace Tweeter.Application.Services
 		{
 			var result = new Response<bool>();
 
-			var existingFollow = _dbContext.Follow
+			var existingFollow = await _dbContext.Follow
 				.FirstOrDefaultAsync(f => f.FolloweeId == followeeId && f.FollowerId == _userAccessor.CurrentUserId);
 
 			var follower = await _dbContext.User.FirstOrDefaultAsync(u => u.Id == _userAccessor.CurrentUserId);

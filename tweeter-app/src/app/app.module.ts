@@ -40,6 +40,8 @@ import { TweetApiClient } from './services/api/tweet-api-client.service';
 import { TweetsFeedComponent } from './components/tweet/tweets-feed/tweets-feed.component';
 import { TweetCommentApiClient } from './services/api/tweet-comment-api-client.service';
 import { BaseComponent } from './components/common/base-component/base-component.component';
+import { UserApiClient } from './services/api/user-api-client.service';
+import { UserEffects } from './state/user/effects';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,7 @@ import { BaseComponent } from './components/common/base-component/base-component
         strictActionImmutability: false,
       },
     }),
-    EffectsModule.forRoot([AuthEffects, TweetEffects, TweetCommentEffects]),
+    EffectsModule.forRoot([AuthEffects, TweetEffects, TweetCommentEffects, UserEffects]),
     SimpleNotificationsModule.forRoot({position: ["top", "right"], timeOut: 4000, animate: NotificationAnimationType.FromTop}),
     BrowserAnimationsModule,
   ],
@@ -85,6 +87,7 @@ import { BaseComponent } from './components/common/base-component/base-component
     ApiClient,
     TweetApiClient,
     TweetCommentApiClient,
+    UserApiClient,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,

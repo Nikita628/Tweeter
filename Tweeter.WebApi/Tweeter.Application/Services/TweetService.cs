@@ -76,7 +76,7 @@ namespace Tweeter.Application.Services
 				newTweet.ImgUrl = res.Url;
 			}
 
-			//await ProcessHashTags(tweet.Text);
+			await ProcessHashTags(tweet.Text);
 			await _dbContext.Tweet.AddAsync(newTweet);
 			await _dbContext.SaveChangesAsync();
 			result.Item = await Get(newTweet.Id);
@@ -237,30 +237,28 @@ namespace Tweeter.Application.Services
 
 		private async Task ProcessHashTags(string text)
 		{
-			// select all hashtags from tweet text
-			// select all existing hashtags from db
-			// for all existing hashtags, increment tweet count
-			// for new hashtags, add new hashtag to db
-
 			var searchHashTags = new Regex(@"#[^ ]*");
 			var hashTagsFromNewTweet = searchHashTags.Matches(text).Select(m => m.Value).ToList();
 
-			var param = new SqlParameter("hashTags", hashTagsFromNewTweet);
-			var hashTagsFromDb = await _dbContext.HashTag
-				.FromSqlRaw("select * from dbo.HashTag where Text in @hashTags", param)
-				.ToDictionaryAsync((h) => h.Text);
-
-			var newHashTags = new List<HashTag>();
-
-			foreach (var h in hashTagsFromNewTweet)
+			if (hashTagsFromNewTweet.Count > 0)
 			{
-				if (hashTagsFromDb.TryGetValue(h, out HashTag htFromDb))
-					htFromDb.TweetCount++;
-				else
-					newHashTags.Add(new HashTag { Text = h });
-			}
+				var param = string.Join(",", hashTagsFromNewTweet.Select(h => $"'{h}'"));
+				var hashTagsFromDb = await _dbContext.HashTag
+					.FromSqlRaw($"select * from dbo.HashTag where Text in ({param})")
+					.ToDictionaryAsync((h) => h.Text);
 
-			await _dbContext.HashTag.AddRangeAsync(newHashTags);
+				var newHashTags = new List<HashTag>();
+
+				foreach (var h in hashTagsFromNewTweet)
+				{
+					if (hashTagsFromDb.TryGetValue(h, out HashTag htFromDb))
+						htFromDb.TweetCount++;
+					else
+						newHashTags.Add(new HashTag { Text = h, TweetCount = 1 });
+				}
+
+				await _dbContext.HashTag.AddRangeAsync(newHashTags);
+			}
 		}
 	}
 }

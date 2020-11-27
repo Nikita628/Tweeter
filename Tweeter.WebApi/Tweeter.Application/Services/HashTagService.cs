@@ -30,7 +30,7 @@ namespace Tweeter.Application.Services
 
 			var query = _dbContext.HashTag
 				.AsNoTracking()
-				.OrderBy(h => h.TweetCount)
+				.OrderByDescending(h => h.TweetCount)
 				.Skip(0)
 				.Take(10);
 

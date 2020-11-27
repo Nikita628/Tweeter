@@ -4,10 +4,11 @@ import { createSelector } from '@ngrx/store';
 import { IAppState } from '..';
 import { ApiPageResponse } from '../../models/Api';
 import { IPayloadedAction } from '../../models/Common';
-import { Tweet, TweetSearchParam } from '../../models/Tweet';
+import { Tweet } from '../../models/Tweet';
 import { TweetComment } from '../../models/TweetComment';
 import { actionTypes } from "./actions";
 import { actionTypes as tweetCommentAT } from "../tweet-comment/actions";
+import { HashTag } from 'src/app/models/HashTag';
 
 export interface ITweetFeeds {
     home: { tweets: Tweet[], totalCount: number };
@@ -17,6 +18,7 @@ export interface ITweetFeeds {
 
 export interface ITweetState {
     tweetFeeds: ITweetFeeds;
+    hashtags: HashTag[];
 }
 
 const initialState: ITweetState = {
@@ -25,6 +27,7 @@ const initialState: ITweetState = {
         explore: { tweets: [], totalCount: 0 },
         bookmarks: { tweets: [], totalCount: 0 },
     },
+    hashtags: [],
 };
 
 const reducerMap = {
@@ -161,6 +164,17 @@ const reducerMap = {
             },
         };
     },
+
+    [actionTypes.searchHashtagsSuccess]: (
+        state: ITweetState,
+        action: Action & IPayloadedAction<ApiPageResponse<HashTag>>
+    ): ITweetState => {
+        const hashtags = action.payload.items;
+        return {
+            ...state,
+            hashtags,
+        };
+    },
 };
 
 export function tweetReducer(state: ITweetState = initialState, action: any): ITweetState {
@@ -173,4 +187,5 @@ export function tweetReducer(state: ITweetState = initialState, action: any): IT
 export const selectFeature = (state: IAppState) => state.tweet;
 export const selectors = {
     feed: createSelector(selectFeature, (state: ITweetState, feedKey: string) => state.tweetFeeds[feedKey]),
+    hashtags: createSelector(selectFeature, (state: ITweetState) => state.hashtags),
 };

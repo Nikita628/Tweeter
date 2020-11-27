@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { HashTag } from 'src/app/models/HashTag';
 import { Tweet, TweetSearchParam } from 'src/app/models/Tweet';
 
 import { environment } from 'src/environments/environment';
@@ -33,5 +34,9 @@ export class TweetApiClient extends ApiClient {
 
     public bookmark(tweetId: number): Observable<ApiResponse<boolean>> {
         return this.http.put<ApiResponse<boolean>>(`${environment.apiUrl}${this.endpoint}bookmark/${tweetId}`, {});
+    }
+
+    public searchHashTags(): Observable<ApiPageResponse<HashTag>> {
+        return this.http.post<ApiPageResponse<HashTag>>(`${environment.apiUrl}/hashtag/search`, {});
     }
 }
