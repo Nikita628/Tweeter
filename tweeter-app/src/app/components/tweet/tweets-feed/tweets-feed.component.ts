@@ -17,14 +17,15 @@ import { BaseComponent } from '../../common/base-component/base-component.compon
 export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges {
   @Input() feedKey: string;
   @Input() param: TweetSearchParam;
-  @Input() useLastId: boolean;
+  @Input() useLastIdForPaging: boolean;
 
   private feed$: Observable<{tweets: Tweet[], totalCount: number}>;
-  private scrollY = 0;
+  private scrollY: number;
   private lastId: number;
   private pageNumber: number;
 
-  public totalCount = 0;
+  public totalCountForPaging = 0;
+  public totalCountForLastId = 0;
   public tweets: Tweet[] = [];
 
   constructor(protected store: Store<IAppState>) {
@@ -44,7 +45,13 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
         this.lastId = feed.tweets[feed.tweets.length - 1].id;
       }
 
-      this.totalCount = feed.totalCount;
+      if (this.useLastIdForPaging && !this.totalCountForLastId) {
+        this.totalCountForLastId = feed.totalCount;
+      }
+
+      if (!this.useLastIdForPaging) {
+        this.totalCountForPaging = feed.totalCount;
+      }
 
       if (this.scrollY) {
         window.scrollTo(0, this.scrollY);
@@ -65,7 +72,7 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
       appendToExistingStorePage: true,
     };
 
-    if (this.useLastId) {
+    if (this.useLastIdForPaging) {
       param.idLessThan = this.lastId;
     } else {
       param.pageNumber = ++this.pageNumber;

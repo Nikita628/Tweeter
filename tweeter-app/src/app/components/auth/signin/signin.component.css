@@ -44,3 +44,13 @@ button {
     background-color: #2f80ed;
     font-weight: 600;
 }
+
+.error {
+    font-size: smaller;
+    color: red;
+    margin: 0;
+}
+
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+}

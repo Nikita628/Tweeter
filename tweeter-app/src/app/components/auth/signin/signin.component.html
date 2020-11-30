@@ -3,17 +3,18 @@
         <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
             <div class="signin mt-4">
                 <h5>LOGIN</h5>
-                <form (keyup.enter)="onSubmit()">
+                <form (ngSubmit)="onSubmit()" #signinForm="ngForm">
                     <div class="form-group">
                         <i class="material-icons">alternate_email</i>
-                        <input [(ngModel)]="email" type="text" placeholder="Email" name="email">
+                        <input ngModel type="text" placeholder="Email" name="email" required email #emailControl="ngModel">
+                        <p *ngIf="!emailControl.valid && emailControl.touched" class="error">Please enter a valid email</p>
                     </div>
                     <div class="form-group">
                         <i class="material-icons">lock</i>
-                        <input [(ngModel)]="password" type="password" placeholder="Password" name="password">
+                        <input ngModel type="password" placeholder="Password" name="password" required>
                     </div>
                     <div class="text-center">
-                        <button (click)="onSubmit()" [disabled]="!email || !password || isSubmitDisabled" type="button" class="btn btn-primary w-100">
+                        <button [disabled]="!signinForm.valid || isLoading" type="submit" class="btn btn-primary w-100">
                             SUBMIT
                             <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         </button>

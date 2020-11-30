@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { takeUntil } from "rxjs/operators";
@@ -8,6 +8,7 @@ import { actionCreators } from 'src/app/state/auth/actions';
 import { IAuthState } from 'src/app/state/auth/reducer';
 import { Router } from '@angular/router';
 import { BaseComponent } from '../../common/base-component/base-component.component';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: "app-signin",
@@ -16,10 +17,7 @@ import { BaseComponent } from '../../common/base-component/base-component.compon
 })
 export class SigninComponent extends BaseComponent implements OnInit, OnDestroy {
     private authState$: Observable<IAuthState>;
-
-    public email = "";
-    public password = "";
-    public isSubmitDisabled = false;
+    @ViewChild("signinForm") form: NgForm;
     public isLoading = false;
 
     constructor(
@@ -36,7 +34,6 @@ export class SigninComponent extends BaseComponent implements OnInit, OnDestroy 
         ).subscribe((state) => {
             if (state.signinStatus === "errorNetwork") {
                 this.isLoading = false;
-                this.isSubmitDisabled = false;
             } else if (state.signinStatus === "successNetwork") {
                 this.router.navigate(["/"]);
             }
@@ -45,8 +42,7 @@ export class SigninComponent extends BaseComponent implements OnInit, OnDestroy 
 
     public onSubmit(): void {
         this.isLoading = true;
-        this.isSubmitDisabled = true;
-        this.store.dispatch(actionCreators.signin(this.email, this.password));
+        this.store.dispatch(actionCreators.signin(this.form.value.email, this.form.value.password));
     }
 
     ngOnDestroy(): void {

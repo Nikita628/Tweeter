@@ -3,40 +3,84 @@
         <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
             <div class="signup mt-4">
                 <h5>REGISTRATION</h5>
-                <form (keyup.enter)="onSubmit()">
+                <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
                     <div class="form-group">
                         <i class="material-icons">person_outline</i>
-                        <input [ngClass]="{redBorder: nameError}" class="input"
-                            (input)="onNameChange($event.target.value)" type="text" placeholder="Name" name="username">
-                        <p *ngIf="nameError" class="error">{{ nameError }}</p>
+                        <input 
+                            class="input"
+                            type="text" 
+                            placeholder="Name" 
+                            formControlName="username"
+                        >
+                        <p 
+                            *ngIf="!signupForm.get('username').valid && signupForm.get('username').touched" 
+                            class="error"
+                        >
+                            Please enter a valid name
+                        </p>
                     </div>
+
                     <div class="form-group">
                         <i class="material-icons">alternate_email</i>
-                        <input [ngClass]="{redBorder: emailError}" class="input"
-                            (input)="onEmailChange($event.target.value)" type="text" placeholder="Email" name="email">
-                        <p *ngIf="emailError" class="error">{{ emailError }}</p>
+                        <input 
+                            class="input"
+                            type="text" 
+                            placeholder="Email"
+                            formControlName="email"
+                        >
+                        <p 
+                            *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched" 
+                            class="error"
+                        >
+                            Please enter a valid email
+                        </p>
                     </div>
+
                     <div class="form-group">
                         <i class="material-icons">lock</i>
-                        <input [ngClass]="{redBorder: passwordError}" class="input"
-                            (input)="onPasswordChange($event.target.value)" type="password" placeholder="Password"
-                            name="password">
-                        <p *ngIf="passwordError" class="error">{{ passwordError }}</p>
+                        <input 
+                            class="input"
+                            type="password" 
+                            placeholder="Password"
+                            formControlName="password"
+                        >
+                        <p 
+                            *ngIf="!signupForm.get('password').valid && signupForm.get('password').touched" 
+                            class="error"
+                        >
+                            Please enter a valid password
+                        </p>
                     </div>
+
                     <div class="form-group">
                         <i class="material-icons">lock</i>
-                        <input [ngClass]="{redBorder: confirmationError}" class="input"
-                            (input)="onConfirmationChange($event.target.value)" type="password"
-                            placeholder="Confirm Password" name="confirmation">
-                        <p *ngIf="confirmationError" class="error">{{ confirmationError }}</p>
+                        <input 
+                            class="input"
+                            type="password"
+                            placeholder="Confirm Password"
+                            formControlName="confirmation"
+                        >
+                        <p 
+                            *ngIf="!signupForm.get('confirmation').valid && signupForm.get('confirmation').touched" 
+                            class="error"
+                        >
+                            <span>Please confirm password</span>
+                        </p>
                     </div>
+
                     <div class="text-center">
-                        <button (click)="onSubmit()" [disabled]="isSubmitDisabled" type="button"
-                            class="btn btn-primary w-100">SUBMIT
+                        <button 
+                            [disabled]="!signupForm.valid || isLoading" 
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        >
+                            SUBMIT
                             <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         </button>
                         <p class="text-muted mt-3 mb-1">Already have an account? Login <a [routerLink]="['/signin']">here</a></p>
                     </div>
+
                 </form>
             </div>
         </div>

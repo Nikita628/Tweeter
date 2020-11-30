@@ -3,11 +3,11 @@
         <app-tweet-details [feedKey]="feedKey" [tweet]="tweet"></app-tweet-details>
     </div>
     <button
-        *ngIf="tweets.length && totalCount > tweets.length" 
+        *ngIf="tweets.length && (totalCountForPaging > tweets.length || totalCountForLastId > tweets.length)" 
         class="load-more" 
         (click)="onLoadMore()" 
         type="button"
     >
-    Load More (Total - {{totalCount}})
+    Load More (Total - {{useLastIdForPaging ? totalCountForLastId : totalCountForPaging}})
     </button>
 </div>
