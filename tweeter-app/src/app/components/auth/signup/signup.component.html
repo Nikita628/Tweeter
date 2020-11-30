@@ -65,7 +65,8 @@
                             *ngIf="!signupForm.get('confirmation').valid && signupForm.get('confirmation').touched" 
                             class="error"
                         >
-                            <span>Please confirm password</span>
+                            <span class="d-block" *ngIf="signupForm.get('confirmation').errors?.required">Please confirm password</span>
+                            <span class="d-block" *ngIf="!isPasswordMatchConfirmation">Confirmation does not match the entered password</span>
                         </p>
                     </div>
 

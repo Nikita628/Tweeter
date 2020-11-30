@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -21,6 +21,7 @@ export class SignupComponent extends BaseComponent implements OnInit, OnDestroy 
 
   public signupForm: FormGroup;
   public isLoading = false;
+  public isPasswordMatchConfirmation = true;
 
   constructor(
     protected store: Store<IAppState>,
@@ -46,6 +47,21 @@ export class SignupComponent extends BaseComponent implements OnInit, OnDestroy 
         this.router.navigate(["/signin"]);
       }
     });
+
+    this.signupForm.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value: { confirmation: string, password: string }) => {
+        if ((value.confirmation || value.password)) {
+          const conf = this.signupForm.get("confirmation");
+          if (value.confirmation !== value.password) {
+            this.isPasswordMatchConfirmation = false;
+            conf.setErrors({ match: true, ...conf.errors });
+          } else {
+            this.isPasswordMatchConfirmation = true;
+            conf.setErrors(null);
+          }
+        }
+      });
   }
 
   public onSubmit(): void {
@@ -61,12 +77,4 @@ export class SignupComponent extends BaseComponent implements OnInit, OnDestroy 
     super.ngOnDestroy();
     this.store.dispatch(actionCreators.clearSignupStatus());
   }
-
-  // private validateConfirmation(control: AbstractControl): ValidationErrors {
-  //   if (control.parent && control.parent.value.password !== control.value) {
-  //     return { message: "Confirmation does not match" };
-  //   }
-  //   control.parent?.value?.password?.setErrors(null);
-  //   return null;
-  // }
 }
