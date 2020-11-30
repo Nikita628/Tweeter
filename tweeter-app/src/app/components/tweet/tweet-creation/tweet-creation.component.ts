@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, takeUntil } from 'rxjs/operators';
+
 import { Tweet } from 'src/app/models/Tweet';
 import { IAppState } from 'src/app/state';
-
 import { actionCreators as tweetAC, actionTypes as tweetAT } from "../../../state/tweet/actions";
 import { BaseComponent } from '../../common/base-component/base-component.component';
 
@@ -38,10 +38,12 @@ export class TweetCreationComponent extends BaseComponent implements OnInit, OnD
           this.imgPreviewElement.nativeElement.src = "";
           this.onlyFollowedCanReply = false;
           this.sending = false;
+          super.clearActionStatus(tweetAT.create);
         } else if (statuses[tweetAT.create] === "progress") {
           this.sending = true;
         } else if (statuses[tweetAT.create] === "error") {
           this.sending = false;
+          super.clearActionStatus(tweetAT.create);
         }
       });
   }

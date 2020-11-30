@@ -15,6 +15,7 @@
             </p>
             <img *ngIf="t.imgUrl" [src]="t.imgUrl" alt="tweet image" class="tweet-img">
             <div class="info">
+                <span class="mx-2">{{ t.likeCount }} Likes</span>
                 <span class="mx-2">{{ t.commentCount }} Comments</span>
                 <span class="mx-2">{{ t.retweetCount }} Retweets</span>
                 <span class="mx-2">{{ t.bookmarkCount }} Saved</span>

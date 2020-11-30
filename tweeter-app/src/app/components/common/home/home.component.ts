@@ -1,27 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { TweetSearchParam } from 'src/app/models/Tweet';
 import { IAppState } from 'src/app/state';
+import { BaseComponent } from '../base-component/base-component.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent extends BaseComponent implements OnInit, OnDestroy {
   public feedKey = "home";
-  private destroyed$ = new Subject();
+  public param = new TweetSearchParam();
 
-  constructor(private store: Store<IAppState>) {
-
+  constructor(protected store: Store<IAppState>) {
+    super(store);
+    this.param.pageSize = 10;
+    this.param.sortDirection = "desc";
   }
 
   ngOnInit(): void {
-
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+    super.ngOnInit();
+    this.param.appendToExistingStorePage = false;
+    this.param.followerId = this.currentUser.id;
+    this.param.createdById = this.currentUser.id;
+    this.param.createdByIdOrFollowerId = true;
   }
 }

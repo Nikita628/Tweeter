@@ -6,7 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { IActionStatuses } from 'src/app/models/Common';
 import { User } from 'src/app/models/User';
 import { IAppState } from 'src/app/state';
-import { selectors as commonSE } from "../../../state/common/reducer";
+import { selectors as actionStatusesSE } from "../../../state/action-statuses/reducer";
+import { actionCreators } from "../../../state/action-statuses/actions";
 
 @Component({
   selector: 'app-base-component',
@@ -19,7 +20,7 @@ export class BaseComponent implements OnInit, OnDestroy {
   public currentUser: User;
 
   constructor(protected store: Store<IAppState>) {
-    this.actionStatuses$ = store.select(commonSE.actionStatuses);
+    this.actionStatuses$ = store.select(actionStatusesSE.actionStatuses);
   }
 
   ngOnInit(): void {
@@ -31,5 +32,9 @@ export class BaseComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  clearActionStatus(actionType: string): void {
+    this.store.dispatch(actionCreators.clearActionStatus(actionType));
   }
 }

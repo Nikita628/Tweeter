@@ -2,5 +2,12 @@
     <div *ngFor="let tweet of tweets" class="tweet-container">
         <app-tweet-details [feedKey]="feedKey" [tweet]="tweet"></app-tweet-details>
     </div>
-    <button class="load-more" (click)="onLoadMore()" *ngIf="tweets?.length && totalCount > tweets.length" type="button">Load More</button>
+    <button
+        *ngIf="tweets.length && totalCount > tweets.length" 
+        class="load-more" 
+        (click)="onLoadMore()" 
+        type="button"
+    >
+    Load More (Total - {{totalCount}})
+    </button>
 </div>

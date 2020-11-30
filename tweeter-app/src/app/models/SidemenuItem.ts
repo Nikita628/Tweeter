@@ -1,5 +1,9 @@
 export class SidemenuItem {
     public text: string;
-    public isActive: boolean;
-    public onClick: () => void;
+    public link: string;
+
+    constructor(text: string, link: string) {
+        this.text = text;
+        this.link = link;
+    }
 }

@@ -1,1 +1,24 @@
-<p>explore works!</p>
+<div class="explore">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="menu-container">
+                    <app-sidemenu [items]="menuItems"></app-sidemenu>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tweet-search-container">
+                    <form class="search-form">
+                        <i class="material-icons">search</i>
+                        <input class="search-input" type="text" placeholder="Search" [(ngModel)]="searchText"
+                            name="searchInput">
+                        <button class="search-button" type="button" (click)="onSearch()">
+                            Search
+                        </button>
+                    </form>
+                </div>
+                <app-tweets-feed [feedKey]="feedKey" [param]="param"></app-tweets-feed>
+            </div>
+        </div>
+    </div>
+</div>

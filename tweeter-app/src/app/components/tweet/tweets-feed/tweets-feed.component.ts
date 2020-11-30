@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -14,20 +14,21 @@ import { BaseComponent } from '../../common/base-component/base-component.compon
   templateUrl: './tweets-feed.component.html',
   styleUrls: ['./tweets-feed.component.css']
 })
-export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDestroy {
+export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges {
   @Input() feedKey: string;
+  @Input() param: TweetSearchParam;
+  @Input() useLastId: boolean;
+
   private feed$: Observable<{tweets: Tweet[], totalCount: number}>;
-  private param = new TweetSearchParam();
   private scrollY = 0;
   private lastId: number;
+  private pageNumber: number;
 
   public totalCount = 0;
   public tweets: Tweet[] = [];
 
   constructor(protected store: Store<IAppState>) {
     super(store);
-    this.param.pageSize = 10;
-    this.param.sortDirection = "desc";
   }
 
   ngOnInit(): void {
@@ -38,25 +39,21 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
     this.feed$.pipe(
       takeUntil(this.destroyed$)
     ).subscribe((feed) => {
-      if (feed?.tweets?.length) {
+      if (feed.tweets.length) {
         this.tweets = feed.tweets;
         this.lastId = feed.tweets[feed.tweets.length - 1].id;
       }
 
-      if (feed?.totalCount && !this.totalCount) {
-        this.totalCount = feed.totalCount;
-      }
+      this.totalCount = feed.totalCount;
 
       if (this.scrollY) {
         window.scrollTo(0, this.scrollY);
       }
     });
+  }
 
-    this.param.appendToExistingStorePage = false;
-    this.param.followerId = this.currentUser.id;
-    this.param.createdById = this.currentUser.id;
-    this.param.createdByIdOrFollowerId = true;
-
+  ngOnChanges(): void {
+    this.pageNumber = this.param.pageNumber;
     this.store.dispatch(tweetAC.search(this.param, this.feedKey));
   }
 
@@ -65,9 +62,14 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
 
     const param: TweetSearchParam = {
       ...this.param,
-      idLessThan: this.lastId,
       appendToExistingStorePage: true,
     };
+
+    if (this.useLastId) {
+      param.idLessThan = this.lastId;
+    } else {
+      param.pageNumber = ++this.pageNumber;
+    }
 
     this.store.dispatch(tweetAC.search(param, this.feedKey));
   }
