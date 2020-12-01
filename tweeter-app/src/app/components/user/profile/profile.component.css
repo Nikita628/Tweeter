@@ -1,0 +1,49 @@
+.cockpit {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.cockpit .container {
+    position: absolute;
+    top: 80%;
+}
+
+.header {
+    display: flex;
+    background-color: white;
+    padding: 10px;
+}
+
+.avatar-container {
+    position: relative;
+    min-width: 150px;
+    min-height: 150px;
+    max-width: 150px;
+    max-height: 150px;
+}
+
+.cover {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    min-height: 250px;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    position: absolute;
+    bottom: 30%;
+    background: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+span.name {
+    font-weight: bolder;
+    font-size: 20px;
+    margin: 0 10px;
+}
