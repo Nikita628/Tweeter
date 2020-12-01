@@ -34,7 +34,8 @@
 							@onlyLikedByUserId int,
 							@followerId int,
 							@currentUserId int,
-							@idLessThan int';
+							@idLessThan int,
+							@bookmarkedByUserId int';
 
 			SET @sql = 'SELECT t.[Id]
 			  ,t.[CreatedById]
@@ -145,6 +146,14 @@
 				select top(1) * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @onlyLikedByUserId
 			)';
 
+			IF @bookmarkedByUserId IS NOT NULL
+			SET @sql = @sql + ' 
+			AND EXISTS (
+				select top(1) * from dbo.TweetBookmark tb where tb.TweetId = t.Id and tb.UserId = @bookmarkedByUserId
+				union
+				select top(1) * from dbo.TweetBookmark tb where tb.TweetId = originalTweets.Id and tb.UserId = @bookmarkedByUserId
+			)';
+
 			IF @followerId IS NOT NULL and (@createdByIdOrFollowerId is null or @createdByIdOrFollowerId = 0) 
 			SET @sql = @sql + ' 
 			AND EXISTS (select top(1) * from dbo.Follow f where f.FolloweeId = t.CreatedById and f.FollowerId = @followerId)';
@@ -177,7 +186,8 @@
 					@onlyWithMedia = @onlyWithMedia,
 					@followerId = @followerId,
 					@currentUserId = @currentUserId,
-					@idLessThan = @idLessThan
+					@idLessThan = @idLessThan,
+					@bookmarkedByUserId = @bookmarkedByUserId
 ";
 
 		public const string GetById = @"

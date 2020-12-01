@@ -1,1 +1,12 @@
-<p>bookmarks works!</p>
+<div class="bookmarks">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <app-sidemenu [items]="menuItems"></app-sidemenu>
+            </div>
+            <div class="col-md-8">
+                <app-tweets-feed [feedKey]="feedKey" [param]="param"></app-tweets-feed>
+            </div>
+        </div>
+    </div>
+</div>

@@ -30,6 +30,8 @@ export class ExploreComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
+
     this.route.data.subscribe((data) => {
       this.filter = data.filter;
       const param = this.createSearchParam(data.filter);

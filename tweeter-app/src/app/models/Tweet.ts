@@ -33,4 +33,5 @@ export class TweetSearchParam extends ApiPageRequest {
     public appendToExistingStorePage: boolean;
     public idLessThan: number;
     public createdByIdOrFollowerId: boolean;
+    public bookmarkedByUserId: number;
 }

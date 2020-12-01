@@ -43,5 +43,6 @@ namespace Tweeter.Application.Models
         public int? CurrentUserId { get; set; }
 		public int? IdLessThan { get; set; }
 		public bool? CreatedByIdOrFollowerId { get; set; }
+		public int? BookmarkedByUserId { get; set; }
 	}
 }
