@@ -14,6 +14,7 @@ export interface IUserState {
 const initialState: IUserState = {
     lists: {
         recommended: { users: [], totalCount: 0 },
+        explore: { users: [], totalCount: 0 },
     },
 };
 

@@ -42,6 +42,7 @@ import { TweetCommentApiClient } from './services/api/tweet-comment-api-client.s
 import { BaseComponent } from './components/common/base-component/base-component.component';
 import { UserApiClient } from './services/api/user-api-client.service';
 import { UserEffects } from './state/user/effects';
+import { UsersListComponent } from './components/user/users-list/users-list.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { UserEffects } from './state/user/effects';
     DropdownComponent,
     TweetsFeedComponent,
     BaseComponent,
+    UsersListComponent,
   ],
   imports: [
     BrowserModule,

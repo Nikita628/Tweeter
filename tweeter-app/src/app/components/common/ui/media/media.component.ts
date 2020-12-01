@@ -7,8 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MediaComponent implements OnInit {
   @Input() imgUrl: string;
-  @Input() width: number;
-  @Input() height: number;
+  @Input() width: string;
+  @Input() height: string;
   @Input() header: string;
   @Input() text: string;
 

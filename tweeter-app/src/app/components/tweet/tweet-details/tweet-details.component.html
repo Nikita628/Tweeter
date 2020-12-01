@@ -5,7 +5,7 @@
     <div class="tweet">
         <ng-container *ngIf="tweet.originalTweet || tweet as t">
             <app-media [imgUrl]="t.createdBy.avatarUrl ? t.createdBy.avatarUrl : 'assets/user-placeholder.png'"
-                [width]="40" [height]="40" [header]="t.createdBy.name" [text]="t.createdAt | date:'medium'">
+                [width]="'40px'" [height]="'40px'" [header]="t.createdBy.name" [text]="t.createdAt | date:'medium'">
             </app-media>
             <p class="my-3">
                ID = {{ t.id }}

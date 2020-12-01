@@ -8,16 +8,17 @@
             </div>
             <div class="col-md-8">
                 <div class="tweet-search-container">
-                    <form class="search-form">
+                    <form class="search-form" (ngSubmit)="onSearch()">
                         <i class="material-icons">search</i>
                         <input class="search-input" type="text" placeholder="Search" [(ngModel)]="searchText"
                             name="searchInput">
-                        <button class="search-button" type="button" (click)="onSearch()">
+                        <button class="search-button" type="submit">
                             Search
                         </button>
                     </form>
                 </div>
-                <app-tweets-feed [feedKey]="feedKey" [param]="param"></app-tweets-feed>
+                <app-tweets-feed *ngIf="filter !== 'people'" [feedKey]="feedKey" [param]="tweetParam"></app-tweets-feed>
+                <app-users-list *ngIf="filter === 'people'" [param]="userParam" [listKey]="'explore'"></app-users-list>
             </div>
         </div>
     </div>

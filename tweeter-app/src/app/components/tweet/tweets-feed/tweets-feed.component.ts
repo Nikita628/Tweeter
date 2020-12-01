@@ -40,13 +40,16 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
     this.feed$.pipe(
       takeUntil(this.destroyed$)
     ).subscribe((feed) => {
-      if (feed.tweets.length) {
-        this.tweets = feed.tweets;
-        this.lastId = feed.tweets[feed.tweets.length - 1].id;
-      }
+      this.tweets = feed.tweets;
 
-      if (this.useLastIdForPaging && !this.totalCountForLastId) {
-        this.totalCountForLastId = feed.totalCount;
+      if (this.useLastIdForPaging) {
+        if (!this.totalCountForLastId) {
+          this.totalCountForLastId = feed.totalCount;
+        }
+
+        if (feed.tweets.length) {
+          this.lastId = feed.tweets[feed.tweets.length - 1].id;
+        }
       }
 
       if (!this.useLastIdForPaging) {
@@ -54,6 +57,7 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
       }
 
       if (this.scrollY) {
+        // TODO scroll only after search action completed
         window.scrollTo(0, this.scrollY);
       }
     });

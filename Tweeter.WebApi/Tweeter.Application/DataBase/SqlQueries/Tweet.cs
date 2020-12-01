@@ -115,7 +115,7 @@
 			-- filtering setup ----------------------------
 			IF @textContains IS NOT NULL
 			SET @sql = @sql + '
-			AND t.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%'' OR originalTweets.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%''';
+			AND (t.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%'' OR originalTweets.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%'')';
  
 			IF @createdById IS NOT NULL and (@createdByIdOrFollowerId is null or @createdByIdOrFollowerId = 0) 
 			SET @sql = @sql + ' 

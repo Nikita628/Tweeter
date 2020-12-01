@@ -1,5 +1,5 @@
 <div class="media">
-    <img *ngIf="imgUrl" [src]="imgUrl" class="media-img" alt="image" [width]="width" [height]="height">
+    <img *ngIf="imgUrl" [src]="imgUrl" class="media-img" alt="image" [ngStyle]="{width: width, height: height}">
     <div class="media-body">
         <strong class="mt-0 mb-1">{{ header }}</strong>
         <p class="mb-0 text">{{ text }}</p>

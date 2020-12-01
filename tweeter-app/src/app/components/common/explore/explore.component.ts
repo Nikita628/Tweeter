@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { SidemenuItem } from 'src/app/models/SidemenuItem';
 import { TweetSearchParam } from 'src/app/models/Tweet';
+import { UserSearchParam } from 'src/app/models/User';
 import { IAppState } from 'src/app/state';
 import { BaseComponent } from '../base-component/base-component.component';
 
@@ -13,10 +14,11 @@ import { BaseComponent } from '../base-component/base-component.component';
   styleUrls: ['./explore.component.css']
 })
 export class ExploreComponent extends BaseComponent implements OnInit, OnDestroy {
-  private filter: string;
+  public filter: "top" | "media" | "people" | "latest";
   public menuItems: SidemenuItem[];
   public readonly feedKey = "explore";
-  public param: TweetSearchParam;
+  public tweetParam: TweetSearchParam;
+  public userParam: UserSearchParam;
   public searchText: string;
 
   constructor(
@@ -30,17 +32,27 @@ export class ExploreComponent extends BaseComponent implements OnInit, OnDestroy
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
       this.filter = data.filter;
-      this.param = this.createSearchParam(data.filter);
+      const param = this.createSearchParam(data.filter);
+      if (param instanceof TweetSearchParam) {
+        this.tweetParam = param;
+      } else if (param instanceof UserSearchParam) {
+        this.userParam = param;
+      }
     });
   }
 
   public onSearch(): void {
     const newParam = this.createSearchParam(this.filter);
-    newParam.textContains = this.searchText;
-    this.param = newParam;
+    if (newParam instanceof TweetSearchParam) {
+      newParam.textContains = this.searchText;
+      this.tweetParam = newParam;
+    } else if (newParam instanceof UserSearchParam) {
+      newParam.nameContains = this.searchText;
+      this.userParam = newParam;
+    }
   }
 
-  private createSearchParam(filter: string): TweetSearchParam {
+  private createSearchParam(filter: string): TweetSearchParam | UserSearchParam {
     const newParam = new TweetSearchParam();
     newParam.pageSize = 10;
     newParam.sortDirection = "desc";
@@ -51,6 +63,10 @@ export class ExploreComponent extends BaseComponent implements OnInit, OnDestroy
       newParam.sortProp = "id";
     } else if (filter === "media") {
       newParam.onlyWithMedia = true;
+    } else if (filter === "people") {
+      const userParam = new UserSearchParam();
+      userParam.pageSize = 10;
+      return userParam;
     }
 
     return newParam;
@@ -61,6 +77,7 @@ export class ExploreComponent extends BaseComponent implements OnInit, OnDestroy
     items.push(new SidemenuItem("Top", "/explore/top"));
     items.push(new SidemenuItem("Latest", "/explore/latest"));
     items.push(new SidemenuItem("Media", "/explore/media"));
+    items.push(new SidemenuItem("People", "/explore/people"));
     return items;
   }
 }
