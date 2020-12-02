@@ -13,6 +13,15 @@
     display: flex;
     background-color: white;
     padding: 10px;
+    flex-flow: row wrap;
+    justify-content: center;
+    box-shadow: 1px 1px 3px #e1e1e1;
+    border-radius: 5px;
+}
+
+.info {
+    padding: 5px 10px;
+    text-align: center;
 }
 
 .avatar-container {
@@ -21,6 +30,12 @@
     min-height: 150px;
     max-width: 150px;
     max-height: 150px;
+    margin-bottom: -30px;
+}
+
+.cover-container {
+    width: 100%;
+    min-height: 50px;
 }
 
 .cover {
@@ -45,5 +60,67 @@
 span.name {
     font-weight: bolder;
     font-size: 20px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.link-button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    font-family: arial, sans-serif;
+    color: gray;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.follow-links {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.follow-links div {
+    display: inline-block;
     margin: 0 10px;
+}
+
+.follow-links div strong {
+    margin-right: 5px;
+}
+
+.about {
+    margin-top: 10px;
+    font-weight: 550;
+    color: gray;
+}
+
+.button-container button {
+    border: none;
+    background-color: #2f80ed;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+    border-radius: 5px;
+    max-height: 30px;
+}
+
+.button-container button:active {
+    background-color: #2362b4;
+}
+
+@media (min-width: 768px) { 
+    .header {
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+    }
+
+    .info {
+        text-align: start;
+    }
+
+    span.name {
+        display: inline-block;
+        margin-bottom: 0;
+    }
 }

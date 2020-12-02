@@ -1,10 +1,11 @@
 <div class="profile">
     <div class="cockpit">
 
-        <img src="https://www.onni.com/wp-content/uploads/2017/04/natures-walk-image.jpg" alt="" class="cover">
+        <div class="cover-container">
+            <img *ngIf="true" src="https://www.onni.com/wp-content/uploads/2017/04/natures-walk-image.jpg" alt="" class="cover">
+        </div>
 
         <div class="container">
-
             <div class="header">
                 <div class="avatar-container">
                     <img [src]="'assets/user-placeholder.png'" alt="" class="avatar">
@@ -13,8 +14,12 @@
                     <div class="name">
                         <span class="name">Name Name</span>
                         <div class="follow-links">
-                            <button class="link-button">123 Following</button>
-                            <button class="link-button">123 Following</button>
+                            <div>
+                                <strong>123</strong><button class="link-button">Following</button>
+                            </div>
+                            <div>
+                                <strong>123</strong><button class="link-button">Followers</button>
+                            </div>
                         </div>               
                     </div>
                     <p class="about">
@@ -24,7 +29,12 @@
                     </p>
                 </div>
                 <div class="button-container">
-                    <button>Follow</button>
+                    <button type="button">
+                        <i class="material-icons">person_add</i> Follow
+                    </button>
+                    <!-- <button *ngIf="u.isFolloweeOfCurrentUser" type="button" (click)="onUnfollow(u.id)">
+                        <i class="material-icons">person_add_disabled</i> Unfollow
+                    </button> -->
                 </div>
             </div>
             
