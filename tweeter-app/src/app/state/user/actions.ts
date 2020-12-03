@@ -15,6 +15,10 @@ export const actionTypes = {
     unfollow: "User/Unfollow",
     unfollowSuccess: "User/UnfollowSuccess",
     unfollowError: "User/UnfollowError",
+
+    get: "User/Get",
+    getSuccess: "User/GetSuccess",
+    getError: "User/GetError",
 };
 
 export const actionCreators = {
@@ -54,5 +58,17 @@ export const actionCreators = {
     }),
     unfollowError: (): Action => ({
         type: actionTypes.unfollowError,
+    }),
+
+    get: (userId: number): Action & IPayloadedAction<number> => ({
+        type: actionTypes.get,
+        payload: userId,
+    }),
+    getSuccess: (user: User): Action & IPayloadedAction<User> => ({
+        type: actionTypes.getSuccess,
+        payload: user,
+    }),
+    getError: (): Action => ({
+        type: actionTypes.getError,
     }),
 };

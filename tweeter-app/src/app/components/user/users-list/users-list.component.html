@@ -7,6 +7,7 @@
             [height]="'50px'"
             [header]="u.name"
             [text]="u.followersCount + ' followers'"
+            [link]="'/profile' + '/' + u.id"
         >
         </app-media>
         <p *ngIf="u.about" class="about">

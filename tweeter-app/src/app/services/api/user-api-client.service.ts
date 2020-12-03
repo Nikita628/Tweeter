@@ -21,4 +21,8 @@ export class UserApiClient extends ApiClient {
     public unfollow(userId: number): Observable<ApiResponse<boolean>> {
         return this.http.put<ApiResponse<boolean>>(`${environment.apiUrl}${this.endpoint}unfollow/${userId}`, {});
     }
+
+    public get(userId: number): Observable<ApiResponse<User>> {
+        return this.http.get<ApiResponse<User>>(`${environment.apiUrl}${this.endpoint}get/${userId}`);
+    }
 }

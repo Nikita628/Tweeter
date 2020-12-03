@@ -11,15 +11,21 @@
             <img alt="" [ngClass]="{'img-preview': !!selectedImg}" #imgPreviewElement>
         </div>
     </div>
+
     <hr>
+
     <div *ngFor="let comment of comments" class="comment">
-        <img [src]="comment.createdBy.avatarUrl ? comment.createdBy.avatarUrl : 'assets/user-placeholder.png'"
+        <a [routerLink]="['/profile', comment.createdBy.id]">
+            <img [src]="comment.createdBy.avatarUrl ? comment.createdBy.avatarUrl : 'assets/user-placeholder.png'"
             class="user-img" alt="avatar">
+        </a>
         <div class="comment-body">
             <div class="comment-content">
                 <div class="comment-header">
-                    <strong>{{ comment.createdBy.name }}</strong>{{ " " }}<span
-                        class="comment-date">{{ comment.createdAt | date:'medium' }}</span>
+                    <strong>
+                        <a [routerLink]="['/profile', comment.createdBy.id]" class="text-black">{{ comment.createdBy.name }}</a>
+                    </strong>{{ " " }}
+                    <span class="comment-date">{{ comment.createdAt | date:'medium' }}</span>
                 </div>
                 <p>ID = {{ comment.id }}</p>
                 <p class="comment-text">{{ comment.text }}</p>

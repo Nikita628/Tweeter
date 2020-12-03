@@ -9,6 +9,7 @@ import { User } from 'src/app/models/User';
 
 export interface IUserState {
     lists: { [listKey: string]: { users: User[], totalCount: number } };
+    user: User;
 }
 
 const initialState: IUserState = {
@@ -16,6 +17,7 @@ const initialState: IUserState = {
         recommended: { users: [], totalCount: 0 },
         explore: { users: [], totalCount: 0 },
     },
+    user: null,
 };
 
 const reducerMap = {
@@ -43,6 +45,14 @@ const reducerMap = {
     ): IUserState => {
         const userId = action.payload.userId;
         const listKey = action.payload.listKey;
+
+        if (listKey === null) {
+            return {
+                ...state,
+                user: { ...state.user, isFolloweeOfCurrentUser: true, followersCount: state.user.followersCount + 1 },
+            };
+        }
+
         const users = state.lists[listKey].users.map((u: User): User => {
             if (u.id === userId) {
                 return { ...u, followersCount: u.followersCount + 1, isFolloweeOfCurrentUser: true };
@@ -65,6 +75,14 @@ const reducerMap = {
     ): IUserState => {
         const userId = action.payload.userId;
         const listKey = action.payload.listKey;
+
+        if (listKey === null) {
+            return {
+                ...state,
+                user: { ...state.user, isFolloweeOfCurrentUser: false, followersCount: state.user.followersCount - 1 },
+            };
+        }
+
         const users = state.lists[listKey].users.map((u: User): User => {
             if (u.id === userId) {
                 return { ...u, followersCount: u.followersCount - 1, isFolloweeOfCurrentUser: false };
@@ -80,6 +98,18 @@ const reducerMap = {
             },
         };
     },
+
+    [actionTypes.getSuccess]: (
+        state: IUserState,
+        action: Action & IPayloadedAction<User>
+    ): IUserState => {
+        const user = action.payload;
+
+        return {
+            ...state,
+            user,
+        };
+    },
 };
 
 export function userReducer(state: IUserState = initialState, action: any): IUserState {
@@ -92,4 +122,5 @@ export function userReducer(state: IUserState = initialState, action: any): IUse
 export const selectFeature = (state: IAppState) => state.user;
 export const selectors = {
     list: createSelector(selectFeature, (state: IUserState, listKey: string) => state.lists[listKey]),
+    user: createSelector(selectFeature, (state: IUserState) => state.user),
 };

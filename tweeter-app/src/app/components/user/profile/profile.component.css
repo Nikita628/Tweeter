@@ -109,6 +109,10 @@ span.name {
     background-color: #2362b4;
 }
 
+.content {
+    margin-top: 20px;
+}
+
 @media (min-width: 768px) { 
     .header {
         flex-flow: row nowrap;
@@ -123,4 +127,8 @@ span.name {
         display: inline-block;
         margin-bottom: 0;
     }
+}
+
+.menu-container {
+    margin-bottom: 20px;
 }

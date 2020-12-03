@@ -1,7 +1,15 @@
 <div class="media">
-    <img *ngIf="imgUrl" [src]="imgUrl" class="media-img" alt="image" [ngStyle]="{width: width, height: height}">
+    <a *ngIf="imgUrl && link" [routerLink]="link">
+        <img [src]="imgUrl" class="media-img" alt="image" [ngStyle]="{width: width, height: height}">
+    </a>
+    <img *ngIf="imgUrl && !link" [src]="imgUrl" class="media-img" alt="image" [ngStyle]="{width: width, height: height}">
     <div class="media-body">
-        <strong class="mt-0 mb-1">{{ header }}</strong>
+        <strong *ngIf="link" class="mt-0 mb-1">
+            <a class="text-black" [routerLink]="link">{{ header }}</a>
+        </strong>
+        <strong *ngIf="!link" class="mt-0 mb-1">
+            {{ header }}
+        </strong>
         <p class="mb-0 text">{{ text }}</p>
     </div>
 </div>

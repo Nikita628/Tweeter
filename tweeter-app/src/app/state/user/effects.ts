@@ -88,4 +88,25 @@ export class UserEffects {
                 );
         })
     );
+
+    @Effect()
+    get = this.actions$.pipe(
+        ofType(actionTypes.get),
+        switchMap((action: Action & IPayloadedAction<number>) => {
+            return this.userApi.get(action.payload)
+                .pipe(
+                    mergeMap((res: ApiResponse<User>) => {
+                        if (!res.errors.length) {
+                            return [actionCreators.getSuccess(res.item)];
+                        }
+                        this.notification.error(res.errors);
+                        return [actionCreators.getError()];
+                    }),
+                    catchError((error) => {
+                        this.notification.error();
+                        return [actionCreators.getError()];
+                    })
+                );
+        })
+    );
 }

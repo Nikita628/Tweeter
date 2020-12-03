@@ -6,3 +6,7 @@ body {
 *:active, *:focus {
     outline: none !important;
 }
+
+.text-black {
+    color: #333 !important;
+}

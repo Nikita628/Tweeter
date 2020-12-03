@@ -9,6 +9,7 @@
                 [height]="'40px'"
                 [header]="u.name"
                 [text]="u.followersCount + ' followers'"
+                [link]="'/profile' + '/' + u.id"
             >
             </app-media>
             <button *ngIf="!u.isFolloweeOfCurrentUser" type="button" (click)="onFollow(u.id)">

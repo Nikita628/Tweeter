@@ -98,5 +98,50 @@
 					@pageNumber = @pageNumber,
 					@pageSize = @pageSize
 ";
+
+		public const string GetUser = @"
+			--DECLARE 
+			--@userId as int = 1,
+			--@currentUserId as int = 1;
+
+			DECLARE @sql NVARCHAR(MAX);
+			DECLARE @params NVARCHAR(500);
+			declare @filter nvarchar(1000) = ' where 1=1';
+			declare @join nvarchar(1000) = '';
+			declare @orderBy nvarchar(500);
+			declare @paging nvarchar(500);
+
+			SET @params = '@userId int,
+							@currentUserId int';
+
+			SET @sql = 'SELECT u.Id
+				,u.FollowersCount
+				,u.FolloweesCount
+				,u.AvatarUrl
+				,u.Name
+				,u.About
+				,u.ProfileCoverUrl
+				,CASE WHEN EXISTS(
+					select top(1) * from dbo.Follow f where f.FollowerId = @currentUserId and f.FolloweeId = u.Id
+				) THEN 1 ELSE 0 END AS IsFolloweeOfCurrentUser
+
+			FROM dbo.AspNetUsers u
+			';
+
+			-- filtering setup ----------------------------
+			IF @userId IS NOT NULL
+				SET @filter = @filter + ' 
+				AND u.Id = @userId';
+
+			set @sql = @sql + @filter;
+
+			print(@sql)
+
+			EXEC sp_Executesql     
+					@sql,  
+					@params,
+					@userId = @userId,
+					@currentUserId = @currentUserId
+";
 	}
 }

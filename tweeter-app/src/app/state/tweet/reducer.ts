@@ -14,6 +14,7 @@ export interface ITweetFeeds {
     home: { tweets: Tweet[], totalCount: number };
     explore: { tweets: Tweet[], totalCount: number };
     bookmarks: { tweets: Tweet[], totalCount: number };
+    profile: { tweets: Tweet[], totalCount: number };
 }
 
 export interface ITweetState {
@@ -26,6 +27,7 @@ const initialState: ITweetState = {
         home: { tweets: [], totalCount: 0 },
         explore: { tweets: [], totalCount: 0 },
         bookmarks: { tweets: [], totalCount: 0 },
+        profile: { tweets: [], totalCount: 0 },
     },
     hashtags: [],
 };

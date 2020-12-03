@@ -11,6 +11,7 @@ export class MediaComponent implements OnInit {
   @Input() height: string;
   @Input() header: string;
   @Input() text: string;
+  @Input() link: string;
 
   constructor() { }
 

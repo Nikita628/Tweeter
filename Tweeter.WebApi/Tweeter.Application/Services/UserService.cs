@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.DataBase;
@@ -48,13 +49,19 @@ namespace Tweeter.Application.Services
 			return result;
 		}
 
-		public async Task<Response<DataBase.User>> GetAsync(int userId)
+		public async Task<Response<UserDto>> GetAsync(int userId)
 		{
-			var result = new Response<DataBase.User>();
+			var result = new Response<UserDto>();
 
-			var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Id == userId);
+			Func<object[], UserDto> map = (objects) =>
+			{
+				UserDto user = (UserDto)objects[0];
+				return user;
+			};
 
-			result.Item = user;
+			var types = new[] { typeof(UserDto) };
+			var param = new { userId, currentUserId = _userAccessor.CurrentUserId };
+			result.Item = (await _rawSql.Search<UserDto>(DataBase.SqlQueries.User.GetUser, param, types, map, "_split_")).FirstOrDefault();
 
 			return result;
 		}

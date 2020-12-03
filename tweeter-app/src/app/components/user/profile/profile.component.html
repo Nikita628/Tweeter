@@ -1,45 +1,52 @@
-<div class="profile">
+<div class="profile" *ngIf="user">
     <div class="cockpit">
 
         <div class="cover-container">
-            <img *ngIf="true" src="https://www.onni.com/wp-content/uploads/2017/04/natures-walk-image.jpg" alt="" class="cover">
+            <img *ngIf="user.profileCoverUrl" [src]="user.profileCoverUrl" alt="" class="cover">
         </div>
 
         <div class="container">
             <div class="header">
                 <div class="avatar-container">
-                    <img [src]="'assets/user-placeholder.png'" alt="" class="avatar">
+                    <img [src]="user.avatarUrl ? user.avatarUrl : 'assets/user-placeholder.png'" alt="" class="avatar">
                 </div>
                 <div class="info">
                     <div class="name">
-                        <span class="name">Name Name</span>
+                        <span class="name">{{user.name}}</span>
                         <div class="follow-links">
                             <div>
-                                <strong>123</strong><button class="link-button">Following</button>
+                                <strong>{{user.followeesCount}}</strong><button class="link-button">Following</button>
                             </div>
                             <div>
-                                <strong>123</strong><button class="link-button">Followers</button>
+                                <strong>{{user.followersCount}}</strong><button class="link-button">Followers</button>
                             </div>
                         </div>               
                     </div>
                     <p class="about">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo, beatae?
-                        olor sit, amet consectetur adipisicing elit. Explicabo, beatae?
-                        olor sit, amet consectetur adipisicing elit. Explicabo, beatae?
+                        {{user.about}}
                     </p>
                 </div>
-                <div class="button-container">
-                    <button type="button">
+                <div class="button-container" *ngIf="user.id !== currentUser.id">
+                    <button *ngIf="user.isFolloweeOfCurrentUser" type="button" (click)="onUnfollow(user.id)">
+                        <i class="material-icons">person_add_disabled</i> Unfollow
+                    </button>
+                    <button *ngIf="!user.isFolloweeOfCurrentUser" type="button" (click)="onFollow(user.id)">
                         <i class="material-icons">person_add</i> Follow
                     </button>
-                    <!-- <button *ngIf="u.isFolloweeOfCurrentUser" type="button" (click)="onUnfollow(u.id)">
-                        <i class="material-icons">person_add_disabled</i> Unfollow
-                    </button> -->
                 </div>
             </div>
             
             <div class="content">
-                page content goes here
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="menu-container">
+                            <app-sidemenu [items]="menuItems"></app-sidemenu>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <app-tweets-feed [feedKey]="feedKey" [param]="param"></app-tweets-feed>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
