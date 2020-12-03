@@ -22,6 +22,10 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
   public readonly feedKey = "profile";
   public param: TweetSearchParam;
   public user: User;
+
+  public isModalDisplayed = false;
+  public modalTitle = "";
+
   private userId: number;
 
   constructor(
@@ -65,6 +69,24 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
       });
   }
 
+  public onFollow(userId: number): void {
+    this.store.dispatch(userAC.follow(userId, null));
+  }
+
+  public onUnfollow(userId: number): void {
+    this.store.dispatch(userAC.unfollow(userId, null));
+  }
+
+  public closeModal(): void {
+    this.isModalDisplayed = false;
+  }
+
+  public openModal(mode: "followees" | "followers"): void {
+    this.modalTitle = mode.toUpperCase();
+    this.isModalDisplayed = true;
+    // dispatch action, set user list in store
+  }
+
   private createSearchParam(dataFilter: string): TweetSearchParam {
     const newParam = new TweetSearchParam();
     newParam.pageSize = 10;
@@ -81,14 +103,6 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
     }
 
     return newParam;
-  }
-
-  onFollow(userId: number): void {
-    this.store.dispatch(userAC.follow(userId, null));
-  }
-
-  onUnfollow(userId: number): void {
-    this.store.dispatch(userAC.unfollow(userId, null));
   }
 
   private createSideMenuItems(): SidemenuItem[] {

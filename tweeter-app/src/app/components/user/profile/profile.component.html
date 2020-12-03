@@ -15,10 +15,10 @@
                         <span class="name">{{user.name}}</span>
                         <div class="follow-links">
                             <div>
-                                <strong>{{user.followeesCount}}</strong><button class="link-button">Following</button>
+                                <strong>{{user.followeesCount}}</strong><button class="link-button" (click)="openModal('followees')">Following</button>
                             </div>
                             <div>
-                                <strong>{{user.followersCount}}</strong><button class="link-button">Followers</button>
+                                <strong>{{user.followersCount}}</strong><button class="link-button" (click)="openModal('followers')">Followers</button>
                             </div>
                         </div>               
                     </div>
@@ -51,3 +51,7 @@
         </div>
     </div>
 </div>
+
+<app-modal *ngIf="isModalDisplayed" [title]="modalTitle" (closeClick)="closeModal()">
+    <div class="content">list of users here</div>
+</app-modal>

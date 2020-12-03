@@ -43,6 +43,7 @@ import { BaseComponent } from './components/common/base-component/base-component
 import { UserApiClient } from './services/api/user-api-client.service';
 import { UserEffects } from './state/user/effects';
 import { UsersListComponent } from './components/user/users-list/users-list.component';
+import { ModalComponent } from './components/common/ui/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { UsersListComponent } from './components/user/users-list/users-list.comp
     TweetsFeedComponent,
     BaseComponent,
     UsersListComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,

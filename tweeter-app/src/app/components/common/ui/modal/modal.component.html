@@ -1,0 +1,18 @@
+<div class="app-modal">
+    <div class="app-modal-content">
+
+        <div class="app-modal-header">
+            <span class="text">{{title}}</span>
+            <span class="close" (click)="onClose()">&times;</span>
+        </div>
+
+        <div class="app-modal-body">
+            <ng-content select=".content"></ng-content>
+        </div>
+
+        <div class="app-modal-footer">
+
+        </div>
+        
+    </div>
+</div>
