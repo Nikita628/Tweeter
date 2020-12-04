@@ -5,14 +5,15 @@
 		public const string SearchTweets = @"
 			--DECLARE 
 --			@textContains as nvarchar(500) = null,
---			@createdById as int = 2, 
+--			@createdById as int = null, 
 --			@onlyWithComments as bit = null,
 --			@onlyWithMedia as bit = null, 
 --			@onlyLikedByUserId as int = null,
---			@followerId as int = 1,
+--			@followerId as int = null,
 --			@currentUserId as int = 1,
 --			@idLessThan as int = null,
---			@createdByIdOrFollowerId as bit = 1,
+--			@createdByIdOrFollowerId as bit = null,
+--			@bookmarkedByUserId as int = null,
 
 --			@sortProp as nvarchar(100) = 't.id',
 --			@sortDirection as nvarchar(100) = 'asc', 
@@ -24,6 +25,7 @@
 			DECLARE @params NVARCHAR(500);
 			declare @orderBy nvarchar(500);
 			declare @paging nvarchar(500);
+			declare @join nvarchar(500) = '';
 
 			SET @params = '@textContains nvarchar,
 							@createdById int,
@@ -107,13 +109,24 @@
 				,0 as _split_
 				,COUNT(*) OVER() TotalCount
 
+				,(select CreatedAt from dbo.TweetBookmark tb where (tb.TweetId = t.Id AND tb.UserId = @bookmarkedByUserId) OR (tb.TweetId = t.RetweetedFromId AND tb.UserId = @bookmarkedByUserId)) as BookmarkDate
+
 			FROM dbo.Tweet t
-			JOIN dbo.AspNetUsers u ON u.Id = t.CreatedById
+			';
+
+			-- join setup ---------------------------------
+			set @join = @join + '
+			LEFT JOIN dbo.AspNetUsers u ON u.Id = t.CreatedById
 			LEFT JOIN dbo.Tweet originalTweets ON originalTweets.Id = t.RetweetedFromId
 			LEFT JOIN dbo.AspNetUsers otu ON otu.Id = originalTweets.CreatedById
-			WHERE 1 = 1';
+			';
+
+			set @sql = @sql + @join;
 
 			-- filtering setup ----------------------------
+			set @sql = @sql + '
+			where 1=1';
+
 			IF @textContains IS NOT NULL
 			SET @sql = @sql + '
 			AND (t.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%'' OR originalTweets.[Text] LIKE ''%'' + ''' + @textContains + ''' + ''%'')';
@@ -163,8 +176,12 @@
 			AND (t.CreatedById = @createdById or EXISTS (select top(1) * from dbo.Follow f where f.FolloweeId = t.CreatedById and f.FollowerId = @followerId))';
 
 			-- sorting setup ----------------------------
-			set @orderBy = ' 
+			if @bookmarkedByUserId is not null
+				set @orderBy = '
+			ORDER BY BookmarkDate DESC';
+			else set @orderBy = ' 
 			ORDER BY ' + @sortProp + ' ' + @sortDirection;
+
 			SET @sql = @sql + @orderBy;
 
 			-- paging setup -----------------------------

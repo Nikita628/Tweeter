@@ -11,3 +11,9 @@
     font-weight: bold;
     margin-bottom: 20px;
 }
+
+.no-tweets {
+    text-align: center;
+    color: gray;
+    font-weight: 500;
+}

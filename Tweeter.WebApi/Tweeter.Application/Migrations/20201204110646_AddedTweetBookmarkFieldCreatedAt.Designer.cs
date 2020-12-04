@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tweeter.Application.DataBase;
 
 namespace Tweeter.Application.Migrations
 {
     [DbContext(typeof(TweeterDbContext))]
-    partial class TweeterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201204110646_AddedTweetBookmarkFieldCreatedAt")]
+    partial class AddedTweetBookmarkFieldCreatedAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,7 +238,7 @@ namespace Tweeter.Application.Migrations
                     b.Property<int>("TweetId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("UserId", "TweetId");

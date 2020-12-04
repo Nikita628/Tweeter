@@ -39,7 +39,8 @@ namespace Tweeter.Application.Services
 			var newBookmark = new TweetBookmark
 			{
 				TweetId = tweetId,
-				UserId = _userAccessor.CurrentUserId
+				UserId = _userAccessor.CurrentUserId,
+				CreatedAt = DateTime.UtcNow
 			};
 
 			var existingTweet = await _dbContext.Tweet.FirstOrDefaultAsync(t => t.Id == tweetId);

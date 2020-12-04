@@ -147,11 +147,14 @@ namespace Tweeter.WebApi
 			var tweetBookmarks = new List<TweetBookmark>();
 			while (tweetBookmarks.Count < 30)
 			{
+				var bookmarkDate = DateTime.UtcNow;
+				bookmarkDate = bookmarkDate.AddHours(rand.Next(10));
 				var tweetToBookmark = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
 				var newTb = new TweetBookmark
 				{
 					UserId = seedData.Users[rand.Next(seedData.Users.Count)].Id,
-					TweetId = tweetToBookmark.Id
+					TweetId = tweetToBookmark.Id,
+					CreatedAt = bookmarkDate
 				};
 				if (!tweetBookmarks.Any(tl => tl.UserId == newTb.UserId && tl.TweetId == newTb.TweetId)
 					&& !tweetToBookmark.RetweetedFromId.HasValue)

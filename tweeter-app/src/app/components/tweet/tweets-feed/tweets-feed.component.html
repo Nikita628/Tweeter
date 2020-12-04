@@ -1,4 +1,5 @@
 <div class="feed">
+    <p *ngIf="!tweets.length" class="no-tweets">The feed is empty</p>
     <div *ngFor="let tweet of tweets" class="tweet-container">
         <app-tweet-details [feedKey]="feedKey" [tweet]="tweet"></app-tweet-details>
     </div>
