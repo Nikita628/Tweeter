@@ -27,3 +27,24 @@
     font-weight: bold;
     margin-bottom: 20px;
 }
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button-container button {
+    border: none;
+    background-color: #2f80ed;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+    border-radius: 5px;
+    max-height: 30px;
+}
+
+.button-container button:active {
+    background-color: #2362b4;
+}

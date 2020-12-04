@@ -5,7 +5,7 @@ import { filter, takeUntil, withLatestFrom } from 'rxjs/operators';
 
 import { SidemenuItem } from 'src/app/models/SidemenuItem';
 import { TweetSearchParam } from 'src/app/models/Tweet';
-import { User } from 'src/app/models/User';
+import { User, UserSearchParam } from 'src/app/models/User';
 import { IAppState } from 'src/app/state';
 import { BaseComponent } from '../../common/base-component/base-component.component';
 import { actionCreators as userAC } from "../../../state/user/actions";
@@ -22,9 +22,11 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
   public readonly feedKey = "profile";
   public param: TweetSearchParam;
   public user: User;
+  public userParam: UserSearchParam;
 
   public isModalDisplayed = false;
   public modalTitle = "";
+  public modalContent: "followees" | "followers";
 
   private userId: number;
 
@@ -49,6 +51,7 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
         const param = this.createSearchParam(data.filter);
         this.param = param;
         this.menuItems = this.createSideMenuItems();
+        this.isModalDisplayed = false;
       });
 
     this.route.data
@@ -82,9 +85,19 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   public openModal(mode: "followees" | "followers"): void {
-    this.modalTitle = mode.toUpperCase();
+    const newParam = new UserSearchParam();
+
+    if (mode === "followees") {
+      newParam.followeesOfUserId = this.user.id;
+      this.modalTitle = `${this.user.name} is following`;
+    } else {
+      newParam.followersOfUserId = this.user.id;
+      this.modalTitle = `${this.user.name} has followers`;
+    }
+
+    this.modalContent = mode;
+    this.userParam = newParam;
     this.isModalDisplayed = true;
-    // dispatch action, set user list in store
   }
 
   private createSearchParam(dataFilter: string): TweetSearchParam {

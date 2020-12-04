@@ -12,10 +12,13 @@
 
  .app-modal-content {
      background-color: #fefefe;
-     margin: 10% auto;
      padding: 20px;
      border: 1px solid #888;
-     width: 80%;
+     display: inline-block;
+     margin-left: 50%;
+     transform: translateX(-50%);
+     margin-top: 100px;
+     width: 100%;
  }
 
  .close {
@@ -38,10 +41,28 @@
  }
 
  .app-modal-header .text {
-    font-size: 20px;
-    font-weight: bold;
+     font-size: 20px;
+     font-weight: bold;
  }
 
  .app-modal-body {
      padding: 20px 0;
+ }
+
+ @media (min-width: 768px) {
+    .app-modal-content {
+        width: 80%;
+    }
+ }
+
+ @media (min-width: 992px) {
+    .app-modal-content {
+        width: 60%;
+    }
+ }
+
+ @media (min-width: 1200px) {
+    .app-modal-content {
+        width: 50%;
+    }
  }

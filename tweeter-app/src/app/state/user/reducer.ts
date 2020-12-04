@@ -16,6 +16,8 @@ const initialState: IUserState = {
     lists: {
         recommended: { users: [], totalCount: 0 },
         explore: { users: [], totalCount: 0 },
+        followers: { users: [], totalCount: 0 },
+        followees: { users: [], totalCount: 0 },
     },
     user: null,
 };

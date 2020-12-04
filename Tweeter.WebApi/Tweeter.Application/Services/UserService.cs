@@ -78,6 +78,7 @@ namespace Tweeter.Application.Services
 				return user;
 			};
 
+			param.CurrentUserId = _userAccessor.CurrentUserId;
 			var types = new[] { typeof(UserDto), typeof(Total) };
 			result.Items = await _rawSql.Search<UserDto>(DataBase.SqlQueries.User.SearchUsers, param, types, map, "_split_");
 

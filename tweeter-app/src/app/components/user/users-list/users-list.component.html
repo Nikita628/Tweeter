@@ -1,15 +1,25 @@
 <div class="users-list">
     <div class="user" *ngFor="let u of users">
         <p>ID - {{u.id}}</p>
-        <app-media
-            [imgUrl]="u.avatarUrl ? u.avatarUrl : 'assets/user-placeholder.png'"
-            [width]="'50px'"
-            [height]="'50px'"
-            [header]="u.name"
-            [text]="u.followersCount + ' followers'"
-            [link]="'/profile' + '/' + u.id"
-        >
-        </app-media>
+        <div class="info">
+            <app-media
+                [imgUrl]="u.avatarUrl ? u.avatarUrl : 'assets/user-placeholder.png'"
+                [width]="'50px'"
+                [height]="'50px'"
+                [header]="u.name"
+                [text]="u.followersCount + ' followers'"
+                [link]="'/profile' + '/' + u.id"
+            >
+            </app-media>
+            <div class="button-container" *ngIf="currentUser.id !== u.id">
+                <button *ngIf="u.isFolloweeOfCurrentUser" type="button" (click)="onUnfollow(u.id)">
+                    <i class="material-icons">person_add_disabled</i> Unfollow
+                </button>
+                <button *ngIf="!u.isFolloweeOfCurrentUser" type="button" (click)="onFollow(u.id)">
+                    <i class="material-icons">person_add</i> Follow
+                </button>
+            </div>
+        </div>
         <p *ngIf="u.about" class="about">
             {{u.about}}
         </p>

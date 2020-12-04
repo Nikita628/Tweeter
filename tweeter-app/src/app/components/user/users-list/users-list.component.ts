@@ -45,6 +45,14 @@ export class UsersListComponent extends BaseComponent implements OnInit, OnDestr
     this.store.dispatch(userAC.search(this.param, this.listKey));
   }
 
+  public onFollow(userId: number): void {
+    this.store.dispatch(userAC.follow(userId, this.listKey));
+  }
+
+  public onUnfollow(userId: number): void {
+    this.store.dispatch(userAC.unfollow(userId, this.listKey));
+  }
+
   public onLoadMore(): void {
     const newParam: UserSearchParam = {
       ...this.param,
