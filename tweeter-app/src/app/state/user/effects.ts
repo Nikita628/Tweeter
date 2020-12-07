@@ -116,11 +116,11 @@ export class UserEffects {
         switchMap((action: Action & IPayloadedAction<User>) => {
             return this.userApi.update(action.payload)
                 .pipe(
-                    mergeMap((res: ApiResponse<boolean>) => {
+                    mergeMap((res: ApiResponse<User>) => {
                         if (!res.errors.length) {
-                            localStorage.setItem("tweeter_user", JSON.stringify(action.payload));
+                            localStorage.setItem("tweeter_user", JSON.stringify(res.item));
                             this.notification.success(["User has been updated"]);
-                            return [actionCreators.updateSuccess(action.payload)];
+                            return [actionCreators.updateSuccess(res.item)];
                         }
                         this.notification.error(res.errors);
                         return [actionCreators.updateError()];

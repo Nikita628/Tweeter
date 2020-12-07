@@ -26,7 +26,7 @@ export class UserApiClient extends ApiClient {
         return this.http.get<ApiResponse<User>>(`${environment.apiUrl}${this.endpoint}get/${userId}`);
     }
 
-    public update(user: User): Observable<ApiResponse<boolean>> {
+    public update(user: User): Observable<ApiResponse<User>> {
         const form = new FormData();
         form.append("cover", user.cover);
         form.append("avatar", user.avatar);
@@ -34,6 +34,6 @@ export class UserApiClient extends ApiClient {
         user.cover = null;
         form.append("userJson", JSON.stringify(user));
 
-        return this.http.put<ApiResponse<boolean>>(`${environment.apiUrl}${this.endpoint}update`, form);
+        return this.http.put<ApiResponse<User>>(`${environment.apiUrl}${this.endpoint}update`, form);
     }
 }
