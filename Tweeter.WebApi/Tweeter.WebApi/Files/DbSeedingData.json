@@ -1060,43 +1060,43 @@
 
 	"HashTags": [
 		{
-			"text": "ipsum",
+			"text": "#ipsum",
 			"tweetCount": 1
 		},
 		{
-			"text": "aute",
+			"text": "#aute",
 			"tweetCount": 2
 		},
 		{
-			"text": "ea",
+			"text": "#ea",
 			"tweetCount": 3
 		},
 		{
-			"text": "ad",
+			"text": "#ad",
 			"tweetCount": 2
 		},
 		{
-			"text": "officia",
+			"text": "#officia",
 			"tweetCount": 2
 		},
 		{
-			"text": "irure",
+			"text": "#irure",
 			"tweetCount": 2
 		},
 		{
-			"text": "consequat",
+			"text": "#consequat",
 			"tweetCount": 1
 		},
 		{
-			"text": "culpa",
+			"text": "#culpa",
 			"tweetCount": 2
 		},
 		{
-			"text": "occaecat",
+			"text": "#occaecat",
 			"tweetCount": 1
 		},
 		{
-			"text": "non",
+			"text": "#non",
 			"tweetCount": 2
 		}
 	]

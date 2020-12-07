@@ -44,6 +44,8 @@ import { UserApiClient } from './services/api/user-api-client.service';
 import { UserEffects } from './state/user/effects';
 import { UsersListComponent } from './components/user/users-list/users-list.component';
 import { ModalComponent } from './components/common/ui/modal/modal.component';
+import { ScrollPositionService } from './services/utils/scroll-position.service';
+import { NumberShortenerPipe } from './pipes/number-shortener.pipe';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,7 @@ import { ModalComponent } from './components/common/ui/modal/modal.component';
     BaseComponent,
     UsersListComponent,
     ModalComponent,
+    NumberShortenerPipe,
   ],
   imports: [
     BrowserModule,
@@ -93,6 +96,7 @@ import { ModalComponent } from './components/common/ui/modal/modal.component';
     TweetApiClient,
     TweetCommentApiClient,
     UserApiClient,
+    ScrollPositionService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,

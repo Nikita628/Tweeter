@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Tweet, TweetSearchParam } from 'src/app/models/Tweet';
+import { ScrollPositionService } from 'src/app/services/utils/scroll-position.service';
 import { IAppState } from 'src/app/state';
 import { actionCreators as tweetAC } from 'src/app/state/tweet/actions';
 import { selectors as tweetSE } from "../../../state/tweet/reducer";
@@ -20,7 +21,6 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
   @Input() useLastIdForPaging: boolean;
 
   private feed$: Observable<{tweets: Tweet[], totalCount: number}>;
-  private scrollY: number;
   private lastId: number;
   private pageNumber: number;
 
@@ -28,7 +28,7 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
   public totalCountForLastId = 0;
   public tweets: Tweet[] = [];
 
-  constructor(protected store: Store<IAppState>) {
+  constructor(protected store: Store<IAppState>, private scroll: ScrollPositionService) {
     super(store);
   }
 
@@ -56,10 +56,7 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
         this.totalCountForPaging = feed.totalCount;
       }
 
-      if (this.scrollY) {
-        // TODO scroll only after search action completed
-        window.scrollTo(0, this.scrollY);
-      }
+      this.scroll.scrollToPosition("feed");
     });
   }
 
@@ -69,8 +66,6 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
   }
 
   public onLoadMore(): void {
-    this.scrollY = window.scrollY;
-
     const param: TweetSearchParam = {
       ...this.param,
       appendToExistingStorePage: true,
@@ -82,6 +77,7 @@ export class TweetsFeedComponent extends BaseComponent implements OnInit, OnDest
       param.pageNumber = ++this.pageNumber;
     }
 
+    this.scroll.setPosition("feed", window.scrollY);
     this.store.dispatch(tweetAC.search(param, this.feedKey));
   }
 }

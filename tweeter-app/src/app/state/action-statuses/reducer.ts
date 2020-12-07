@@ -15,13 +15,15 @@ const initialState: IActionStatusesState = {
 
 export function actionStatusesReducer(state: IActionStatusesState = initialState, action: Action): IActionStatusesState {
     if (action.type) {
-        if (actionTypes.clearActionStatus) {
+        if (action.type === actionTypes.clearActionStatus) {
             const actionType = (action as Action & IPayloadedAction<string>).payload;
             return {
                 ...state,
                 [actionType]: null,
             };
-        } else if (!action.type.endsWith("Success") && !action.type.endsWith("Error")) {
+        }
+
+        if (!action.type.endsWith("Success") && !action.type.endsWith("Error")) {
             return {
                 ...state,
                 statuses: {
@@ -29,14 +31,18 @@ export function actionStatusesReducer(state: IActionStatusesState = initialState
                     [action.type]: "progress"
                 },
             };
-        } else if (action.type.endsWith("Success")) {
+        }
+
+        if (action.type.endsWith("Success")) {
             const actionToComplete = action.type.match(/(.*)Success/)[1];
             const newState: IActionStatusesState = { ...state, statuses: { ...state.statuses } };
             if (newState.statuses[actionToComplete]) {
                 newState.statuses[actionToComplete] = "success";
             }
             return newState;
-        } else if (action.type.endsWith("Error")) {
+        }
+
+        if (action.type.endsWith("Error")) {
             const actionToComplete = action.type.match(/(.*)Error/)[1];
             const newState: IActionStatusesState = { ...state, statuses: { ...state.statuses } };
             if (newState.statuses[actionToComplete]) {
@@ -45,6 +51,7 @@ export function actionStatusesReducer(state: IActionStatusesState = initialState
             return newState;
         }
     }
+
     return state;
 }
 

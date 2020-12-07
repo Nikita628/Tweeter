@@ -54,7 +54,7 @@ export class TweetDetailsComponent extends BaseComponent implements OnInit {
   }
 
   public onSendComment(): void {
-    // this.isCommenting = true;
+    this.isCommenting = true;
     this.notifier.notifyListener();
   }
 

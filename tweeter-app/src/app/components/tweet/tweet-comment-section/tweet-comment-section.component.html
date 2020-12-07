@@ -35,7 +35,7 @@
                 <span [ngClass]="{danger: comment.isLikedByCurrentUser}" (click)="onLike(comment.id)">
                     <i class="material-icons">check</i> {{ comment.isLikedByCurrentUser ? 'Liked' : 'Like' }}
                 </span>
-                <span>- {{ comment.likeCount }} Likes</span>
+                <span>- {{ comment.likeCount | shorten }} Likes</span>
             </div>
         </div>
     </div>

@@ -104,7 +104,7 @@ namespace Tweeter.WebApi
 			foreach (var b in seedData.Tweets)
 			{
 				b.CreatedById = seedData.Users[rand.Next(seedData.Users.Count)].Id;
-				b.CreatedAt = DateTime.UtcNow;
+				b.CreatedAt = DateTime.UtcNow.AddMinutes(rand.Next(60));
 				context.Tweet.Add(b);
 			}
 			context.SaveChanges();
@@ -148,7 +148,7 @@ namespace Tweeter.WebApi
 			while (tweetBookmarks.Count < 30)
 			{
 				var bookmarkDate = DateTime.UtcNow;
-				bookmarkDate = bookmarkDate.AddHours(rand.Next(10));
+				bookmarkDate = bookmarkDate.AddMinutes(rand.Next(10));
 				var tweetToBookmark = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
 				var newTb = new TweetBookmark
 				{
@@ -170,7 +170,7 @@ namespace Tweeter.WebApi
 			foreach (var tc in seedData.TweetComments)
 			{
 				tc.CreatedById = seedData.Users[rand.Next(seedData.Users.Count)].Id;
-				tc.CreatedAt = DateTime.UtcNow;
+				tc.CreatedAt = DateTime.UtcNow.AddMinutes(rand.Next(60));
 				var tweetToComment = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
 
 				while (tweetToComment.RetweetedFromId.HasValue)

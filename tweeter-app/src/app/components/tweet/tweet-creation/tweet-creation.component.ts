@@ -15,7 +15,7 @@ import { BaseComponent } from '../../common/base-component/base-component.compon
 export class TweetCreationComponent extends BaseComponent implements OnInit, OnDestroy {
   @ViewChild("imgPreviewElement") imgPreviewElement: ElementRef<HTMLImageElement>;
   public selectedImg: File;
-  public tweetText: string;
+  public tweetText = "";
   public onlyFollowedCanReply = false;
   public sending = false;
 
@@ -33,7 +33,7 @@ export class TweetCreationComponent extends BaseComponent implements OnInit, OnD
       )
       .subscribe(statuses => {
         if (statuses[tweetAT.create] === "success") {
-          this.tweetText = null;
+          this.tweetText = "";
           this.selectedImg = null;
           this.imgPreviewElement.nativeElement.src = "";
           this.onlyFollowedCanReply = false;

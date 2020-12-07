@@ -10,6 +10,7 @@ import { IAppState } from 'src/app/state';
 import { BaseComponent } from '../../common/base-component/base-component.component';
 import { actionCreators as userAC } from "../../../state/user/actions";
 import { selectors as userSE } from "../../../state/user/reducer";
+import { ScrollPositionService } from 'src/app/services/utils/scroll-position.service';
 
 @Component({
   selector: 'app-profile',
@@ -33,6 +34,7 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
   constructor(
     private route: ActivatedRoute,
     protected store: Store<IAppState>,
+    private scroll: ScrollPositionService,
   ) {
     super(store);
   }
@@ -69,6 +71,7 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
       )
       .subscribe(user => {
         this.user = user;
+        this.scroll.scrollToTop();
       });
   }
 
