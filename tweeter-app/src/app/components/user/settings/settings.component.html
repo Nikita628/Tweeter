@@ -4,27 +4,32 @@
             <div class="settings">
                 <div class="header">
                     <div class="cover-container">
-                        <img *ngIf="false" class="cover" src="http://www.latestwall.com/images/wallpaper/beautiful-nature-photography-hd-background-jpg" alt="">
-                        <div class="cover-placeholder">Cover not selected</div>
+                        <img class="cover" alt="" [src]="coverUrl" #coverImg>
+                        <div *ngIf="!coverUrl" class="cover-placeholder">Cover not selected</div>
                         <i class="material-icons" (click)="coverFile.click()">image_search</i>
                     </div>
                     <div class="avatar-container">
-                        <img class="avatar" src="https://image.flaticon.com/icons/svg/219/219970.svg" alt="">
+                        <img class="avatar" alt="" [src]="avatarUrl" #avatarImg>
                         <i class="material-icons" (click)="avatarFile.click()">image_search</i>
                     </div>
                 </div>
-                <form>
-                    <input #coverFile type="file" class="file">
-                    <input #avatarFile type="file" class="file">
+                <form [formGroup]="settingsForm" (ngSubmit)="onSave()">
+                    <input #coverFile type="file" class="file" formControlName="cover" (change)="onCoverChange($event.target.files[0])">
+                    <input #avatarFile type="file" class="file" formControlName="avatar" (change)="onAvatarChange($event.target.files[0])">
 
-                    <input class="name-input" type="text" name="username" placeholder="My Name">
-
-                    <textarea appAutoHeight class="about-input" name="about" placeholder="About me..."></textarea>
+                    <div class="form-group">
+                        <input class="name-input" type="text" formControlName="username" placeholder="My Name">
+                        <div *ngIf="!settingsForm.get('username').valid && settingsForm.get('username').touched" class="error">Please enter a valid name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <textarea appAutoHeight class="about-input" formControlName="about" placeholder="About me..."></textarea>
+                    </div>
 
                     <div class="buttons">
-                        <button class="btn btn-light">Cancel</button>
+                        <button type="button" class="btn btn-light" (click)="onCancel()">Cancel</button>
                         {{ ' ' }}
-                        <button class="btn btn-primary">Save</button>
+                        <button class="btn btn-primary" type="submit" [disabled]="!settingsForm.valid">Save</button>
                     </div>
                 </form>
             </div>

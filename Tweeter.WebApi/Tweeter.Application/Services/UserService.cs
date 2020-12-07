@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,18 +16,21 @@ namespace Tweeter.Application.Services
 		private readonly IRawSqlService _rawSql;
 		private readonly TweeterDbContext _dbContext;
 		private readonly ICloudService _cloud;
+		private readonly IMapper _mapper;
 
 		public UserService(
 			CurrentUserIdAccessor cu,
 			TweeterDbContext tw,
 			IRawSqlService ra,
-			ICloudService cl
+			ICloudService cl,
+			IMapper m
 			)
 		{
 			_userAccessor = cu;
 			_rawSql = ra;
 			_dbContext = tw;
 			_cloud = cl;
+			_mapper = m;
 		}
 		public async Task<Response<bool>> FollowAsync(int followeeId)
 		{
@@ -106,9 +110,9 @@ namespace Tweeter.Application.Services
 			return result;
 		}
 
-		public async Task<Response<bool>> UpdateAsync(Models.UserForUpdate user)
+		public async Task<Response<UserDto>> UpdateAsync(Models.UserForUpdate user)
 		{
-			var result = new Response<bool>();
+			var result = new Response<UserDto>();
 
 			var existingUser = await _dbContext.User.FirstOrDefaultAsync(u => u.Id == user.Id);
 
@@ -129,7 +133,7 @@ namespace Tweeter.Application.Services
 
 			await _dbContext.SaveChangesAsync();
 
-			result.Item = true;
+			result.Item = (await _dbContext.Users.FirstAsync(u => u.Id == user.Id)).To<UserDto>(_mapper);
 
 			return result;
 		}

@@ -9,6 +9,8 @@ export class User {
     public about: string;
     public profileCoverUrl: string;
     public isFolloweeOfCurrentUser: boolean;
+    public avatar: File;
+    public cover: File;
 }
 
 export class UserSearchParam extends ApiPageRequest {

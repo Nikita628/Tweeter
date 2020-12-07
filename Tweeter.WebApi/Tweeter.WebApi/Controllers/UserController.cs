@@ -38,7 +38,7 @@ namespace Tweeter.WebApi.Controllers
 		}
 
 		[HttpPut("update")]
-		public async Task<IActionResult> Update([FromForm]IFormFile cover, [FromForm]IFormFile avatar, string userJson)
+		public async Task<IActionResult> Update([FromForm]IFormFile cover, [FromForm]IFormFile avatar, [FromForm]string userJson)
 		{
 			var user = JsonConvert.DeserializeObject<UserForUpdate>(userJson);
 

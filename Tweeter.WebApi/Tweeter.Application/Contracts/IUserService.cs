@@ -9,6 +9,6 @@ namespace Tweeter.Application.Contracts
 		Task<PageResponse<UserDto>> SearchAsync(UserSearchParam param);
 		Task<Response<bool>> FollowAsync(int followeeId);
 		Task<Response<bool>> UnfollowAsync(int followeeId);
-		Task<Response<bool>> UpdateAsync(Models.UserForUpdate user);
+		Task<Response<UserDto>> UpdateAsync(Models.UserForUpdate user);
 	}
 }

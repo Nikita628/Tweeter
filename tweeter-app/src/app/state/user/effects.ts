@@ -109,4 +109,27 @@ export class UserEffects {
                 );
         })
     );
+
+    @Effect()
+    update = this.actions$.pipe(
+        ofType(actionTypes.update),
+        switchMap((action: Action & IPayloadedAction<User>) => {
+            return this.userApi.update(action.payload)
+                .pipe(
+                    mergeMap((res: ApiResponse<boolean>) => {
+                        if (!res.errors.length) {
+                            localStorage.setItem("tweeter_user", JSON.stringify(action.payload));
+                            this.notification.success(["User has been updated"]);
+                            return [actionCreators.updateSuccess(action.payload)];
+                        }
+                        this.notification.error(res.errors);
+                        return [actionCreators.updateError()];
+                    }),
+                    catchError((error) => {
+                        this.notification.error();
+                        return [actionCreators.updateError()];
+                    })
+                );
+        })
+    );
 }

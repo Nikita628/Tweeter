@@ -4,6 +4,7 @@ import { SigninResult, SignUpData } from '../../models/Auth';
 import { IPayloadedAction } from '../../models/Common';
 import { User } from '../../models/User';
 import { actionTypes } from "./actions";
+import { actionTypes as userAT } from "../user/actions";
 
 export interface IAuthState {
     user: User;
@@ -60,6 +61,10 @@ const reducerMap = {
     },
     [actionTypes.clearSignupStatus]: (state: IAuthState): IAuthState => {
         return { ...state, signupStatus: null };
+    },
+
+    [userAT.updateSuccess]: (state: IAuthState, action: Action & IPayloadedAction<User>): IAuthState => {
+        return { ...state, user: action.payload };
     },
 };
 

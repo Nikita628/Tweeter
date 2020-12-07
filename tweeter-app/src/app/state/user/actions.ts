@@ -19,6 +19,10 @@ export const actionTypes = {
     get: "User/Get",
     getSuccess: "User/GetSuccess",
     getError: "User/GetError",
+
+    update: "User/Update",
+    updateSuccess: "User/UpdateSuccess",
+    updateError: "User/UpdateError",
 };
 
 export const actionCreators = {
@@ -70,5 +74,17 @@ export const actionCreators = {
     }),
     getError: (): Action => ({
         type: actionTypes.getError,
+    }),
+
+    update: (user: User): Action & IPayloadedAction<User> => ({
+        type: actionTypes.update,
+        payload: user,
+    }),
+    updateSuccess: (user: User): Action & IPayloadedAction<User> => ({
+        type: actionTypes.updateSuccess,
+        payload: user,
+    }),
+    updateError: (): Action => ({
+        type: actionTypes.updateError,
     }),
 };
