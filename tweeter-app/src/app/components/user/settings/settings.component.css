@@ -1,0 +1,92 @@
+.cover {
+    width: 100%;
+    max-height: 200px;
+    height: auto;
+    object-fit: cover;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    background: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.settings {
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px #ccc;
+    margin-top: 30px;
+}
+
+.header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+form textarea, form input {
+    width: 100%;
+}
+
+.avatar-container {
+    position: absolute;
+    bottom: -20%;
+}
+
+.cover-container {
+    width: 100%;
+    max-height: 200px;
+}
+
+i {
+    position: absolute;
+    background: white;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+}
+
+.file {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+.name-input, .about-input {
+    border: none;
+    border-bottom-color: currentcolor;
+    border-bottom-style: none;
+    border-bottom-width: medium;
+    color: gray;
+    padding: 5px;
+    margin: 20px 0;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.about-input {
+    resize: none;
+    height: 30px;
+    overflow: hidden;
+}
+
+.buttons {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.cover-placeholder {
+    min-height: 200px;
+    background: #efefef;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    color: gray;
+}

@@ -1,1 +1,33 @@
-<p>settings works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="settings">
+                <div class="header">
+                    <div class="cover-container">
+                        <img *ngIf="false" class="cover" src="http://www.latestwall.com/images/wallpaper/beautiful-nature-photography-hd-background-jpg" alt="">
+                        <div class="cover-placeholder">Cover not selected</div>
+                        <i class="material-icons" (click)="coverFile.click()">image_search</i>
+                    </div>
+                    <div class="avatar-container">
+                        <img class="avatar" src="https://image.flaticon.com/icons/svg/219/219970.svg" alt="">
+                        <i class="material-icons" (click)="avatarFile.click()">image_search</i>
+                    </div>
+                </div>
+                <form>
+                    <input #coverFile type="file" class="file">
+                    <input #avatarFile type="file" class="file">
+
+                    <input class="name-input" type="text" name="username" placeholder="My Name">
+
+                    <textarea appAutoHeight class="about-input" name="about" placeholder="About me..."></textarea>
+
+                    <div class="buttons">
+                        <button class="btn btn-light">Cancel</button>
+                        {{ ' ' }}
+                        <button class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

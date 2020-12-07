@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Tweeter.Application.Contracts;
 using Tweeter.Application.Models;
+using Tweeter.WebApi.Extensions;
 
 namespace Tweeter.WebApi.Controllers
 {
@@ -35,9 +38,29 @@ namespace Tweeter.WebApi.Controllers
 		}
 
 		[HttpPut("update")]
-		public async Task<IActionResult> Update(UserForUpdate param)
+		public async Task<IActionResult> Update([FromForm]IFormFile cover, [FromForm]IFormFile avatar, string userJson)
 		{
-			var result = await _user.UpdateAsync(param);
+			var user = JsonConvert.DeserializeObject<UserForUpdate>(userJson);
+
+			if (cover != null)
+			{
+				user.ProfileCover = new Application.Models.File
+				{
+					Bytes = await cover.ToByteArrayAsync(),
+					FileName = cover.FileName
+				};
+			}
+
+			if (avatar != null)
+			{
+				user.Avatar = new Application.Models.File
+				{
+					Bytes = await avatar.ToByteArrayAsync(),
+					FileName = avatar.FileName
+				};
+			}
+
+			var result = await _user.UpdateAsync(user);
 
 			return Ok(result);
 		}

@@ -12,4 +12,19 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public onCancel(): void {
+
+  }
+
+  public onSave(): void {
+
+  }
+
+  public onAvatarChanged(): void {
+
+  }
+
+  public onCoverChanged(): void {
+    
+  }
 }
