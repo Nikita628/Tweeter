@@ -45,6 +45,11 @@ export class SigninComponent extends BaseComponent implements OnInit, OnDestroy 
         this.store.dispatch(actionCreators.signin(this.form.value.email, this.form.value.password));
     }
 
+    public onDemoAccount(): void {
+        this.isLoading = true;
+        this.store.dispatch(actionCreators.signin("aguirrehebert@sensate.com", "password"));
+    }
+
     ngOnDestroy(): void {
         super.ngOnDestroy();
         this.store.dispatch(actionCreators.clearSigninStatus());

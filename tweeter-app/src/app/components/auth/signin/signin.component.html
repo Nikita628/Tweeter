@@ -20,6 +20,10 @@
                         </button>
                         <p class="text-muted mt-3 mb-1">Don't have an account? Register <a [routerLink]="['/signup']">here</a></p>
                     </div>
+                    <button type="button" class="btn btn-danger" (click)="onDemoAccount()">
+                        CLICK HERE TO USE DEMO ACCOUNT
+                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
                 </form>
             </div>
         </div>

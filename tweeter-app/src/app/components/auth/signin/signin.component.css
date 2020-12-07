@@ -40,7 +40,7 @@ i {
     color: gray;
 }
 
-button {
+button:not(.btn-danger) {
     background-color: #2f80ed;
     font-weight: 600;
 }
@@ -53,4 +53,8 @@ button {
 
 input.ng-invalid.ng-touched {
     border: 1px solid red;
+}
+
+.btn-danger {
+    margin-top: 20px;
 }

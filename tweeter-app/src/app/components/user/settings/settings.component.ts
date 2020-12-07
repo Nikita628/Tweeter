@@ -1,13 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IAppState } from 'src/app/state';
 import { BaseComponent } from '../../common/base-component/base-component.component';
 import { actionCreators as userAC, actionTypes as userAT } from "../../../state/user/actions";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { selectors as actionStatusesSE } from "../../../state/action-statuses/reducer";
-import { actionCreators as actionStatusesAC } from "../../../state/action-statuses/actions";
 import { User } from 'src/app/models/User';
 
 @Component({
@@ -15,9 +12,10 @@ import { User } from 'src/app/models/User';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent extends BaseComponent implements OnInit {
+export class SettingsComponent extends BaseComponent implements OnInit, AfterViewInit {
   @ViewChild("coverImg") coverEl: ElementRef<HTMLImageElement>;
   @ViewChild("avatarImg") avatarEl: ElementRef<HTMLImageElement>;
+  @ViewChild("aboutText") aboutText: ElementRef<HTMLTextAreaElement>;
 
   settingsForm: FormGroup;
   coverUrl: string;
@@ -47,15 +45,6 @@ export class SettingsComponent extends BaseComponent implements OnInit {
       about: this.currentUser.about,
     });
 
-    // this.store.select(actionStatusesSE.actionStatuses)
-    //   .pipe(takeUntil(this.destroyed$))
-    //   .subscribe(statuses => {
-    //     if (statuses[userAT.update] === "success") {
-    //       this.store.dispatch(actionStatusesAC.clearActionStatus(userAT.update));
-    //       this.router.navigate(["/home"]);
-    //     }
-    //   });
-
     if (this.currentUser.profileCoverUrl) {
       this.coverUrl = this.currentUser.profileCoverUrl;
     }
@@ -63,6 +52,12 @@ export class SettingsComponent extends BaseComponent implements OnInit {
     this.avatarUrl = this.currentUser.avatarUrl
       ? this.currentUser.avatarUrl
       : "assets/user-placeholder.png";
+  }
+
+  ngAfterViewInit(): void {
+    this.aboutText.nativeElement.style.height = "0";
+    const currentHeight = this.aboutText.nativeElement.scrollHeight;
+    this.aboutText.nativeElement.style.height = currentHeight + "px";
   }
 
   public onCancel(): void {
