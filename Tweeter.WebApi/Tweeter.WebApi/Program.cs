@@ -148,7 +148,7 @@ namespace Tweeter.WebApi
 			while (tweetBookmarks.Count < 30)
 			{
 				var bookmarkDate = DateTime.UtcNow;
-				bookmarkDate = bookmarkDate.AddMinutes(rand.Next(10));
+				bookmarkDate = bookmarkDate.AddSeconds(rand.Next(20));
 				var tweetToBookmark = seedData.Tweets[rand.Next(seedData.Tweets.Count)];
 				var newTb = new TweetBookmark
 				{
