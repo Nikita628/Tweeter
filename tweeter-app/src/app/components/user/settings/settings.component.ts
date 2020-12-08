@@ -25,6 +25,7 @@ export class SettingsComponent extends BaseComponent implements OnInit, AfterVie
   coverFile: File;
   avatarFile: File;
   isSaving = false;
+  isCoverSet = false;
 
   constructor(
     protected store: Store<IAppState>,
@@ -49,6 +50,7 @@ export class SettingsComponent extends BaseComponent implements OnInit, AfterVie
     });
 
     if (this.currentUser.profileCoverUrl) {
+      this.isCoverSet = true;
       this.coverUrl = this.currentUser.profileCoverUrl;
     }
 
@@ -98,11 +100,13 @@ export class SettingsComponent extends BaseComponent implements OnInit, AfterVie
 
   public onCoverChange(file: File): void {
     this.coverFile = file;
+    this.isCoverSet = true;
     this.coverEl.nativeElement.src = URL.createObjectURL(file);
   }
 
   public onAvatarChange(file: File): void {
     this.avatarFile = file;
+    // this.avatarUrl = file.name;
     this.avatarEl.nativeElement.src = URL.createObjectURL(file);
   }
 }

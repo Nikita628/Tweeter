@@ -47,7 +47,6 @@ const reducerMap = {
     ): IUserState => {
         const userId = action.payload.userId;
         const listKey = action.payload.listKey;
-        const profileId = action.payload.profileId;
 
         if (listKey === null) {
             return {
@@ -71,10 +70,6 @@ const reducerMap = {
             },
         };
 
-        if (state.user && state.user.id === profileId) {
-            newState.user = { ...state.user, isFolloweeOfCurrentUser: true, followeesCount: state.user.followeesCount + 1 };
-        }
-
         return newState;
     },
 
@@ -84,7 +79,6 @@ const reducerMap = {
     ): IUserState => {
         const userId = action.payload.userId;
         const listKey = action.payload.listKey;
-        const profileId = action.payload.profileId;
 
         if (listKey === null) {
             return {
@@ -107,10 +101,6 @@ const reducerMap = {
                 [listKey]: { ...state.lists[listKey], users }
             },
         };
-
-        if (state.user && state.user.id === profileId) {
-            newState.user = { ...state.user,  isFolloweeOfCurrentUser: false, followeesCount: state.user.followeesCount - 1 };
-        }
 
         return newState;
     },

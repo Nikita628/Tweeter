@@ -4,8 +4,8 @@
             <div class="settings">
                 <div class="header">
                     <div class="cover-container">
-                        <img class="cover" alt="" [src]="coverUrl" #coverImg>
-                        <div *ngIf="!coverUrl" class="cover-placeholder">Cover not selected</div>
+                        <img class="cover" alt="" [src]="coverUrl" #coverImg [ngStyle]="{display: isCoverSet ? 'inline-block' : 'none'}">
+                        <div *ngIf="!isCoverSet" class="cover-placeholder">Cover not selected</div>
                         <i class="material-icons" (click)="coverFile.click()">image_search</i>
                     </div>
                     <div class="avatar-container">
@@ -31,7 +31,7 @@
                     <div class="buttons">
                         <button type="button" class="btn btn-light" (click)="onCancel()">Cancel</button>
                         {{ ' ' }}
-                        <button class="btn btn-primary" type="submit" [disabled]="!settingsForm.valid || !settingsForm.touched">
+                        <button class="btn btn-primary" type="submit" [disabled]="!settingsForm.valid || isSaving">
                             Save
                             <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         </button>
