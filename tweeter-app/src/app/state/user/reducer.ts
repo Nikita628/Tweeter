@@ -43,10 +43,11 @@ const reducerMap = {
 
     [actionTypes.followSuccess]: (
         state: IUserState,
-        action: Action & IPayloadedAction<{ userId: number, listKey: string }>
+        action: Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }>
     ): IUserState => {
         const userId = action.payload.userId;
         const listKey = action.payload.listKey;
+        const profileId = action.payload.profileId;
 
         if (listKey === null) {
             return {
@@ -62,21 +63,28 @@ const reducerMap = {
             return u;
         });
 
-        return {
+        const newState = {
             ...state,
             lists: {
                 ...state.lists,
                 [listKey]: { ...state.lists[listKey], users }
             },
         };
+
+        if (state.user && state.user.id === profileId) {
+            newState.user = { ...state.user, isFolloweeOfCurrentUser: true, followeesCount: state.user.followeesCount + 1 };
+        }
+
+        return newState;
     },
 
     [actionTypes.unfollowSuccess]: (
         state: IUserState,
-        action: Action & IPayloadedAction<{ userId: number, listKey: string }>
+        action: Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }>
     ): IUserState => {
         const userId = action.payload.userId;
         const listKey = action.payload.listKey;
+        const profileId = action.payload.profileId;
 
         if (listKey === null) {
             return {
@@ -92,13 +100,19 @@ const reducerMap = {
             return u;
         });
 
-        return {
+        const newState = {
             ...state,
             lists: {
                 ...state.lists,
                 [listKey]: { ...state.lists[listKey], users }
             },
         };
+
+        if (state.user && state.user.id === profileId) {
+            newState.user = { ...state.user,  isFolloweeOfCurrentUser: false, followeesCount: state.user.followeesCount - 1 };
+        }
+
+        return newState;
     },
 
     [actionTypes.getSuccess]: (

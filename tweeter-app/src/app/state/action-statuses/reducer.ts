@@ -19,7 +19,10 @@ export function actionStatusesReducer(state: IActionStatusesState = initialState
             const actionType = (action as Action & IPayloadedAction<string>).payload;
             return {
                 ...state,
-                [actionType]: null,
+                statuses: {
+                    ...state.statuses,
+                    [actionType]: null,
+                }
             };
         }
 

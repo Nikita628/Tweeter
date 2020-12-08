@@ -42,10 +42,10 @@ export class RecommendedUsersComponent extends BaseComponent implements OnInit {
   }
 
   onFollow(userId: number): void {
-    this.store.dispatch(userAC.follow(userId, this.listKey));
+    this.store.dispatch(userAC.follow(userId, this.listKey, null));
   }
 
   onUnfollow(userId: number): void {
-    this.store.dispatch(userAC.unfollow(userId, this.listKey));
+    this.store.dispatch(userAC.unfollow(userId, this.listKey, null));
   }
 }

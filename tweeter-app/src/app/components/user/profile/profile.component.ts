@@ -76,11 +76,11 @@ export class ProfileComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   public onFollow(userId: number): void {
-    this.store.dispatch(userAC.follow(userId, null));
+    this.store.dispatch(userAC.follow(userId, null, null));
   }
 
   public onUnfollow(userId: number): void {
-    this.store.dispatch(userAC.unfollow(userId, null));
+    this.store.dispatch(userAC.unfollow(userId, null, null));
   }
 
   public closeModal(): void {

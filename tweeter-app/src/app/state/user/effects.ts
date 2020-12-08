@@ -50,12 +50,16 @@ export class UserEffects {
     @Effect()
     follow = this.actions$.pipe(
         ofType(actionTypes.follow),
-        switchMap((action: Action & IPayloadedAction<{ userId: number, listKey: string }>) => {
+        switchMap((action: Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }>) => {
             return this.userApi.follow(action.payload.userId)
                 .pipe(
                     mergeMap((res: ApiResponse<boolean>) => {
                         if (!res.errors.length) {
-                            return [actionCreators.followSuccess(action.payload.userId, action.payload.listKey)];
+                            return [actionCreators.followSuccess(
+                                action.payload.userId,
+                                action.payload.listKey,
+                                action.payload.profileId
+                            )];
                         }
                         this.notification.error(res.errors);
                         return [actionCreators.followError()];
@@ -71,12 +75,16 @@ export class UserEffects {
     @Effect()
     unfollow = this.actions$.pipe(
         ofType(actionTypes.unfollow),
-        switchMap((action: Action & IPayloadedAction<{ userId: number, listKey: string }>) => {
+        switchMap((action: Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }>) => {
             return this.userApi.unfollow(action.payload.userId)
                 .pipe(
                     mergeMap((res: ApiResponse<boolean>) => {
                         if (!res.errors.length) {
-                            return [actionCreators.unfollowSuccess(action.payload.userId, action.payload.listKey)];
+                            return [actionCreators.unfollowSuccess(
+                                action.payload.userId,
+                                action.payload.listKey,
+                                action.payload.profileId
+                            )];
                         }
                         this.notification.error(res.errors);
                         return [actionCreators.unfollowError()];

@@ -1,6 +1,6 @@
 <div class="users-list">
     <div class="user" *ngFor="let u of users">
-        <p>ID - {{u.id}}</p>
+        <!-- <p>ID - {{u.id}}</p> -->
         <div class="info">
             <app-media
                 [imgUrl]="u.avatarUrl ? u.avatarUrl : 'assets/user-placeholder.png'"
@@ -25,6 +25,8 @@
         </p>
         <img *ngIf="u.profileCoverUrl" [src]="u.profileCoverUrl" alt="" class="cover">
     </div>
-    <button *ngIf="totalCount > users.length" class="more" (click)="onLoadMore()">Load More (Total - {{totalCount}})</button>
+    <button *ngIf="totalCount > users.length" class="more" (click)="onLoadMore()">Load More</button>
 </div>
+
+<!-- (Total - {{totalCount}}) -->
 

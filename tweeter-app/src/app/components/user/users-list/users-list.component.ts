@@ -16,6 +16,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class UsersListComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges {
   @Input() listKey: string;
+  @Input() profileId: number = null;
   @Input() param: UserSearchParam;
 
   private list$: Observable<{ users: User[], totalCount: number }>;
@@ -46,11 +47,11 @@ export class UsersListComponent extends BaseComponent implements OnInit, OnDestr
   }
 
   public onFollow(userId: number): void {
-    this.store.dispatch(userAC.follow(userId, this.listKey));
+    this.store.dispatch(userAC.follow(userId, this.listKey, this.profileId));
   }
 
   public onUnfollow(userId: number): void {
-    this.store.dispatch(userAC.unfollow(userId, this.listKey));
+    this.store.dispatch(userAC.unfollow(userId, this.listKey, this.profileId));
   }
 
   public onLoadMore(): void {

@@ -6,6 +6,8 @@ import { actionCreators as userAC, actionTypes as userAT } from "../../../state/
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/User';
+import { selectors as actionStatusSE } from "../../../state/action-statuses/reducer";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-settings',
@@ -22,6 +24,7 @@ export class SettingsComponent extends BaseComponent implements OnInit, AfterVie
   avatarUrl: string;
   coverFile: File;
   avatarFile: File;
+  isSaving = false;
 
   constructor(
     protected store: Store<IAppState>,
@@ -52,6 +55,16 @@ export class SettingsComponent extends BaseComponent implements OnInit, AfterVie
     this.avatarUrl = this.currentUser.avatarUrl
       ? this.currentUser.avatarUrl
       : "assets/user-placeholder.png";
+
+    this.store.select(actionStatusSE.actionStatuses)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(statuses => {
+        if (statuses[userAT.update] === "success"
+          || statuses[userAT.update] === "error") {
+          this.isSaving = false;
+          super.clearActionStatus(userAT.update);
+        }
+      });
   }
 
   ngAfterViewInit(): void {
@@ -65,6 +78,8 @@ export class SettingsComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   public onSave(): void {
+    this.isSaving = true;
+
     const updatedUser: User = { ...this.currentUser };
 
     if (this.avatarFile) {

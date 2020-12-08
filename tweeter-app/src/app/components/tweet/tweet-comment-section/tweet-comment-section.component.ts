@@ -21,6 +21,8 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
   @Input() tweet: Tweet;
   @Input() feedKey: string;
   @Input() notifier: Notifier;
+  @Input() displayCreateArea: boolean;
+
   private comments$: Observable<{ comments: TweetComment[], totalCount: number }>;
   private lastId: number;
   private param = new TweetCommentSearchParam();
@@ -64,7 +66,7 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
         }
       });
 
-    this.notifier.onEmit = () => this.sendComment();
+    // this.notifier.onEmit = () => this.sendComment();
   }
 
   public onFileSelected(files: File[]): void {
@@ -72,7 +74,7 @@ export class TweetCommentSectionComponent extends BaseComponent implements OnIni
     this.imgPreviewElement.nativeElement.src = URL.createObjectURL(this.selectedImg);
   }
 
-  public sendComment(): void {
+  public onSend(): void {
     if (this.commentText) {
       const newComment = new TweetComment();
       newComment.tweetId = this.tweet.retweetedFromId ? this.tweet.retweetedFromId : this.tweet.id;

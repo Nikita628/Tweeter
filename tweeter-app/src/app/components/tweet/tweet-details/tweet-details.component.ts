@@ -17,7 +17,9 @@ import { BaseComponent } from '../../common/base-component/base-component.compon
 export class TweetDetailsComponent extends BaseComponent implements OnInit {
   @Input() tweet: Tweet;
   @Input() feedKey: string;
+
   public notifier = new Notifier();
+  public displayCreateArea = false;
   public isRetweeting = false;
   public isCommenting = false;
   public isLiking = false;
@@ -54,8 +56,7 @@ export class TweetDetailsComponent extends BaseComponent implements OnInit {
   }
 
   public onSendComment(): void {
-    this.isCommenting = true;
-    this.notifier.notifyListener();
+    this.displayCreateArea = !this.displayCreateArea;
   }
 
   public onRetweet(tweetId: number): void {

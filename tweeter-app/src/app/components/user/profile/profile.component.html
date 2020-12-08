@@ -54,6 +54,6 @@
 
 <app-modal *ngIf="isModalDisplayed" [title]="modalTitle" (closeClick)="closeModal()">
     <div class="content">
-        <app-users-list [param]="userParam" [listKey]="modalContent"></app-users-list>
+        <app-users-list [param]="userParam" [listKey]="modalContent" [profileId]="userId"></app-users-list>
     </div>
 </app-modal>

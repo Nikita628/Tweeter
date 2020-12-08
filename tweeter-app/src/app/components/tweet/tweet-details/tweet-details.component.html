@@ -13,9 +13,9 @@
                 [link]="'/profile' + '/' + t.createdBy.id"
             >
             </app-media>
-            <p class="my-3">
+            <!-- <p class="my-3">
                ID = {{ t.id }}
-            </p>
+            </p> -->
             <p class="my-3">
                 {{ t.text }}
             </p>
@@ -48,6 +48,6 @@
             </div>
         </ng-container>
         <br>
-        <app-tweet-comment-section [notifier]="notifier" [tweet]="tweet" [feedKey]="feedKey"></app-tweet-comment-section>
+        <app-tweet-comment-section [notifier]="notifier" [tweet]="tweet" [feedKey]="feedKey" [displayCreateArea]="displayCreateArea"></app-tweet-comment-section>
     </div>
 </div>

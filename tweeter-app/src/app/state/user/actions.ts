@@ -40,25 +40,41 @@ export const actionCreators = {
         type: actionTypes.searchError,
     }),
 
-    follow: (userId: number, listKey: string): Action & IPayloadedAction<{ userId: number, listKey: string }> => ({
+    follow: (
+        userId: number,
+        listKey: string,
+        profileId: number,
+    ): Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }> => ({
         type: actionTypes.follow,
-        payload: { userId, listKey },
+        payload: { userId, listKey, profileId },
     }),
-    followSuccess: (userId: number, listKey: string): Action & IPayloadedAction<{ userId: number, listKey: string }> => ({
+    followSuccess: (
+        userId: number,
+        listKey: string,
+        profileId: number,
+    ): Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }> => ({
         type: actionTypes.followSuccess,
-        payload: { userId, listKey },
+        payload: { userId, listKey, profileId },
     }),
     followError: (): Action => ({
         type: actionTypes.followError,
     }),
 
-    unfollow: (userId: number, listKey: string): Action & IPayloadedAction<{ userId: number, listKey: string }> => ({
+    unfollow: (
+        userId: number,
+        listKey: string,
+        profileId: number
+    ): Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }> => ({
         type: actionTypes.unfollow,
-        payload: { userId, listKey },
+        payload: { userId, listKey, profileId },
     }),
-    unfollowSuccess: (userId: number, listKey: string): Action & IPayloadedAction<{ userId: number, listKey: string }> => ({
+    unfollowSuccess: (
+        userId: number,
+        listKey: string,
+        profileId: number,
+    ): Action & IPayloadedAction<{ userId: number, listKey: string, profileId: number }> => ({
         type: actionTypes.unfollowSuccess,
-        payload: { userId, listKey },
+        payload: { userId, listKey, profileId },
     }),
     unfollowError: (): Action => ({
         type: actionTypes.unfollowError,
