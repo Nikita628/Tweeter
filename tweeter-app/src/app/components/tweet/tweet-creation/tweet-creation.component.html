@@ -18,7 +18,14 @@
                         </ng-container>
                     </app-dropdown>
                 </div>
-                <button [disabled]="!tweetText || sending" [ngClass]="{disabled: !tweetText || sending}" type="button" (click)="onTweet()">Tweet</button>
+                <button 
+                    [disabled]="sending || (!tweetText && !selectedImg)" 
+                    [ngClass]="{disabled: sending || (!tweetText && !selectedImg)}" 
+                    type="button" 
+                    (click)="onTweet()"
+                >
+                Tweet
+                </button>
             </div>
             <input #imgInput type="file" class="img-input" (change)="onFileSelected($event.target.files)" accept="image/*">
             <img alt="" class="img-preview" [ngClass]="{'mt-3': !!selectedImg}" #imgPreviewElement>

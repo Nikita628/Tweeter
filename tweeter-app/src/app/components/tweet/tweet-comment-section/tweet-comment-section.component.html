@@ -4,7 +4,7 @@
             alt="avatar">
         <div class="comment-input">
             <textarea [appAutoHeight]="10" class="comment-area" name="comment" rows="1"
-                placeholder="Tweet your reply..." [(ngModel)]="commentText"></textarea>
+                placeholder="Tweet your reply..." [(ngModel)]="commentText" (keydown.enter)="onSend()"></textarea>
             <i class="material-icons img-button" (click)="imgInput.click()">image_search</i>
             <i class="material-icons send-button" (click)="onSend()">send</i>
             <input #imgInput type="file" class="img-input" (change)="onFileSelected($event.target.files)"

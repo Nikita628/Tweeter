@@ -59,8 +59,7 @@ namespace Tweeter.Application.Services
 
 			if (string.IsNullOrWhiteSpace(tweet.Text))
 			{
-				result.Errors.Add("Tweet text is empty");
-				return result;
+				tweet.Text = string.Empty;
 			}
 
 			var newTweet = new Tweet
