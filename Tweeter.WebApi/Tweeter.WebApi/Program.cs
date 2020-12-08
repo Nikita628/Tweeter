@@ -98,6 +98,13 @@ namespace Tweeter.WebApi
 				}
 			}
 			context.Follow.AddRange(followList);
+			foreach (var f in followList)
+			{
+				var follower = context.User.FirstOrDefault(u => u.Id == f.FollowerId);
+				follower.FolloweesCount++;
+				var followee = context.User.FirstOrDefault(u => u.Id == f.FolloweeId);
+				followee.FollowersCount++;
+			}
 			context.SaveChanges();
 
 			// seed tweets ---

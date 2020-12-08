@@ -13,7 +13,7 @@
 --			@currentUserId as int = 1,
 --			@idLessThan as int = null,
 --			@createdByIdOrFollowerId as bit = null,
---			@bookmarkedByUserId as int = null,
+--			@bookmarkedByUserId as int = 1,
 
 --			@sortProp as nvarchar(100) = 't.id',
 --			@sortDirection as nvarchar(100) = 'asc', 
@@ -157,7 +157,7 @@
 				select top(1) * from dbo.TweetLike tl where tl.TweetId = t.Id and tl.UserId = @onlyLikedByUserId
 				union
 				select top(1) * from dbo.TweetLike tl where tl.TweetId = originalTweets.Id and tl.UserId = @onlyLikedByUserId
-			)';
+			) AND t.RetweetedFromId IS NULL';
 
 			IF @bookmarkedByUserId IS NOT NULL
 			SET @sql = @sql + ' 
@@ -165,7 +165,7 @@
 				select top(1) * from dbo.TweetBookmark tb where tb.TweetId = t.Id and tb.UserId = @bookmarkedByUserId
 				union
 				select top(1) * from dbo.TweetBookmark tb where tb.TweetId = originalTweets.Id and tb.UserId = @bookmarkedByUserId
-			)';
+			) AND t.RetweetedFromId IS NULL';
 
 			IF @followerId IS NOT NULL and (@createdByIdOrFollowerId is null or @createdByIdOrFollowerId = 0) 
 			SET @sql = @sql + ' 
