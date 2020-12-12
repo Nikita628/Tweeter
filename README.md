@@ -1,7 +1,8 @@
 # Tweeter
-Tweeter - Twitter clone
 
-User stories
+Twitter clone.
+
+**Backend**: ASP.NET Core WebAPI, EntityFramework, Dapper(SQL mapper). **Frontend**: Angular, Ngrx.
 
     User story: I can see my profile or others' profile
     User story: When I am on a profile, I can see Tweets and Retweets. I can also filter by Tweets, Tweets and replies, Media and Likes
@@ -18,9 +19,5 @@ User stories
     User story: When I am on Home, I can see the most popular hashtags and people I should follow (it's up to you how to implement this)
     User story: When I am on Explore, I can see the Top, Latest Tweet, or Tweet with Media. I can also choose to see the most popular people
     User story: When I am on Bookmarks, I can see the Saved Tweet
-
-    User story(optional): I can search for a group
-
-Tech stack: Backend - .Net Core, C#, EF, Dapper. Frontend - Angular, ngrx.
 
 Design - https://www.figma.com/file/xxf4TG14lpF3vFUbBtEZUR/Tweeter?node-id=0%3A1
