@@ -2,7 +2,8 @@
 
 Twitter clone.
 
-**Backend**: ASP.NET Core WebAPI, EntityFramework, Dapper(SQL mapper). **Frontend**: Angular, Ngrx.
+**Backend**: ASP.NET Core WebAPI, EntityFramework, Dapper(SQL mapper).\
+**Frontend**: Angular, Ngrx.
 
     User story: I can see my profile or others' profile
     User story: When I am on a profile, I can see Tweets and Retweets. I can also filter by Tweets, Tweets and replies, Media and Likes
