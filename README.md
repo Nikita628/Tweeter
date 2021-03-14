@@ -21,4 +21,3 @@ Twitter clone.
     User story: When I am on Explore, I can see the Top, Latest Tweet, or Tweet with Media. I can also choose to see the most popular people
     User story: When I am on Bookmarks, I can see the Saved Tweet
 
-Design - https://www.figma.com/file/xxf4TG14lpF3vFUbBtEZUR/Tweeter?node-id=0%3A1
