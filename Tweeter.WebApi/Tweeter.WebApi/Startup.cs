@@ -120,11 +120,15 @@ namespace Tweeter.WebApi
 
 			app.UseRouting();
 
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
+
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
+				endpoints.MapFallbackToController("Index", "Fallback");
 			});
 		}
 	}
